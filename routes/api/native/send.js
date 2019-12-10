@@ -51,7 +51,7 @@ module.exports = (api) => {
     //TODO: Change for sendreserve
     let fee = 0.0001
     let spendAmount = amount
-    let deductedAmount = (spendAmount + fee).toFixed(8)
+    let deductedAmount = Number((spendAmount + fee).toFixed(8))
 
     if (deductedAmount > balance) {
       warnings.push({
@@ -107,7 +107,6 @@ module.exports = (api) => {
       txParams = [toAddress, spendAmount];
     }
 
-    //DELET: Uncomment
     const remainingBalance = balance != null && deductedAmount != null ? (balance - deductedAmount).toFixed(8) : 0
     if (remainingBalance < 0) throw new Error("Insufficient funds")
     
