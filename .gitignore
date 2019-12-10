@@ -28,6 +28,7 @@ coverage
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
+assets/bin/*
 
 # Dependency directories
 node_modules
@@ -58,6 +59,4 @@ build
 
 #MacOSX hidden cache files
 __MACOSX
-package-lock.json
-package.json
 react/package.json
