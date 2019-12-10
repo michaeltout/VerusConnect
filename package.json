@@ -1,0 +1,145 @@
+{
+  "name": "Agama",
+  "productName": "Agama",
+  "version": "0.5.9-1",
+  "description": "Agama Wallet Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development electron .",
+    "debug": "yarn start devmode",
+    "make-patch": "./make-patch.sh",
+    "pack": "electron-builder --dir agama-unpacked",
+    "dist": "electron-builder --publish=never  ",
+    "dist-win": "electron-builder --publish=never  --win",
+    "test": "mocha",
+    "update-agamalib": "rm -rf node_modules/agama-wallet-lib/ && yarn install",
+    "postinstall": "rm -rf node_modules/bitgo-utxo-lib/node_modules/create-hash"
+  },
+  "engines": {
+    "node": ">11"
+  },
+  "repository": "https://github.com/VerusCoin/Agama/",
+  "homepage": "https://veruscoin.io",
+  "keywords": [
+    "agama",
+    "SuperNET",
+    "komodo",
+    "multicoin",
+    "wallet",
+    "spv",
+    "jumblr",
+    "verus"
+  ],
+  "author": {
+    "name": "Verus",
+    "email": "development@veruscoin.io",
+    "url": "https://veruscoin.io"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "electron": "^4.1.5",
+    "electron-builder": "21.2.0",
+    "electron-devtools-installer": "^2.2.4"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "agama-wallet-lib": "git+https://github.com/VerusCoin/agama-wallet-lib.git#dev",
+    "arch": "^2.1.0",
+    "async": "^2.6.0",
+    "bigi": "^1.4.2",
+    "bip39": "^2.5.0",
+    "bitgo-utxo-lib": "git+https://github.com/VerusCoin/bitgo-utxo-lib.git",
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.15.2",
+    "buffer-reverse": "^1.0.1",
+    "coinselect": "github:bitcoinjs/coinselect",
+    "create-hash": "git://github.com/pbca26/createHash#electron-v4",
+    "ethereumjs-util": "^6.0.0",
+    "ethers": "git://github.com/pbca26/ethers.js",
+    "express": "^4.14.0",
+    "fix-path": "^2.1.0",
+    "fs-extra": "^7.0.0",
+    "graceful-fs": "^4.1.11",
+    "hoek": "^6.1.3",
+    "iocane": "^1.0.0",
+    "js-sha256": "^0.7.1",
+    "marketmaker": "git://github.com/pbca26/marketmaker",
+    "nodejs-aes256": "^1.0.1",
+    "passwd-strength": "https://github.com/michaeltout/passwd-strength.git",
+    "portscanner": "^2.1.1",
+    "ps-node": "^0.1.5",
+    "remote-file-size": "^3.0.5",
+    "request": "^2.88.0",
+    "semver-compare": "^1.0.0",
+    "sha256": "^0.2.0",
+    "socket.io": "^2.1.1",
+    "wif": "^2.0.6",
+    "winston": "^3.1.0"
+  },
+  "build": {
+    "appId": "Verus",
+    "files": [
+      "**/*",
+      "!buildscripts",
+      "!dist",
+      "!test${/*}",
+      "!windeps${/*}",
+      "!.git*",
+      "!Brewfile",
+      "!README.md",
+      "!make*",
+      "!check_submodule.sh",
+      "!gui/EasyDEX/react/node_modules${/*}",
+      "!gui/EasyDEX/react/src${/*}",
+      "!gui/EasyDEX/react/www${/*}"
+    ],
+    "asar": false,
+    "mac": {
+      "artifactName": "${productName}-MacOS-v${version}.${ext}",
+      "icon": "assets/icons/agama_icons/agama_app_icon.icns",
+      "target": [
+        "dmg",
+        "pkg"
+      ]
+    },
+    "dmg": {
+      "icon": "assets/icons/agama_icons/agama_app_icon.icns",
+      "contents": [
+        {
+          "x": 135,
+          "y": 220
+        },
+        {
+          "x": 405,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "artifactName": "${productName}-Linux-v${version}.${ext}",
+      "icon": "assets/icons/agama_icons",
+      "desktop": {
+        "Encoding": "UTF-8"
+      },
+      "target": [
+        "appimage"
+      ]
+    },
+    "win": {
+      "artifactName": "${productName}-Windows-v${version}.${ext}",
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "assets/icons/agama_app_icon.ico"
+    }
+  },
+  "resolutions": {
+    "lodash": "^4.17.11",
+    "js-yaml": "^3.13.1",
+    "tar": "^4.4.8"
+  }
+}
