@@ -3,17 +3,91 @@ const Promise = require('bluebird');
 module.exports = (api) => {    
   api.native.get_identities = (coin, token, includeCanSign = false, includeWatchOnly = false) => {
     return new Promise((resolve, reject) => {      
-      api.native.callDaemon(coin, 'listidentities', [includeCanSign, includeWatchOnly], token)
+      /*api.native.callDaemon(coin, 'listidentities', [includeCanSign, includeWatchOnly], token)
       .then((identities) => {
         resolve(identities)
       })
       .catch(err => {
         reject(err)
-      })
+      })*/
+      resolve([
+        {
+          "identity": {
+            "version": 1,
+            "flags": 0,
+            "primaryaddresses": [
+              "RJJ4aJDJT6JSMfWGXqoL4Z4wGJCDLVVdJm"
+            ],
+            "minimumsignatures": 1,
+            "identityaddress": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "parent": "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH",
+            "name": "SwampDoc7or",
+            "contentmap": {
+            },
+            "revocationauthority": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "recoveryauthority": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "privateaddress": "zs1x2uu8vgz24ntkf8p30lzv759qezyec7vs7etpww7lnsxlm8d3c9u7rak4xe835cdn3q4gnagrr5"
+          },
+          "blockheight": 3678,
+          "balance": 102932,
+          "txid": "0bc8f930964135f6288af54b01d3b9b8f5f0c72b7379dc8de9fb6e26470763a8",
+          "status": "active",
+          "canspendfor": true,
+          "cansignfor": true
+        },
+        {
+          "identity": {
+            "version": 1,
+            "flags": 0,
+            "primaryaddresses": [
+              "RJJ4aJDJT6JSMfWGXqoL4Z4wGJCDLVVdJm"
+            ],
+            "minimumsignatures": 1,
+            "identityaddress": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "parent": "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH",
+            "name": "Michael",
+            "contentmap": {
+            },
+            "revocationauthority": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "recoveryauthority": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "privateaddress": "zs1x2uu8vgz24ntkf8p30lzv759qezyec7vs7etpww7lnsxlm8d3c9u7rak4xe835cdn3q4gnagrr5"
+          },
+          "blockheight": 3678,
+          "balance": 102932,
+          "txid": "0bc8f930964135f6288af54b01d3b9b8f5f0c72b7379dc8de9fb6e26470763a8",
+          "status": "active",
+          "canspendfor": false,
+          "cansignfor": true
+        },
+        {
+          "identity": {
+            "version": 1,
+            "flags": 0,
+            "primaryaddresses": [
+              "RJJ4aJDJT6JSMfWGXqoL4Z4wGJCDLVVdJm"
+            ],
+            "minimumsignatures": 1,
+            "identityaddress": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "parent": "RQVsJRf98iq8YmRQdehzRcbLGHEx6YfjdH",
+            "name": "Bobaroni",
+            "contentmap": {
+            },
+            "revocationauthority": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "recoveryauthority": "iHkj8ri8xxmZ3jifuxg5z4BoUPQ5a5uYo3",
+            "privateaddress": "zs1x2uu8vgz24ntkf8p30lzv759qezyec7vs7etpww7lnsxlm8d3c9u7rak4xe835cdn3q4gnagrr5"
+          },
+          "blockheight": 3678,
+          "balance": 0,
+          "txid": "0bc8f930964135f6288af54b01d3b9b8f5f0c72b7379dc8de9fb6e26470763a8",
+          "status": "active",
+          "canspendfor": true,
+          "cansignfor": true
+        }
+      ])
     });
   };
 
-  api.post('/native/get_identities', (req, res, next) => {
+  api.post('/native/get_identities', (req, res, next) => {    
     const { token, coin, includeCanSign, includeWatchOnly } = req.body
 
     api.native.get_identities(coin, token, includeCanSign, includeWatchOnly)
@@ -71,7 +145,8 @@ module.exports = (api) => {
 
   api.native.register_id_name = (coin, token, name, controlAddress, referralId) => {
     return new Promise((resolve, reject) => {      
-      api.native.callDaemon(coin, 'registernamecommitment', [name, controlAddress, referralId], token)
+      let params = referralId ? [name, controlAddress, referralId] : [name, controlAddress]
+      api.native.callDaemon(coin, 'registernamecommitment', params, token)
       .then((nameCommitmentResult) => {
         if (
           nameCommitmentResult &&
@@ -119,14 +194,26 @@ module.exports = (api) => {
 
   api.native.get_name_commitments = (coin) => {
     try {
-      return api.loadLocalCommitments()[coin]
+      const nameCommits = api.loadLocalCommitments()
+
+      if (nameCommits[coin] == undefined) {
+        api.saveLocalCommitments({
+          ...nameCommits,
+          [coin]: []
+        });
+
+        return []
+      } else {
+        return nameCommits[coin]
+      }
     } catch (e) {
       throw (e)
     }
   };
 
   api.post('/native/get_name_commitments', (req, res, next) => {
-    const { token, coin } = req.body
+    const { token, chainTicker } = req.body
+    const coin = chainTicker
 
     if (api.checkToken(token)) {
       try {

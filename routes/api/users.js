@@ -58,17 +58,21 @@ module.exports = (api) => {
                         .replace(/":/g, '": ')
                         .replace(/{/g, '{\n')
                         .replace(/}/g, '\n}'), 'utf8', (err) => {
-              if (err)
+              if (err) {
                 return api.log(err);
+            } else {
+              try {
+                fsnode.chmodSync(usersFileName, '0666');
+                api.log(result, 'users');
+                api.log(`app users.json file is created successfully at: ${api.agamaDir}`, 'users');
+                api.writeLog(`app users.json file is created successfully at: ${api.agamaDir}`);
+                resolve(result);
+              } catch (e) {
+                api.log(e)
+                resolve("Error changing file permissions while saving.")
+              }
+            }
             });
-
-            fsnode.chmodSync(usersFileName, '0666');
-            setTimeout(() => {
-              api.log(result, 'users');
-              api.log(`app users.json file is created successfully at: ${api.agamaDir}`, 'users');
-              api.writeLog(`app users.json file is created successfully at: ${api.agamaDir}`);
-              resolve(result);
-            }, 2000);
           });
         }
 

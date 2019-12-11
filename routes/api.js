@@ -67,6 +67,7 @@ api.pathsAgama();
 api = require('./api/log.js')(api);
 api = require('./api/config.js')(api);
 api = require('./api/users.js')(api);
+api = require('./api/nameCommitments.js')(api);
 
 api.appConfig = api.loadLocalConfig();
 
@@ -125,6 +126,7 @@ api = require('./api/native/transactions')(api);
 api = require('./api/native/zoperations')(api);
 api = require('./api/native/remove')(api);
 api = require('./api/native/send.js')(api);
+api = require('./api/native/identities.js')(api);
 
 
 // dex

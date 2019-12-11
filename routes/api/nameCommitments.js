@@ -58,11 +58,13 @@ module.exports = (api) => {
                         .replace(/":/g, '": ')
                         .replace(/{/g, '{\n')
                         .replace(/}/g, '\n}'), 'utf8', (err) => {
-              if (err)
+              if (err) {
                 return api.log(err);
+              } else {
+                fsnode.chmodSync(commitmentsFileName, '0666');
+              }
             });
-
-            fsnode.chmodSync(commitmentsFileName, '0666');
+            
             setTimeout(() => {
               api.log(result, 'commitments');
               api.log(`app nameCommits.json file is created successfully at: ${api.agamaDir}`, 'commitments');
