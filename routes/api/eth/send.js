@@ -128,7 +128,7 @@ module.exports = (api) => {
         return chainTicker === "ETH"
           ? api.eth.connect[chainTicker].sendTransaction({
               to,
-              value: Number(value),
+              value: ethers.utils.parseEther(Number(value).toPrecision(8)),
               gasPrice: Number(gasPrice),
               gasLimit: Number(gasLimit)
             })
