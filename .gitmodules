@@ -1,3 +1,3 @@
-[submodule "gui/EasyDEX-GUI"]
-	path = gui/EasyDEX-GUI
+[submodule "gui/VerusConnect-GUI"]
+	path = gui/VerusConnect-GUI
 	url = https://github.com/michaeltout/VerusConnect-GUI

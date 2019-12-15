@@ -18,11 +18,11 @@ Verus-enhaced Komodo Desktop Multicoin Wallet
 2) [Install git](https://git-scm.com/)
 
 
-#### Build & Start EasyDEX-GUI (frontend)
+#### Build & Start VerusConnect-GUI (frontend)
 
 ```shell
 git clone --recursive https://github.com/VerusCoin/Agama --branch master --single-branch
-cd agama/gui/EasyDEX-GUI/react/
+cd agama/gui/VerusConnect-GUI/react/
 yarn update && yarn install 
 ```
 Leave the above process running and use a new terminal windows/tab when proceeding with the below steps.
