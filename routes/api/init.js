@@ -44,12 +44,6 @@ module.exports = (api) => {
           api.log(`created verus agama folder at ${api.agamaDir}`, 'init');
           api.writeLog(`created verus agama folder at ${api.agamaDir}`);
         }
-
-        if (fs.existsSync(api.agamaDirKMD) && fs.existsSync(`${api.agamaDirKMD}/config.json`)) {
-          fs.copyFileSync(`${api.agamaDirKMD}/config.json`, `${api.agamaDir}/config.json`);
-          api.log(`located config.json in KMD folder and copied over to ${api.agamaDir}`, 'init');
-          api.writeLog(`located config.json in KMD folder and copied over to ${api.agamaDir}`);
-        } 
       } else {
         api.log('verus agama folder already exists', 'init');
       }

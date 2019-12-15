@@ -8,22 +8,22 @@ const pathsAgama = (api) => {
   switch (os.platform()) {
     case 'darwin':
       fixPath();
-      api.agamaDirKMD = `${process.env.HOME}/Library/Application Support/Agama`;
+      //api.agamaDirKMD = `${process.env.HOME}/Library/Application Support/Agama`;
 
       api.agamaDir = `${process.env.HOME}/Library/Application Support/VerusConnect`;
       return api;
       break;
 
     case 'linux':
-      api.agamaDirKMD = `${process.env.HOME}/.agama`;
+      //api.agamaDirKMD = `${process.env.HOME}/.agama`;
 
       api.agamaDir = `${process.env.HOME}/.verus-connect`;
       return api;
       break;
 
     case 'win32':
-      api.agamaDirKMD = `${process.env.APPDATA}/Agama`;
-      api.agamaDirKMD = path.normalize(api.agamaDirKMD);
+      //api.agamaDirKMD = `${process.env.APPDATA}/Agama`;
+      //api.agamaDirKMD = path.normalize(api.agamaDirKMD);
 
       api.agamaDir = `${process.env.APPDATA}/VerusConnect`;
       api.agamaDir = path.normalize(api.agamaDir);
