@@ -171,10 +171,6 @@ module.exports = (api) => {
           const _maxSpendBalance = Number(
             api.maxSpendBalance(utxoListFormatted)
           );
-
-          //DELET
-          console.log("MAX SPEND BALANCE")
-          console.log(_maxSpendBalance)
           
           let targets = [
             {
@@ -243,11 +239,6 @@ module.exports = (api) => {
             );
           } else {
             let _change = 0;
-
-            //DELET
-            console.log("CALCULATED OUTPUTS")
-            console.log(outputs)
-            console.log(firstRun)
 
             if (outputs && outputs.length === 2) {
               _change = outputs[1].value - fee;
@@ -498,9 +489,6 @@ module.exports = (api) => {
                     );
                   } else {
                     if (!offlineTx) {
-                      //DELET
-                      console.log("INPUTS")
-                      console.log(inputs)
 
                       _rawtx = transaction(
                         toAddress,
@@ -514,20 +502,6 @@ module.exports = (api) => {
                         opreturn ? { opreturn } : null
                       );
                     }
-
-                    //DELET
-                    console.log("TO RAW TX")
-                    console.log({
-                      toAddress,
-                      fromAddress,
-                      wif,
-                      net: api.electrumJSNetworks[network] ||
-                        api.getNetworkData(network),
-                      inputs,
-                      _change,
-                      value: value,
-                      op: opreturn ? { opreturn } : null
-                    })
                   }
 
                   resolve(
@@ -552,8 +526,6 @@ module.exports = (api) => {
         }
       })
       .catch(err => {
-        //DELET
-        console.error(err);
 
         reject(err);
       });

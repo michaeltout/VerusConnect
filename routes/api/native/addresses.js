@@ -31,10 +31,6 @@ module.exports = (api) => {
             let balanceObj = {native: 0, reserve: {}}
             
             try {
-              //DELET
-              console.log(j)
-              console.log(i)
-
               balanceObj.native = Number(await api.native.callDaemon(coin, 'z_getbalance', [address], token))
 
               resObj[
@@ -43,18 +39,12 @@ module.exports = (api) => {
                   : "public"
               ].push({ address, tag: addrTag, balances: balanceObj });
               
-              //DELET
-              console.log(resObj)
             } catch (e) {
-              //DELET
-              console.error(e)
               throw e
             }
           }
         }
 
-        //DELET
-        console.log(resObj)
         
         resolve(resObj)
       })
@@ -161,11 +151,11 @@ module.exports = (api) => {
 
     api.native.validate_address(coin, token, address)
     .then((validation) => {
-      if (!validation.pubkey) throw new Error(`No pubkey found for ${address}`)
+      if (!validation.pubkey && !validation.scriptPubKey) throw new Error(`No pubkey found for ${address}`)
 
       const retObj = {
         msg: 'success',
-        result: validation.pubkey,
+        result: validation.pubkey ? validation.pubkey : validation.scriptPubkey,
       };
   
       res.end(JSON.stringify(retObj));  

@@ -58,8 +58,8 @@ module.exports = (api) => {
         field: "value",
         message: `Original amount + fee (${deductedAmount}) is larger than balance, amount has been changed.`
       });
-      spendAmount -= fee;
-      deductedAmount = spendAmount + fee;
+      spendAmount = Number((spendAmount - fee).toFixed(8));
+      deductedAmount = Number((spendAmount + fee).toFixed(8));
     }
 
     if (fromAddress || toAddress[0] === "z" || customFee != null) {
@@ -164,10 +164,6 @@ module.exports = (api) => {
 
         api.native.callDaemon(chainTicker, preflightRes.cliCmd, preflightRes.txParams, token)
         .then(txid => {
-          //DELET
-          console.log("DAEMON RESULT:")
-          console.log(txid)
-          
           const retObj = {
             msg: "success",
             result: { ...preflightRes, txid }

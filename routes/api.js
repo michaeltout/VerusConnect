@@ -126,7 +126,11 @@ api = require('./api/native/transactions')(api);
 api = require('./api/native/zoperations')(api);
 api = require('./api/native/remove')(api);
 api = require('./api/native/send.js')(api);
-api = require('./api/native/identities.js')(api);
+api = require('./api/native/nameRegistration.js')(api);
+api = require('./api/native/idRegistration.js')(api);
+api = require('./api/native/idRevocation.js')(api);
+api = require('./api/native/idInformation.js')(api);
+api = require('./api/native/idRecovery.js')(api);
 
 
 // dex

@@ -19,8 +19,8 @@ module.exports = (api) => {
     
     if (deductedAmount > balance) {
       warnings.push({field: "value", message: `Original amount + fee (${deductedAmount}) is larger than balance, amount has been changed.`})
-      spendAmount -= fee
-      deductedAmount = spendAmount + fee
+      spendAmount = Number((spendAmount - fee).toFixed(8));
+      deductedAmount = Number((spendAmount + fee).toFixed(8));
     }
 
     return ({
@@ -70,8 +70,7 @@ module.exports = (api) => {
             gasPrice
           );
 
-          //DELET: Uncomment
-          //if (preflightObj.remainingBalance < 0) throw new Error("Insufficient funds")
+          if (preflightObj.remainingBalance < 0) throw new Error("Insufficient funds")
           
           resolve(preflightObj)
         } else {
@@ -97,11 +96,11 @@ module.exports = (api) => {
               amount,
               gasLimit,
               gasPrice,
-              numberOfTokens
+              numberOfTokens,
+              contract
             );
 
-            //DELET: Uncomment
-            //if (preflightObj.remainingBalance < 0) throw new Error("Insufficient funds")
+            if (preflightObj.remainingBalance < 0) throw new Error("Insufficient funds")
             
             resolve(preflightObj)
           })
@@ -123,7 +122,7 @@ module.exports = (api) => {
       api.eth.txPreflight(chainTicker, toAddress, amount, speed, network)
       .then(preflightObj => {
         txResult = preflightObj
-        const { to, value, gasPrice, gasLimit, numberOfTokens } = txResult;
+        const { to, value, gasPrice, gasLimit, numberOfTokens, contract } = txResult;
         
         return chainTicker === "ETH"
           ? api.eth.connect[chainTicker].sendTransaction({

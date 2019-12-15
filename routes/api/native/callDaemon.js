@@ -37,12 +37,6 @@ module.exports = (api) => {
   
       request(options, (error, response, body) => {
         const rpcJsonParsed = api.native.convertRpcJson(body)
-
-        //DELET
-        console.log('')
-        console.log(cmd)
-        console.log(rpcJsonParsed)
-        console.log('')
         
         if (rpcJsonParsed.msg === 'success') resolve(rpcJsonParsed.result);
         else reject(new Error(rpcJsonParsed.result))
