@@ -235,7 +235,7 @@ if (os.platform() === 'linux') {
 	agamaIcon = path.join(__dirname, '/assets/icons/agama_icons/128x128.png');
 }
 if (os.platform() === 'win32') {
-	agamaIcon = path.join(__dirname, '/assets/icons/agama_app_icon.ico');
+	agamaIcon = path.join(__dirname, '/assets/icons/vrsc.ico');
 }
 
 // close app

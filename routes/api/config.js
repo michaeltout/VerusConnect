@@ -54,72 +54,39 @@ module.exports = (api) => {
       if (localAppConfig) {
         let _localAppConfig = JSON.parse(localAppConfig);
         // update config to v2.42 compatible
-        if (!_localAppConfig.general.native) {
-          const _confProps = [
-            'dataDir',
-            'cliStopTimeout',
-            'failedRPCAttemptsThreshold',
-            'stopNativeDaemonsOnQuit',
-            'rpc2cli',
-          ];
+        if (_localAppConfig.general != null && _localAppConfig.coin != null) {
+          const compareConfigs = compareJSON(
+            defaultConf,
+            JSON.parse(localAppConfig)
+          );
 
-          _localAppConfig.general.native = {
-            dataDir: defaultConf.native.dataDir,
-            cliStopTimeout: defaultConf.native.cliStopTimeout,
-            failedRPCAttemptsThreshold: defaultConf.native.failedRPCAttemptsThreshold,
-            stopNativeDaemonsOnQuit: defaultConf.native.stopNativeDaemonsOnQuit,
-            rpc2cli: defaultConf.native.rpc2cli,
-          };
+          if (Object.keys(compareConfigs).length) {
+            const newConfig = deepmerge(
+              defaultConf,
+              JSON.parse(localAppConfig)
+            );
 
-          for (let i = 0; i < _confProps.length; i++) {
-            if (_localAppConfig.hasOwnProperty([_confProps[i]])) {
-              _localAppConfig.general.native[_confProps[i]] = _localAppConfig[_confProps[i]];
-              delete _localAppConfig[_confProps[i]];
-            }
+            api.log("config diff is found, updating local config", "settings");
+            api.log("config diff:", "settings");
+            api.log(compareConfigs, "settings");
+            api.writeLog("aconfig diff is found, updating local config");
+            api.writeLog("config diff:");
+            api.writeLog(compareConfigs);
+
+            api.saveLocalAppConf(newConfig);
+            return newConfig;
+          } else {
+            return JSON.parse(localAppConfig);
           }
-
-          api.log('update config to v2.42 compatible', 'settings');
-          localAppConfig = JSON.stringify(_localAppConfig);
-          api.saveLocalAppConf(_localAppConfig);
-        }
-
-        //This block of code forces the enabling or disabling of verustest.
-        //Use for releases that do not support either normal verus or verustest
-        /*if (_localAppConfig.coin.native.VRSC.hasOwnProperty('enableVrsctest') && 
-          _localAppConfig.general.main.enableVrsctest !== defaultConf.general.main.enableVrsctest) {
-          _localAppConfig.general.main.enableVrsctest = defaultConf.general.main.enableVrsctest
-          api.log('Changed PBaaS enableVrsctest to ' + defaultConf.general.main.enableVrsctest, 'settings');
-          localAppConfig = JSON.stringify(_localAppConfig);
-          api.saveLocalAppConf(_localAppConfig);
-        }*/
-
-        const compareConfigs = compareJSON(defaultConf, JSON.parse(localAppConfig));
-
-        if (Object.keys(compareConfigs).length) {
-          const newConfig = deepmerge(defaultConf, JSON.parse(localAppConfig));
-
-          api.log('config diff is found, updating local config', 'settings');
-          api.log('config diff:', 'settings');
-          api.log(compareConfigs, 'settings');
-          api.writeLog('aconfig diff is found, updating local config');
-          api.writeLog('config diff:');
-          api.writeLog(compareConfigs);
-
-          api.saveLocalAppConf(newConfig);
-          return newConfig;
-        } else {
-          return JSON.parse(localAppConfig);
-        }
-      } else {
-        return api.appConfig;
+        } 
       }
-    } else {
-      api.log('local config file is not found!', 'settings');
-      api.writeLog('local config file is not found!');
-      api.saveLocalAppConf(api.appConfig);
+    } 
+    
+    api.log('local config file is not found or corrupted!', 'settings');
+    api.writeLog('local config file is not found or corrupted!');
+    api.saveLocalAppConf(api.appConfig);
 
-      return api.appConfig;
-    }
+    return api.appConfig;
   };
 
   api.saveLocalAppConf = (appSettings) => {
@@ -145,17 +112,25 @@ module.exports = (api) => {
           return new Promise((resolve, reject) => {
             const result = 'config.json write file is done';
 
-            fs.writeFile(appConfFileName,
-                        JSON.stringify(appSettings)
-                        .replace(/,/g, ',\n') // format json in human readable form
-                        .replace(/":/g, '": ')
-                        .replace(/{/g, '{\n')
-                        .replace(/}/g, '\n}'), 'utf8', (err) => {
-              if (err)
-                return api.log(err);
+            fs.writeFile(appConfFileName, JSON.stringify({}), "utf8", err => {
+              if (err) return api.log(err);
             });
 
             fsnode.chmodSync(appConfFileName, '0666');
+
+            fs.writeFile(
+              appConfFileName,
+              JSON.stringify(appSettings)
+                .replace(/,/g, ",\n") // format json in human readable form
+                .replace(/":/g, '": ')
+                .replace(/{/g, "{\n")
+                .replace(/}/g, "\n}"),
+              "utf8",
+              err => {
+                if (err) return api.log(err);
+              }
+            );
+
             setTimeout(() => {
               api.log(result, 'settings');
               api.log(`app conf.json file is created successfully at: ${api.agamaDir}`, 'settings');
@@ -233,21 +208,12 @@ module.exports = (api) => {
    *
    */
   api.get('/config/load', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      const retObj = {
-        msg: 'success',
-        result: api.loadLocalConfig(),
-      };
+    const retObj = {
+      msg: 'success',
+      result: api.loadLocalConfig(),
+    };
 
-      res.send(retObj);
-    } else {
-      const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
-      };
-
-      res.end(JSON.stringify(retObj));
-    }
+    res.send(retObj);
   });
 
   /*
@@ -255,21 +221,12 @@ module.exports = (api) => {
    *
    */
   api.get('/config/schema', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      const retObj = {
-        msg: 'success',
-        result: api.appConfigSchema,
-      };
+    const retObj = {
+      msg: 'success',
+      result: api.appConfigSchema,
+    };
 
-      res.send(retObj);
-    } else {
-      const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
-      };
-
-      res.end(JSON.stringify(retObj));
-    }
+    res.send(retObj);
   });
 
   api.testLocation = (path) => {

@@ -1,7 +1,7 @@
 {
-  "name": "Agama",
-  "productName": "Agama",
-  "version": "0.0.1",
+  "name": "VerusConnect",
+  "productName": "VerusConnect",
+  "version": "0.0.1-alpha",
   "description": "Agama Wallet Desktop App",
   "main": "main.js",
   "scripts": {
@@ -97,14 +97,14 @@
     "asar": false,
     "mac": {
       "artifactName": "${productName}-MacOS-v${version}.${ext}",
-      "icon": "assets/icons/agama_icons/agama_app_icon.icns",
+      "icon": "assets/icons/agama_icons/vrsc.icns",
       "target": [
         "dmg",
         "pkg"
       ]
     },
     "dmg": {
-      "icon": "assets/icons/agama_icons/agama_app_icon.icns",
+      "icon": "assets/icons/agama_icons/vrsc.icns",
       "contents": [
         {
           "x": 135,
@@ -134,7 +134,7 @@
         "nsis",
         "zip"
       ],
-      "icon": "assets/icons/agama_app_icon.ico"
+      "icon": "assets/icons/vrsc.ico"
     }
   },
   "resolutions": {

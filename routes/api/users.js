@@ -144,20 +144,11 @@ module.exports = (api) => {
    *
    */
   api.get('/users/load', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      const obj = api.loadLocalUsers();
-      res.end(JSON.stringify({
-        msg: 'success',
-        result: obj,
-      }));
-    } else {
-      const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
-      };
-
-      res.end(JSON.stringify(retObj));
-    }
+    const obj = api.loadLocalUsers();
+    res.end(JSON.stringify({
+      msg: 'success',
+      result: obj,
+    }));
   });
 
   return api;
