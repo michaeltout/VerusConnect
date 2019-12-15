@@ -25,17 +25,19 @@ module.exports = (api) => {
                 )
               )
               
-              try {
-                zBalance = Number(
-                  await api.native.callDaemon(
-                    coin,
-                    "z_getbalance",
-                    [zAddr],
-                    token
+              if (zAddr != null) {
+                try {
+                  zBalance = Number(
+                    await api.native.callDaemon(
+                      coin,
+                      "z_getbalance",
+                      [zAddr],
+                      token
+                    )
                   )
-                )
-              } catch(e) {
-                api.log(e.message, 'get_identities');
+                } catch(e) {
+                  api.log(e.message, 'get_identities');
+                }
               }
               
               formattedIds[i].balances = {
