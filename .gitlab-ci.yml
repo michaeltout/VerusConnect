@@ -102,7 +102,8 @@ build:windows:
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
     - cd gui/
     - git clone https://github.com/VerusCoin/VerusConnect-GUI.git
-    - cd VerusConnect-GUI/react    - yarn install
+    - cd VerusConnect-GUI/react
+    - yarn install
     - yarn run build
     - cd ../../..
     - mkdir -p assets/bin/
