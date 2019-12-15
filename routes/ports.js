@@ -10,6 +10,7 @@ const assetChainPorts = {
   SUPERNET: 11341,
   REVS: 10196,
   WLC: 12167,
+  WLC21: 38808,
   PANGEA: 14068,
   DEX: 11890,
   JUMBLR: 15106,
