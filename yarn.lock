@@ -78,9 +78,9 @@ after@0.8.2:
   resolved "https://registry.yarnpkg.com/after/-/after-0.8.2.tgz#fedb394f9f0e02aa9768e702bda23b505fae7e1f"
   integrity sha1-/ts5T58OAqqXaOcCvaI7UF+ufh8=
 
-"agama-wallet-lib@git+https://github.com/VerusCoin/agama-wallet-lib.git#dev":
+"agama-wallet-lib@https://github.com/VerusCoin/agama-wallet-lib.git#dev":
   version "0.3.4"
-  resolved "git+https://github.com/VerusCoin/agama-wallet-lib.git#5916c9fa0e7d3d1b045accf30bf269214b298ef5"
+  resolved "https://github.com/VerusCoin/agama-wallet-lib.git#4f45bd10269f0353aaf5f719ee2588f4f488df46"
   dependencies:
     bigi "^1.4.2"
     bip32 "^1.0.2"
@@ -1729,7 +1729,6 @@ ethereumjs-util@^6.0.0:
 
 "ethers@git://github.com/pbca26/ethers.js":
   version "4.0.7"
-  uid "26671ceccb7a828e405b70f7ea42025efef19b73"
   resolved "git://github.com/pbca26/ethers.js#26671ceccb7a828e405b70f7ea42025efef19b73"
   dependencies:
     "@types/node" "^10.3.2"
@@ -5231,12 +5230,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typeforce@^1.11.1, typeforce@^1.11.3, typeforce@^1.11.5:
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.18.0.tgz#d7416a2c5845e085034d70fcc5b6cc4a90edbfdc"
-  integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
-
-"typeforce@git+https://github.com/michaeltout/typeforce":
+typeforce@^1.11.1, typeforce@^1.11.3, typeforce@^1.11.5, "typeforce@git+https://github.com/michaeltout/typeforce":
   version "1.18.0"
   resolved "git+https://github.com/michaeltout/typeforce#c9b0abc33ff006d7a6a6150eff034bc7eb8b07de"
 
