@@ -1,5 +1,5 @@
 // TODO: Delete this file and find a way
-// to use coinData in easyDEX-GUI in appConfig.js
+// to use coinData in VerusConnect-GUI in appConfig.js
 
 "use strict";
 
@@ -14,7 +14,7 @@ var _coinHelpers = _interopRequireDefault(
 
 var chainParams = require("./chainParams");
 
-var _coins = _interopRequireDefault(require("../gui/EasyDEX-GUI/react/src/translate/coins"));
+var _coins = _interopRequireDefault(require("../gui/VerusConnect-GUI/react/src/translate/coins"));
 
 var _ethErc20ContractId = _interopRequireDefault(
   require("agama-wallet-lib/src/eth-erc20-contract-id")
@@ -163,9 +163,9 @@ var getCoinObj = function getCoinObj(chainTicker) {
       id: 'VRSC',                                // Coin's chain ticker
       name: Verus,                               // Coin name
       tags: [                                    // Tags for coin to identify properties
-        'is_sapling', 
-        'is_zcash', 
-        'is_pbaas', 
+        'is_sapling',
+        'is_zcash',
+        'is_pbaas',
         'is_pbaas_root'],
       available_modes: {                         // Modes in which this coin can be activated
         'native': true,
@@ -176,7 +176,7 @@ var getCoinObj = function getCoinObj(chainTicker) {
         explorer: https://explorer.veruscoin.io, // (Optional) Explorer URL.
         saplingHeight: 10000,                    // (Optional) height at which sapling will be activated for the chain
         dustThreshold: 0.00001,                  // (Optional) Network threshold for dust values
-        daemon: 'verusd',                        // (Optional) Specify a custom daemon for native mode 
+        daemon: 'verusd',                        // (Optional) Specify a custom daemon for native mode
         startupOptions: ['-mint']                // (Optional) Added in a later step, native options for daemon start
       },
       isPbaasChain: false,                       // Boolean to decide whether or not to skip coin compatability check

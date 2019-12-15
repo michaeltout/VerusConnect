@@ -1,14 +1,14 @@
 #!/bin/bash
-### Script will check EasyDEX-GUI submodule in gui folder. 
+### Script will check VerusConnect-GUI submodule in gui folder.
 ### If you used git clone without --recursive option this is way to go.
 
 PWD=`pwd`
-SIZE=`du -sk gui/EasyDEX-GUI`
+SIZE=`du -sk gui/VerusConnect-GUI`
 
-echo "Checking EasyDEX-GUI folder."
-cd gui/EasyDEX-GUI && \
+echo "Checking VerusConnect-GUI folder."
+cd gui/VerusConnect-GUI && \
 git submodule update --recursive && \
 cd ../.. && \
 echo "Folder looks fine." || \
-echo "Some problem with cloning submodule EasyDEX-GUI." 
+echo "Some problem with cloning submodule VerusConnect-GUI."
 echo
