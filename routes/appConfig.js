@@ -85,13 +85,13 @@ const appConfig = {
         },
         agamaPort: {
           type: 'number_input',
-          displayName: 'Verus Connect Port',
-          info: 'The port with which the Verus Connect GUI will communcate with its back end.'
+          displayName: 'Verus Port',
+          info: 'The port with which the Verus GUI will communcate with its back end.'
         },
         dev: {
           type: 'checkbox',
           displayName: 'Dev Mode',
-          info: 'Run Verus Connect in devmode, where it will search for a running GUI instead of using the pre-compiled one.'
+          info: 'Run Verus in devmode, where it will search for a running GUI instead of using the pre-compiled one.'
         },
         pbaasTestmode: {
           type: 'checkbox',

@@ -81,7 +81,7 @@ var getCoinObj = function getCoinObj(chainTicker) {
 
   if (!isPbaas && !allCoinNames[chainTickerUc])
     throw new Error(
-      "".concat(chainTicker, " not found in Verus Connect coin list.")
+      "".concat(chainTicker, " not found in Verus coin list.")
     );
   else coinObj.name = allCoinNames[chainTickerUc];
   if (_coinHelpers.default.explorerList[chainTickerUc])

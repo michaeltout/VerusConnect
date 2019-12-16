@@ -52,7 +52,7 @@ let localVersionFile = api.readVersionFile();
 localVersion = localVersionFile.split(localVersionFile.indexOf('\r\n') > -1 ? '\r\n' : '\n');
 
 const appBasicInfo = {
-	name: 'Verus Connect',
+	name: 'Verus',
 	version: localVersion[0],
 };
 
@@ -170,7 +170,7 @@ guiapp.use(bodyParser.urlencoded({
 })); // support encoded bodies
 
 guiapp.get('/', (req, res) => {
-	res.send('Verus Connect app server');
+	res.send('Verus app server');
 });
 
 const guipath = path.join(__dirname, '/gui');
