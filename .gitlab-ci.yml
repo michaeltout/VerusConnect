@@ -16,7 +16,7 @@ variables:
   VERUS_APPIMAGE: Verus-Linux-v${VERUS_VERSION}.AppImage
   VERUS_LINUX_TAR: Verus-Linux-v${VERUS_VERSION}.tar.gz
   VERUS_WINDOWS_ZIP: Verus-Windows-v${VERUS_VERSION}.zip
-  VERUS_WINDOWS_NSIS: Verus-Windows-v${VERUS_VERSION}.exe
+  #VERUS_WINDOWS_NSIS: Verus-Windows-v${VERUS_VERSION}.exe
   VERUS_MACOS: Verus-MacOS-v${VERUS_VERSION}.dmg
   GIT_SUBMODULE_STRATEGY: recursive
   POST_COMMENT: "Pipeline Trigger: ${CI_PIPELINE_SOURCE}\n
@@ -119,8 +119,11 @@ build:windows:
   script:
     - yarn run dist-win
     - cd dist
+    - tar -xzvf ${VERUS_WINDOWS_ZIP}
+    - rm ${VERUS_WINDOWS_ZIP}
+    - zip Verus-Windows-v${VERUS_VERSION}
     - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
-    - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
+#    - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
     - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256 ${VERUS_WINDOWS_NSIS} ${VERUS_WINDOWS_NSIS}.sha256 ..
   after_script:
     - curl -F file=@"$VERUS_WINDOWS_ZIP"
@@ -132,8 +135,8 @@ build:windows:
     paths:
       - ${VERUS_WINDOWS_ZIP}
       - ${VERUS_WINDOWS_ZIP}.sha256
-      - ${VERUS_WINDOWS_NSIS}
-      - ${VERUS_WINDOWS_NSIS}.sha256
+   #   - ${VERUS_WINDOWS_NSIS}
+   #   - ${VERUS_WINDOWS_NSIS}.sha256
       - dist
     expire_in: 1 week
 ########################################################################################################################
