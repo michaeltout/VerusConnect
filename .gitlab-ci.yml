@@ -119,7 +119,7 @@ build:windows:
   script:
     - yarn run dist-win
     - cd dist
-    - tar -xzvf ${VERUS_WINDOWS_ZIP}
+    - unzip ${VERUS_WINDOWS_ZIP}
     - rm ${VERUS_WINDOWS_ZIP}
     - zip Verus-Windows-v${VERUS_VERSION}
     - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
