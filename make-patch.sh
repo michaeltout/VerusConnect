@@ -1,4 +1,4 @@
-cd gui/VerusConnect-GUI/react
+cd gui/Verus-GUI/react
 echo "building gui..."
 rm -rf ./build
 mkdir build
@@ -11,11 +11,11 @@ rm -rf ./patch.zip
 rm -rf ./patch
 mkdir patch
 mkdir patch/gui
-mkdir patch/gui/VerusConnect-GUI
-mkdir patch/gui/VerusConnect-GUI/react
-mkdir patch/gui/VerusConnect-GUI/react
-cp -R gui/VerusConnect-GUI/react/build patch/gui/VerusConnect-GUI/react/build
-cp -R gui/VerusConnect-GUI/assets patch/gui/VerusConnect-GUI
+mkdir patch/gui/Verus-GUI
+mkdir patch/gui/Verus-GUI/react
+mkdir patch/gui/Verus-GUI/react
+cp -R gui/Verus-GUI/react/build patch/gui/Verus-GUI/react/build
+cp -R gui/Verus-GUI/assets patch/gui/Verus-GUI
 cp -R gui/startup patch/gui/startup
 cp ./main.js patch
 cp ./version patch

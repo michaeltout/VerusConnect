@@ -18,11 +18,11 @@ The Verus Multicoin Wallet and Ecosystem GUI
 2) [Install git](https://git-scm.com/)
 
 
-#### Build & Start VerusConnect-GUI (frontend)
+#### Build & Start Verus-GUI (frontend)
 
 ```shell
-git clone --recursive https://github.com/VerusCoin/VerusConnect --branch master --single-branch
-cd VerusConnect/gui/VerusConnect-GUI/react/
+git clone --recursive https://github.com/VerusCoin/Verus --branch master --single-branch
+cd Verus/gui/Verus-GUI/react/
 yarn update && yarn install 
 ```
 Leave the above process running and use a new terminal windows/tab when proceeding with the below steps.
@@ -30,17 +30,17 @@ Leave the above process running and use a new terminal windows/tab when proceedi
 Now please create a directory called `bin` inside `assets/` and afterwards copy `komodod` and `komodo-cli` to a new subfolder named after the operating system you are building Agama for: `linux64`, `osx` or `win64`. Inside this subfolder, create another directory called `verusd`
 and copy `verusd` and `verus-cli` into it.
 
-From within `VerusConnect/` the structure will be `assets/bin/linux64` (for example on linux).
+From within `Verus/` the structure will be `assets/bin/linux64` (for example on linux).
 
 
 #### Start Verus Connect App (electron)
 
 ```shell
-cd VerusConnect
+cd Verus
 yarn install
 yarn start
 ```
-To use debug/dev mode please stop the VerusConnect App (electron) and either set `dev: true` and `debug: true` in `~/.verus-connect/config.json` and then restart the app or replace step 4) from above with the start command below:
+To use debug/dev mode please stop the Verus App (electron) and either set `dev: true` and `debug: true` in `~/.verus-connect/config.json` and then restart the app or replace step 4) from above with the start command below:
 
 ```shell
 yarn start devmode

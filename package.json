@@ -1,14 +1,14 @@
 {
-  "name": "VerusConnect",
-  "productName": "VerusConnect",
-  "version": "0.0.1-alpha",
+  "name": "Verus",
+  "productName": "Verus",
+  "version": "0.0.2-alpha",
   "description": "Agama Wallet Desktop App",
   "main": "main.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron .",
     "debug": "yarn start devmode",
     "make-patch": "./make-patch.sh",
-    "pack": "electron-builder --dir agama-unpacked",
+    "pack": "electron-builder --dir verus-unpacked",
     "dist": "electron-builder --publish=never  ",
     "dist-win": "electron-builder --publish=never  --win",
     "test": "mocha",

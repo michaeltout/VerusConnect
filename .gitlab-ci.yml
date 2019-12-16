@@ -8,20 +8,20 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DEFAULT_VERUSCOIN_BRANCH: master
-  VERUS_CONNECT_VERSION: 0.0.1-alpha
-  VERUSCOIN_VERSION: 0.6.0-2
+  VERUS_VERSION: 0.0.2-alpha
+  VERUSCOIN_VERSION: 0.6.0-3
   KOMODO_VERSION: 0.5.0
   BINARY_SOURCE: VerusCoin
   EASYDEX_GUI_BUILD: build.tar.gz
-  VERUS_CONNECT_APPIMAGE: VerusConnect-Linux-v${VERUS_CONNECT_VERSION}.AppImage
-  VERUS_CONNECT_LINUX_TAR: VerusConnect-Linux-v${VERUS_CONNECT_VERSION}.tar.gz
-  VERUS_CONNECT_WINDOWS_ZIP: VerusConnect-Windows-v${VERUS_CONNECT_VERSION}.zip
-  VERUS_CONNECT_WINDOWS_NSIS: VerusConnect-Windows-v${VERUS_CONNECT_VERSION}.exe
-  VERUS_CONNECT_MACOS: VerusConnect-MacOS-v${VERUS_CONNECT_VERSION}.dmg
+  VERUS_APPIMAGE: Verus-Linux-v${VERUS_VERSION}.AppImage
+  VERUS_LINUX_TAR: Verus-Linux-v${VERUS_VERSION}.tar.gz
+  VERUS_WINDOWS_ZIP: Verus-Windows-v${VERUS_VERSION}.zip
+  VERUS_WINDOWS_NSIS: Verus-Windows-v${VERUS_VERSION}.exe
+  VERUS_MACOS: Verus-MacOS-v${VERUS_VERSION}.dmg
   GIT_SUBMODULE_STRATEGY: recursive
   POST_COMMENT: "Pipeline Trigger: ${CI_PIPELINE_SOURCE}\n
       Branch: ${CI_COMMIT_REF_NAME}\n
-      Commit: https://github.com/VerusCoin/VerusConnect/commit/${CI_COMMIT_SHA}\n
+      Commit: https://github.com/VerusCoin/Verus/commit/${CI_COMMIT_SHA}\n
       ${CI_COMMIT_MESSAGE}\n"
 ########################################################################################################################
 ####END####                                        PROJECT LEVEL VARIABLES                                   ####END####
@@ -47,8 +47,8 @@ build:linux:
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
     - cd gui/
-    - git clone https://github.com/VerusCoin/VerusConnect-GUI.git
-    - cd VerusConnect-GUI/react
+    - git clone https://github.com/VerusCoin/Verus-GUI.git
+    - cd Verus-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -64,22 +64,22 @@ build:linux:
   script:
     - yarn run dist
     - cd dist
-    - chmod 755 ${VERUS_CONNECT_APPIMAGE}
-    - tar -czvf ${VERUS_CONNECT_LINUX_TAR} ${VERUS_CONNECT_APPIMAGE}
-    - sha256sum ${VERUS_CONNECT_LINUX_TAR} > ${VERUS_CONNECT_LINUX_TAR}.sha256
-    - mv ${VERUS_CONNECT_LINUX_TAR} ${VERUS_CONNECT_LINUX_TAR}.sha256 ..
+    - chmod 755 ${VERUS_APPIMAGE}
+    - tar -czvf ${VERUS_LINUX_TAR} ${VERUS_APPIMAGE}
+    - sha256sum ${VERUS_LINUX_TAR} > ${VERUS_LINUX_TAR}.sha256
+    - mv ${VERUS_LINUX_TAR} ${VERUS_LINUX_TAR}.sha256 ..
   after_script:
-    - curl -F file=@"$VERUS_CONNECT_LINUX_TAR"
-      -F channels="$VERUS_CONNECT_POST_CHANNEL"
+    - curl -F file=@"$VERUS_LINUX_TAR"
+      -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
   artifacts:
     paths:
-      - ${VERUS_CONNECT_LINUX_TAR}
-      - ${VERUS_CONNECT_LINUX_TAR}.sha256
-      - ${VERUS_CONNECT_APPIMAGE}
-      - ${VERUS_CONNECT_APPIMAGE}.sha256 ..
+      - ${VERUS_LINUX_TAR}
+      - ${VERUS_LINUX_TAR}.sha256
+      - ${VERUS_APPIMAGE}
+      - ${VERUS_APPIMAGE}.sha256 ..
       - dist
     expire_in: 1 week
 ########################################################################################################################
@@ -101,8 +101,8 @@ build:windows:
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
     - cd gui/
-    - git clone https://github.com/VerusCoin/VerusConnect-GUI.git
-    - cd VerusConnect-GUI/react
+    - git clone https://github.com/VerusCoin/Verus-GUI.git
+    - cd Verus-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -119,21 +119,21 @@ build:windows:
   script:
     - yarn run dist-win
     - cd dist
-    - sha256sum ${VERUS_CONNECT_WINDOWS_ZIP} > ${VERUS_CONNECT_WINDOWS_ZIP}.sha256
-    - sha256sum ${VERUS_CONNECT_WINDOWS_NSIS} > ${VERUS_CONNECT_WINDOWS_NSIS}.sha256
-    - mv ${VERUS_CONNECT_WINDOWS_ZIP} ${VERUS_CONNECT_WINDOWS_ZIP}.sha256 ${VERUS_CONNECT_WINDOWS_NSIS} ${VERUS_CONNECT_WINDOWS_NSIS}.sha256 ..
+    - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
+    - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
+    - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256 ${VERUS_WINDOWS_NSIS} ${VERUS_WINDOWS_NSIS}.sha256 ..
   after_script:
-    - curl -F file=@"$VERUS_CONNECT_WINDOWS_ZIP"
-      -F channels="$VERUS_CONNECT_POST_CHANNEL"
+    - curl -F file=@"$VERUS_WINDOWS_ZIP"
+      -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
   artifacts:
     paths:
-      - ${VERUS_CONNECT_WINDOWS_ZIP}
-      - ${VERUS_CONNECT_WINDOWS_ZIP}.sha256
-      - ${VERUS_CONNECT_WINDOWS_NSIS}
-      - ${VERUS_CONNECT_WINDOWS_NSIS}.sha256
+      - ${VERUS_WINDOWS_ZIP}
+      - ${VERUS_WINDOWS_ZIP}.sha256
+      - ${VERUS_WINDOWS_NSIS}
+      - ${VERUS_WINDOWS_NSIS}.sha256
       - dist
     expire_in: 1 week
 ########################################################################################################################
@@ -151,8 +151,8 @@ build:mac:
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
     - cd gui/
-    - git clone https://github.com/VerusCoin/VerusConnect-GUI.git
-    - cd VerusConnect-GUI/react
+    - git clone https://github.com/VerusCoin/Verus-GUI.git
+    - cd Verus-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -168,18 +168,18 @@ build:mac:
     - export USE_HARD_LINKS=false
     - yarn run dist
     - cd dist
-    - shasum -a 256 ${VERUS_CONNECT_MACOS} > ${VERUS_CONNECT_MACOS}.sha256
-    - mv ${VERUS_CONNECT_MACOS} ${VERUS_CONNECT_MACOS}.sha256 ..
+    - shasum -a 256 ${VERUS_MACOS} > ${VERUS_MACOS}.sha256
+    - mv ${VERUS_MACOS} ${VERUS_MACOS}.sha256 ..
   after_script:
-    - curl -F file=@"${VERUS_CONNECT_MACOS}"
-      -F channels="${VERUS_CONNECT_POST_CHANNEL}"
+    - curl -F file=@"${VERUS_MACOS}"
+      -F channels="${VERUS_POST_CHANNEL}"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
   artifacts:
     paths:
-      - ${VERUS_CONNECT_MACOS}
-      - ${VERUS_CONNECT_MACOS}.sha256
+      - ${VERUS_MACOS}
+      - ${VERUS_MACOS}.sha256
       - dist
     expire_in: 1 week
 
@@ -195,20 +195,20 @@ deploy:
     - mkdir -p $CI_COMMIT_REF_NAME/Windows
     - mkdir -p $CI_COMMIT_REF_NAME/Linux
     - mkdir -p $CI_COMMIT_REF_NAME/MacOS
-    - cp ${VERUS_CONNECT_LINUX_TAR} ${CI_COMMIT_REF_NAME}/Linux
-    - cp ${VERUS_CONNECT_WINDOWS_ZIP} ${CI_COMMIT_REF_NAME}/Windows
-    - cp ${VERUS_CONNECT_MACOS} ${CI_COMMIT_REF_NAME}/MacOS
+    - cp ${VERUS_LINUX_TAR} ${CI_COMMIT_REF_NAME}/Linux
+    - cp ${VERUS_WINDOWS_ZIP} ${CI_COMMIT_REF_NAME}/Windows
+    - cp ${VERUS_MACOS} ${CI_COMMIT_REF_NAME}/MacOS
     - echo ${AUTH_KEY} > AUTH_KEY.json
     - gcloud auth activate-service-account --key-file AUTH_KEY.json
-    - gsutil rsync -r $CI_COMMIT_REF_NAME $STAGING/VerusConnect/$CI_COMMIT_REF_NAME/
+    - gsutil rsync -r $CI_COMMIT_REF_NAME $STAGING/Verus/$CI_COMMIT_REF_NAME/
   artifacts:
     paths:
-      - ${VERUS_CONNECT_LINUX_TAR}
-      - ${VERUS_CONNECT_LINUX_TAR}.sha256
-      - ${VERUS_CONNECT_WINDOWS_ZIP}
-      - ${VERUS_CONNECT_WINDOWS_ZIP}.sha256
-      - ${VERUS_CONNECT_MACOS}
-      - ${VERUS_CONNECT_MACOS}.sha256
-  #    - ${VERUS_CONNECT_WINDOWS_NSIS}
-   #   - ${VERUS_CONNECT_WINDOWS_NSIS}.sha256
+      - ${VERUS_LINUX_TAR}
+      - ${VERUS_LINUX_TAR}.sha256
+      - ${VERUS_WINDOWS_ZIP}
+      - ${VERUS_WINDOWS_ZIP}.sha256
+      - ${VERUS_MACOS}
+      - ${VERUS_MACOS}.sha256
+  #    - ${VERUS_WINDOWS_NSIS}
+   #   - ${VERUS_WINDOWS_NSIS}.sha256
     expire_in: 1 week

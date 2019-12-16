@@ -10,7 +10,7 @@ const pathsAgama = (api) => {
       fixPath();
       //api.agamaDirKMD = `${process.env.HOME}/Library/Application Support/Agama`;
 
-      api.agamaDir = `${process.env.HOME}/Library/Application Support/VerusConnect`;
+      api.agamaDir = `${process.env.HOME}/Library/Application Support/Verus`;
       return api;
       break;
 
@@ -25,7 +25,7 @@ const pathsAgama = (api) => {
       //api.agamaDirKMD = `${process.env.APPDATA}/Agama`;
       //api.agamaDirKMD = path.normalize(api.agamaDirKMD);
 
-      api.agamaDir = `${process.env.APPDATA}/VerusConnect`;
+      api.agamaDir = `${process.env.APPDATA}/Verus`;
       api.agamaDir = path.normalize(api.agamaDir);
       return api;
       break;
@@ -38,7 +38,7 @@ const pathsDaemons = (api) => {
   switch (os.platform()) {
     case 'darwin':
       fixPath();
-      api.agamaTestDir = `${process.env.HOME}/Library/Application Support/VerusConnect/test`,
+      api.agamaTestDir = `${process.env.HOME}/Library/Application Support/Verus/test`,
       api.komododBin = path.join(__dirname, '../../assets/bin/osx/komodod'),
       api.komodocliBin = path.join(__dirname, '../../assets/bin/osx/komodo-cli'),
       api.veruscliBin = path.join(__dirname, '../../assets/bin/osx/verusd/verus'),
@@ -79,7 +79,7 @@ const pathsDaemons = (api) => {
       break;
 
     case 'win32':
-      api.agamaTestDir = `${process.env.APPDATA}/VerusConnect/test`;
+      api.agamaTestDir = `${process.env.APPDATA}/Verus/test`;
       api.agamaTestDir = path.normalize(api.agamaTestDir);
       api.komododBin = path.join(__dirname, '../../assets/bin/win64/komodod.exe'),
       api.komododBin = path.normalize(api.komododBin),
