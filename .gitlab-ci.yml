@@ -121,10 +121,10 @@ build:windows:
     - cd dist
     - unzip ${VERUS_WINDOWS_ZIP} -d Verus-Windows-v${VERUS_VERSION}
     - rm ${VERUS_WINDOWS_ZIP}
-    - zip -r Verus-Windows-v${VERUS_VERSION}
+    - zip -r ${VERUS_WINDOWS_ZIP} Verus-Windows-v${VERUS_VERSION}
     - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
 #    - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
-    - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256 ${VERUS_WINDOWS_NSIS} ${VERUS_WINDOWS_NSIS}.sha256 ..
+    - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256  ..
   after_script:
     - curl -F file=@"$VERUS_WINDOWS_ZIP"
       -F channels="$VERUS_POST_CHANNEL"
