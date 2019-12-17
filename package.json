@@ -1,7 +1,7 @@
 {
   "name": "Verus",
   "productName": "Verus",
-  "version": "0.0.2-alpha",
+  "version": "0.0.3-alpha",
   "description": "Agama Wallet Desktop App",
   "main": "main.js",
   "scripts": {
