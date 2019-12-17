@@ -46,9 +46,7 @@ build:linux:
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
-    - cd gui/
-    - git clone https://github.com/VerusCoin/Verus-GUI.git
-    - cd Verus-GUI/react
+    - cd gui/Verus-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -100,9 +98,7 @@ build:windows:
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
-    - cd gui/
-    - git clone https://github.com/VerusCoin/Verus-GUI.git
-    - cd Verus-GUI/react
+    - cd gui/Verus-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -153,9 +149,7 @@ build:mac:
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
-    - cd gui/
-    - git clone https://github.com/VerusCoin/Verus-GUI.git
-    - cd Verus-GUI/react
+    - cd gui/Verus-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
