@@ -40,7 +40,7 @@ cd Verus
 yarn install
 yarn start
 ```
-To use debug/dev mode please stop the Verus App (electron) and either set `dev: true` and `debug: true` in `~/.verus-connect/config.json` and then restart the app or replace step 4) from above with the start command below:
+To use debug/dev mode please stop the Verus App (electron) and either set `dev: true` and `debug: true` in `~/.verus/config.json` and then restart the app or replace step 4) from above with the start command below:
 
 ```shell
 yarn start devmode

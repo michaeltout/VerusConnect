@@ -17,7 +17,7 @@ const pathsAgama = (api) => {
     case 'linux':
       //api.agamaDirKMD = `${process.env.HOME}/.agama`;
 
-      api.agamaDir = `${process.env.HOME}/.verus-connect`;
+      api.agamaDir = `${process.env.HOME}/.verus`;
       return api;
       break;
 
@@ -60,7 +60,7 @@ const pathsDaemons = (api) => {
       break;
 
     case 'linux':
-      api.agamaTestDir = `${process.env.HOME}/.verus-connect/test`,
+      api.agamaTestDir = `${process.env.HOME}/.verus/test`,
       api.komododBin = path.join(__dirname, '../../assets/bin/linux64/komodod'),
       api.komodocliBin = path.join(__dirname, '../../assets/bin/linux64/komodo-cli'),
       api.veruscliBin = path.join(__dirname, '../../assets/bin/linux64/verusd/verus'),
