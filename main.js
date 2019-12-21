@@ -335,7 +335,7 @@ function createAppCloseWindow() {
 					show: false,
 				});
 
-				mainWindow.loadURL(appConfig.general.main.dev || process.argv.indexOf('devmode') > -1 ? 'http://127.0.0.1:3000' : `file://${__dirname}/gui/Verus-GUI/react/build/index.html`);
+				mainWindow.loadURL(appConfig.general.main.dev || process.argv.indexOf('devmode') > -1 ? 'http://127.0.0.1:3000' : `file://${__dirname}/gui/Verus-Desktop-GUI/react/build/index.html`);
 
 				api.setIO(io); // pass sockets object to api router
 				api.setVar('appBasicInfo', appBasicInfo);

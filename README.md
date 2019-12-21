@@ -18,11 +18,11 @@ The Verus Multicoin Wallet and Ecosystem GUI
 2) [Install git](https://git-scm.com/)
 
 
-#### Build & Start Verus-GUI (frontend)
+#### Build & Start Verus-Desktop-GUI (frontend)
 
 ```shell
 git clone --recursive https://github.com/VerusCoin/Verus --branch master --single-branch
-cd Verus/gui/Verus-GUI/react/
+cd Verus/gui/Verus-Desktop-GUI/react/
 yarn update && yarn install 
 ```
 Leave the above process running and use a new terminal windows/tab when proceeding with the below steps.

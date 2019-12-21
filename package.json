@@ -1,8 +1,8 @@
 {
-  "name": "Verus",
-  "productName": "Verus",
-  "version": "0.0.3-alpha",
-  "description": "Agama Wallet Desktop App",
+  "name": "verus-desktop",
+  "productName": "Verus Deskop",
+  "version": "0.0.4-alpha",
+  "description": "Verus Desktop Wallet App",
   "main": "main.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron .",
