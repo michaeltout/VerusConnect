@@ -52,7 +52,7 @@ let localVersionFile = api.readVersionFile();
 localVersion = localVersionFile.split(localVersionFile.indexOf('\r\n') > -1 ? '\r\n' : '\n');
 
 const appBasicInfo = {
-	name: 'Verus',
+	name: 'Verus Desktop',
 	version: localVersion[0],
 };
 
