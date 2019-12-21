@@ -1,6 +1,6 @@
 {
   "name": "verus-desktop",
-  "productName": "Verus-Deskop",
+  "productName": "Verus-Desktop",
   "version": "0.0.4-alpha",
   "description": "Verus Desktop Wallet App",
   "main": "main.js",
