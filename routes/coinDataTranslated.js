@@ -1,5 +1,5 @@
 // TODO: Delete this file and find a way
-// to use coinData in Verus-GUI in appConfig.js
+// to use coinData in Verus-Desktop-GUI in appConfig.js
 
 "use strict";
 
@@ -14,7 +14,7 @@ var _coinHelpers = _interopRequireDefault(
 
 var chainParams = require("./chainParams");
 
-var _coins = _interopRequireDefault(require("../gui/Verus-GUI/react/src/translate/coins"));
+var _coins = _interopRequireDefault(require("../gui/Verus-Desktop-GUI/react/src/translate/coins"));
 
 var _ethErc20ContractId = _interopRequireDefault(
   require("agama-wallet-lib/src/eth-erc20-contract-id")

@@ -152,7 +152,7 @@ const appConfig = {
     },
     coin: {
       native: {
-        includePrivateAddrs: {
+        /*includePrivateAddrs: {
           type: 'checkbox',
           displayName: 'Fetch private addresses',
           info: 'Fetch private addresses when fetching addresses.',
@@ -166,7 +166,7 @@ const appConfig = {
           type: 'checkbox',
           displayName: 'Fetch private transactions',
           info: 'Fetch private transactions when fetching transactions.',
-        },
+        },*/
         stakeGuard: {
           type: 'text_input',
           displayName: 'StakeGuard Address',

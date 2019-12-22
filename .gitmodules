@@ -1,3 +1,3 @@
-[submodule "gui/Verus-GUI"]
-	path = gui/Verus-GUI
-	url = https://github.com/VerusCoin/Verus-GUI
+[submodule "gui/Verus-Desktop-GUI"]
+	path = gui/Verus-Desktop-GUI
+	url = https://github.com/VerusCoin/Verus-Desktop-GUI
