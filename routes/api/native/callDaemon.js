@@ -44,6 +44,31 @@ module.exports = (api) => {
     });
   }
 
+  api.post('/native/call_daemon', (req, res, next) => {
+    const token = req.body.token;
+    const params = req.body.params;
+    const coin = req.body.chainTicker;
+    const cmd = req.body.cmd;
+
+    api.native.callDaemon(coin, cmd, params, token)
+    .then((rpcRes) => {
+      const retObj = {
+        msg: 'success',
+        result: rpcRes,
+      };
+  
+      res.end(JSON.stringify(retObj));  
+    })
+    .catch(error => {
+      const retObj = {
+        msg: 'error',
+        result: error.message,
+      };
+  
+      res.end(JSON.stringify(retObj));  
+    })
+  });
+
   api.native.convertRpcJson = (json) => {
     if (json === 'Work queue depth exceeded') {
       return({ msg: 'error', result: 'Daemon is busy' });
