@@ -10,14 +10,14 @@ const pathsAgama = (api) => {
       fixPath();
       //api.agamaDirKMD = `${process.env.HOME}/Library/Application Support/Agama`;
 
-      api.agamaDir = `${process.env.HOME}/Library/Application Support/Verus`;
+      api.agamaDir = `${process.env.HOME}/Library/Application Support/Verus-Desktop`;
       return api;
       break;
 
     case 'linux':
       //api.agamaDirKMD = `${process.env.HOME}/.agama`;
 
-      api.agamaDir = `${process.env.HOME}/.verus`;
+      api.agamaDir = `${process.env.HOME}/.verus-desktop`;
       return api;
       break;
 
@@ -25,7 +25,7 @@ const pathsAgama = (api) => {
       //api.agamaDirKMD = `${process.env.APPDATA}/Agama`;
       //api.agamaDirKMD = path.normalize(api.agamaDirKMD);
 
-      api.agamaDir = `${process.env.APPDATA}/Verus`;
+      api.agamaDir = `${process.env.APPDATA}/Verus-Desktop`;
       api.agamaDir = path.normalize(api.agamaDir);
       return api;
       break;
