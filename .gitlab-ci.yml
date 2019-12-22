@@ -7,28 +7,28 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: master
-  VERUS_VERSION: 0.0.3-alpha
-  VERUSCOIN_VERSION: 0.6.0-5
+  DEFAULT_VERUSCOIN_BRANCH: dev
+  VERUS_VERSION: 0.0.4-alpha
+  VERUSCOIN_VERSION: 0.6.0-6
   KOMODO_VERSION: 0.5.0
   BINARY_SOURCE: VerusCoin
   EASYDEX_GUI_BUILD: build.tar.gz
-  VERUS_APPIMAGE: Verus-Linux-v${VERUS_VERSION}.AppImage
-  VERUS_LINUX_TAR: Verus-Linux-v${VERUS_VERSION}.tar.gz
-  VERUS_WINDOWS_ZIP: Verus-Windows-v${VERUS_VERSION}.zip
-  #VERUS_WINDOWS_NSIS: Verus-Windows-v${VERUS_VERSION}.exe
-  VERUS_MACOS: Verus-MacOS-v${VERUS_VERSION}.dmg
+  VERUS_APPIMAGE: Verus-Desktop-Linux-v${VERUS_VERSION}.AppImage
+  VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}.tar.gz
+  VERUS_WINDOWS_ZIP: Verus-Desktop-Windows-v${VERUS_VERSION}.zip
+  #VERUS_WINDOWS_NSIS: Verus-Desktop-Windows-v${VERUS_VERSION}.exe
+  VERUS_MACOS: Verus-Desktop-MacOS-v${VERUS_VERSION}.dmg
   GIT_SUBMODULE_STRATEGY: recursive
   POST_COMMENT: "Pipeline Trigger: ${CI_PIPELINE_SOURCE}\n
       Branch: ${CI_COMMIT_REF_NAME}\n
-      Commit: https://github.com/VerusCoin/Verus/commit/${CI_COMMIT_SHA}\n
+      Commit: https://github.com/VerusCoin/Verus-Desktop/commit/${CI_COMMIT_SHA}\n
       ${CI_COMMIT_MESSAGE}\n"
 ########################################################################################################################
 ####END####                                        PROJECT LEVEL VARIABLES                                   ####END####
 ########################################################################################################################
 ########################################################################################################################
 ########################################################################################################################
-####START####          Build Stage: compile and package komodo binaries for Verus CLI                     ####START#####
+####START####                                          Build Stage                                        ####START#####
 ########################################################################################################################
 ########################################################################################################################
 ####START####                                            LINUX                                             ####START####
@@ -46,7 +46,7 @@ build:linux:
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
-    - cd gui/Verus-GUI/react
+    - cd gui/Verus-Desktop-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -98,7 +98,7 @@ build:windows:
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
-    - cd gui/Verus-GUI/react
+    - cd gui/Verus-Desktop-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -115,9 +115,9 @@ build:windows:
   script:
     - yarn run dist-win
     - cd dist
-    - unzip ${VERUS_WINDOWS_ZIP} -d Verus-Windows-v${VERUS_VERSION}
+    - unzip ${VERUS_WINDOWS_ZIP} -d Verus-Desktop-Windows-v${VERUS_VERSION}
     - rm ${VERUS_WINDOWS_ZIP}
-    - zip -r ${VERUS_WINDOWS_ZIP} Verus-Windows-v${VERUS_VERSION}
+    - zip -r ${VERUS_WINDOWS_ZIP} Verus-Desktop-Windows-v${VERUS_VERSION}
     - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
 #    - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
     - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256  ..
@@ -149,7 +149,7 @@ build:mac:
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
-    - cd gui/Verus-GUI/react
+    - cd gui/Verus-Desktop-GUI/react
     - yarn install
     - yarn run build
     - cd ../../..
@@ -197,7 +197,7 @@ deploy:
     - cp ${VERUS_MACOS} ${CI_COMMIT_REF_NAME}/MacOS
     - echo ${AUTH_KEY} > AUTH_KEY.json
     - gcloud auth activate-service-account --key-file AUTH_KEY.json
-    - gsutil rsync -r $CI_COMMIT_REF_NAME $STAGING/Verus/$CI_COMMIT_REF_NAME/
+    - gsutil rsync -r $CI_COMMIT_REF_NAME $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/
   artifacts:
     paths:
       - ${VERUS_LINUX_TAR}
