@@ -94,12 +94,13 @@ const template = [
     role: 'help',
     label: 'Debug',
     submenu: [
-      {
-        label: 'Reset settings',
-        click (item, focusedWindow) {
-          focusedWindow.resetSettings();
-        }
-      },
+      // TODO: Reimplement
+      //{
+      //  label: 'Reset settings',
+      //  click (item, focusedWindow) {
+      //    focusedWindow.resetSettings();
+      //  }
+      //},
       {
         label: 'Join our Discord',
         click (item, focusedWindow) {
@@ -110,11 +111,11 @@ const template = [
       {
         label: 'Add Github issue',
         click (item, focusedWindow) {
-          shell.openExternal('https://github.com/VerusCoin/agama/issues/new?body=Please+describe+your+issue+in+details.+Attach+screenshots+if+you+can,+they+help+a+lot.');
+          shell.openExternal('https://github.com/VerusCoin/Verus-Desktop/issues/new?body=Please+describe+your+issue+in+detail.+Attach+screenshots+if+you+can,+they+help+a+lot.');
         }
       },
       {
-        label: 'Show Agama data folder',
+        label: 'Show Verus Desktop Wallet data folder',
         click (item, focusedWindow) {
           shell.openItem(pathsAgama().agamaDir);
         }
