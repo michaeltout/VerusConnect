@@ -83,9 +83,9 @@ module.exports = (api) => {
     }
   });
 
-  api.get('/electrum/coins/activate', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      const result = api.addElectrumCoin(req.query.chainTicker);
+  api.post('/electrum/coins/activate', (req, res, next) => {
+    if (api.checkToken(req.body.token)) {
+      const result = api.addElectrumCoin(req.body.chainTicker);
 
       const retObj = {
         msg: 'success',
