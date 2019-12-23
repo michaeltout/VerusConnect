@@ -2,24 +2,15 @@ const Promise = require('bluebird');
 
 module.exports = (api) => {
   api.get('/electrum/getblockinfo', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      api.electrumGetBlockInfo(req.query.height, req.query.network)
-      .then((json) => {
-        const retObj = {
-          msg: 'success',
-          result: json,
-        };
-
-        res.end(JSON.stringify(retObj));
-      });
-    } else {
+    api.electrumGetBlockInfo(req.query.height, req.query.network)
+    .then((json) => {
       const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
+        msg: 'success',
+        result: json,
       };
 
       res.end(JSON.stringify(retObj));
-    }
+    });
   });
 
   api.electrumGetBlockInfo = (height, network) => {
@@ -42,24 +33,15 @@ module.exports = (api) => {
   }
 
   api.get('/electrum/getcurrentblock', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      api.electrumGetCurrentBlock(req.query.network)
-      .then((json) => {
-        const retObj = {
-          msg: 'success',
-          result: json,
-        };
-
-        res.end(JSON.stringify(retObj));
-      });
-    } else {
+    api.electrumGetCurrentBlock(req.query.network)
+    .then((json) => {
       const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
+        msg: 'success',
+        result: json,
       };
 
       res.end(JSON.stringify(retObj));
-    }
+    });
   });
 
   api.electrumGetCurrentBlock = (network) => {

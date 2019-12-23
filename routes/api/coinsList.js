@@ -24,7 +24,8 @@ module.exports = (api) => {
    *  type: GET
    *
    */
-  api.get('/coinslist', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/coinslist', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       if (fs.existsSync(`${api.agamaDir}/shepherd/coinslist.json`)) {
         fs.readFile(`${api.agamaDir}/shepherd/coinslist.json`, 'utf8', (err, data) => {
@@ -60,7 +61,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: POST

@@ -1,4 +1,6 @@
 module.exports = (shepherd) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   shepherd.get('/electrum/decoderawtx', (req, res, next) => {
     if (shepherd.checkToken(req.query.token)) {
       const _network = shepherd.getNetworkData(req.query.network);
@@ -58,7 +60,7 @@ module.exports = (shepherd) => {
 
       res.end(JSON.stringify(errorObj));
     }
-  });
+  });*/
 
   return shepherd;
 };

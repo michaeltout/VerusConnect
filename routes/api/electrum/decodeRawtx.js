@@ -1,5 +1,7 @@
 module.exports = (api) => {
   // TODO: loop through vins/vouts
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/decoderawtx', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const _network = api.getNetworkData(req.query.network);
@@ -62,7 +64,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

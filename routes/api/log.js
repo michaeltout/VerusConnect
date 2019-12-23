@@ -42,6 +42,8 @@ module.exports = (api) => {
     }
   }
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/log/runtime', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let _res = JSON.parse(JSON.stringify(api.appRuntimeLog));
@@ -92,8 +94,10 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/log/runtime/dump', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       if (req.query.stringify) {
@@ -134,7 +138,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.getAppRuntimeLog = () => {
     return new Promise((resolve, reject) => {
@@ -194,6 +198,9 @@ module.exports = (api) => {
    *  type: GET
    *  params: type
    */
+
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/getlog', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const logExt = req.query.type === 'txt' ? 'txt' : 'json';
@@ -232,7 +239,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.printDirs = () => {
     api.log(`agama dir: ${api.agamaDir}`, 'env');

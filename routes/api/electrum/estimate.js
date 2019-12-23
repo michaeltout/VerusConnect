@@ -1,4 +1,6 @@
 module.exports = (api) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/estimatefee', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       async function _estimateFee() {
@@ -27,7 +29,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

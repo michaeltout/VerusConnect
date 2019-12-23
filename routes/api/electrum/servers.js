@@ -186,6 +186,8 @@ module.exports = (api) => {
     });
   };
 
+  /*
+  //TODO: Re-evauluate as POST or eliminate use of API token
   api.get('/electrum/kv/servers', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       api.electrum.get_transactions({
@@ -234,7 +236,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

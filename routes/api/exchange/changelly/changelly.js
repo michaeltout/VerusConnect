@@ -40,6 +40,8 @@ module.exports = (api) => {
     });
   };
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/changelly/coins', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const options = {
@@ -59,12 +61,15 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/changelly/rate', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       if (req.query.combined) {
@@ -130,12 +135,15 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/changelly/order/place', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const options = {
@@ -170,12 +178,15 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/changelly/getMinAmount', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const options = {
@@ -205,12 +216,15 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+  
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/changelly/order', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const _orderId = req.query.orderId;
@@ -241,7 +255,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: POST

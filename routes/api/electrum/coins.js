@@ -63,6 +63,8 @@ module.exports = (api) => {
     return true;
   }
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/coin/changepub', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       api.electrumKeys[req.query.chainTicker].pub = req.query.pub;
@@ -81,7 +83,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.post('/electrum/coins/activate', (req, res, next) => {
     if (api.checkToken(req.body.token)) {
@@ -103,7 +105,7 @@ module.exports = (api) => {
     }
   });
 
-  api.get('/electrum/coins', (req, res, next) => {
+  /*api.get('/electrum/coins', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let _electrumCoins = JSON.parse(JSON.stringify(api.electrum.coinData)); // deep cloning
 
@@ -131,7 +133,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.checkCoinConfigIntegrity = (coin) => {
     let _totalCoins = 0;

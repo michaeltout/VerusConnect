@@ -226,54 +226,45 @@ module.exports = (api) => {
   }
 
   api.get('/electrum/listunspent', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      async function _getListunspent() {
-        const network = req.query.network || api.validateChainTicker(req.query.coin);
-        const ecl = await api.ecl(network);
+    async function _getListunspent() {
+      const network = req.query.network || api.validateChainTicker(req.query.coin);
+      const ecl = await api.ecl(network);
 
-        if (req.query.full &&
-            req.query.full === 'true') {
-          api.electrum.listunspent(
-            ecl,
-            req.query.address,
-            network,
-            true,
-            req.query.verify
-          )
-          .then((listunspent) => {
-            api.log('electrum listunspent ==>', 'spv.listunspent');
+      if (req.query.full &&
+          req.query.full === 'true') {
+        api.electrum.listunspent(
+          ecl,
+          req.query.address,
+          network,
+          true,
+          req.query.verify
+        )
+        .then((listunspent) => {
+          api.log('electrum listunspent ==>', 'spv.listunspent');
 
-            const retObj = {
-              msg: 'success',
-              result: listunspent,
-            };
+          const retObj = {
+            msg: 'success',
+            result: listunspent,
+          };
 
-            res.end(JSON.stringify(retObj));
-          });
-        } else {
-          api.electrum.listunspent(ecl, req.query.address, network)
-          .then((listunspent) => {
-            ecl.close();
-            api.log('electrum listunspent ==>', 'spv.listunspent');
+          res.end(JSON.stringify(retObj));
+        });
+      } else {
+        api.electrum.listunspent(ecl, req.query.address, network)
+        .then((listunspent) => {
+          ecl.close();
+          api.log('electrum listunspent ==>', 'spv.listunspent');
 
-            const retObj = {
-              msg: 'success',
-              result: listunspent,
-            };
+          const retObj = {
+            msg: 'success',
+            result: listunspent,
+          };
 
-            res.end(JSON.stringify(retObj));
-          });
-        }
-      };
-      _getListunspent();
-    } else {
-      const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
-      };
-
-      res.end(JSON.stringify(retObj));
-    }
+          res.end(JSON.stringify(retObj));
+        });
+      }
+    };
+    _getListunspent();
   });
 
   return api;

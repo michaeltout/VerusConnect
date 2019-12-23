@@ -139,6 +139,8 @@ module.exports = (api) => {
     return keys;
   }
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/wiftopub', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const _network = api.electrumJSNetworks[req.query.coin.toLowerCase()];
@@ -167,8 +169,10 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/pubkey/check', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const address = api.pubkeyToAddress(req.query.pubkey, req.query.coin);
@@ -199,7 +203,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.pubkeyToAddress = (pubkey, coin) => {
     try {
@@ -241,6 +245,8 @@ module.exports = (api) => {
     }
   });
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/seedtowif', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const keys = api.seedToWif(
@@ -265,7 +271,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.getCoinByPub = (address, coin) => {
     const _skipNetworks = [

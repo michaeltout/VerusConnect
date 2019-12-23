@@ -5,7 +5,8 @@ module.exports = (api) => {
    *  type: GET
    *
    */
-  api.get('/auth/status', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/auth/status', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let retObj;
       let _status = true;
@@ -30,11 +31,10 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.checkToken = (token) => {
-    if (token === api.appSessionHash ||
-        process.argv.indexOf('devmode') > -1) {
+    if (token === api.appSessionHash) {
       return true;
     }
   };

@@ -186,6 +186,8 @@ module.exports = (shepherd) => {
     });
   };
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   shepherd.get('/electrum/kv/servers', (req, res, next) => {
     if (shepherd.checkToken(req.query.token)) {
       shepherd.listtransactions({
@@ -233,7 +235,7 @@ module.exports = (shepherd) => {
 
       res.end(JSON.stringify(errorObj));
     }
-  });
+  });*/
 
   return shepherd;
 };

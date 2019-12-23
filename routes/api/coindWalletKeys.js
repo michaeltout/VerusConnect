@@ -9,7 +9,8 @@ module.exports = (api) => {
    *  type: GET
    *
    */
-  api.get('/coindwalletkeys', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/coindwalletkeys', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const chain = req.query.chain;
 
@@ -113,7 +114,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

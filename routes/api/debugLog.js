@@ -68,7 +68,8 @@ module.exports = (api) => {
     }
   });
 
-  api.get('/coind/stdout', (req, res) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/coind/stdout', (req, res) => {
     if (api.checkToken(req.query.token)) {
       const _daemonName = req.query.chain !== 'komodod' && req.query.chain.toLowerCase() !== 'kmd' ? req.query.chain : 'komodod';
       const _daemonLogName = `${api.agamaDir}/${_daemonName}.log`;
@@ -97,7 +98,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.readDebugLog = (fileLocation, lastNLines) => {
     return new Promise((resolve, reject) => {

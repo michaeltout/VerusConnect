@@ -39,7 +39,8 @@ module.exports = (api) => {
     }
   });
 
-  api.get('/addressbook', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/addressbook', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       if (fs.existsSync(`${api.agamaDir}/shepherd/addressBook.json`)) {
         fs.readFile(`${api.agamaDir}/shepherd/addressBook.json`, 'utf8', (err, data) => {
@@ -75,7 +76,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

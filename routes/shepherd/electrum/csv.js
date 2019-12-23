@@ -3,6 +3,8 @@ const request = require('request');
 const { secondsToString } = require('agama-wallet-lib/src/time');
 
 module.exports = (shepherd) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   shepherd.get('/electrum/listtransactions/csv', (req, res, next) => {
     if (shepherd.checkToken(req.query.token)) {
       shepherd.listtransactions({
@@ -52,8 +54,9 @@ module.exports = (shepherd) => {
 
       res.end(JSON.stringify(errorObj));
     }
-  });
+  });*/
 
+  /*
   shepherd.get('/native/listtransactions/csv', (req, res, next) => {
     if (shepherd.checkToken(req.query.token)) {
       const _coin = req.query.coin;
@@ -129,7 +132,7 @@ module.exports = (shepherd) => {
 
       res.end(JSON.stringify(errorObj));
     }
-  });
+  });*/
 
   return shepherd;
 };

@@ -74,6 +74,8 @@ module.exports = (api) => {
     });
   };
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/coinswitch/coins', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let options;
@@ -112,12 +114,14 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/coinswitch/rate', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let options;
@@ -173,12 +177,14 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*.
 
   /*
    *  type: GET
    *
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/coinswitch/order/place', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let options;
@@ -254,12 +260,14 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/coinswitch/order', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const _orderId = req.query.orderId;
@@ -291,7 +299,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*.
 
   /*
    *  type: POST
@@ -323,6 +331,9 @@ module.exports = (api) => {
    *  type: GET
    *
    */
+
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/coinswitch/history/sync', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       // personal API key
@@ -541,7 +552,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

@@ -10,7 +10,9 @@ module.exports = (api) => {
    *  type: GET
    *  params: patchList
    */
-  api.get('/update/patch', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+
+  /*api.get('/update/patch', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const retObj = {
         msg: 'success',
@@ -72,7 +74,7 @@ module.exports = (api) => {
             }
           }
 
-          zip.extractAllTo(/*target path*/rootLocation + (api.appConfig.general.main.dev || process.argv.indexOf('devmode') > -1 ? '/patch' : ''), /*overwrite*/true);
+          zip.extractAllTo(rootLocation + (api.appConfig.general.main.dev || process.argv.indexOf('devmode') > -1 ? '/patch' : ''), true);
           // TODO: extract files in chunks
           api.io.emit('patch', {
             msg: {
@@ -93,13 +95,15 @@ module.exports = (api) => {
         }
       });
     });
-  }
+  }*/
 
   /*
    *  check latest version
    *  type:
    *  params:
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/update/patch/check', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const rootLocation = path.join(__dirname, '../../');
@@ -158,18 +162,21 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  unpack zip
    *  type:
    *  params:
    */
+  
+  /*
+  //TODO: Re-evauluate as POST or eliminate use of API token
   api.get('/unpack', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const dlLocation = path.join(__dirname, '../../');
       const zip = new AdmZip(`${dlLocation}patch.zip`);
-      zip.extractAllTo(/*target path*/ `${dlLocation}/patch/unpack`, /*overwrite*/true);
+      zip.extractAllTo(`${dlLocation}/patch/unpack`, true);
 
       const retObj = {
         msg: 'success',
@@ -185,7 +192,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

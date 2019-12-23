@@ -209,6 +209,8 @@ module.exports = (api) => {
     }
   });
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/getpinlist', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       if (fs.existsSync(`${api.agamaDir}/shepherd/pin`)) {
@@ -253,7 +255,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.post('/modifypin', (req, res, next) => {
     if (api.checkToken(req.body.token)) {

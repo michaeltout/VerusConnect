@@ -9,32 +9,23 @@ const btcnetworks = require('agama-wallet-lib/src/bitcoinjs-networks');
 
 module.exports = (api) => {
   api.get('/electrum/get_transactions', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      api.electrum.get_transactions({
-        network: req.query.network,
-        coin: req.query.chainTicker,
-        kv: req.query.kv,
-        maxlength: api.appConfig.general.electrum.get_transactionsMaxLength,
-        full: req.query.full ? req.query.full : true,
-        txid: req.query.txid,
-      })
-      .then((txhistory) => {
-        res.end(JSON.stringify(txhistory));
-      })
-      .catch(error => {
-        res.end(JSON.stringify({
-          msg: 'error',
-          result: error.message,
-        }));
-      });
-    } else {
-      const retObj = {
+    api.electrum.get_transactions({
+      network: req.query.network,
+      coin: req.query.chainTicker,
+      kv: req.query.kv,
+      maxlength: api.appConfig.general.electrum.get_transactionsMaxLength,
+      full: req.query.full ? req.query.full : true,
+      txid: req.query.txid,
+    })
+    .then((txhistory) => {
+      res.end(JSON.stringify(txhistory));
+    })
+    .catch(error => {
+      res.end(JSON.stringify({
         msg: 'error',
-        result: 'unauthorized access',
-      };
-
-      res.end(JSON.stringify(retObj));
-    }
+        result: error.message,
+      }));
+    });
   });
 
   api.electrum.get_transactions = (config) => {
@@ -483,36 +474,27 @@ module.exports = (api) => {
   };
 
   api.get('/electrum/gettransaction', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      async function _getTransaction() {
-        const network = req.query.network || api.validateChainTicker(req.query.coin);
-        const ecl = await api.ecl(network);
+    async function _getTransaction() {
+      const network = req.query.network || api.validateChainTicker(req.query.coin);
+      const ecl = await api.ecl(network);
 
-        api.log('electrum gettransaction =>', 'spv.gettransaction');
+      api.log('electrum gettransaction =>', 'spv.gettransaction');
 
-        ecl.connect();
-        ecl.blockchainTransactionGet(req.query.txid)
-        .then((json) => {
-          ecl.close();
-          api.log(json, 'spv.gettransaction');
+      ecl.connect();
+      ecl.blockchainTransactionGet(req.query.txid)
+      .then((json) => {
+        ecl.close();
+        api.log(json, 'spv.gettransaction');
 
-          const retObj = {
-            msg: 'success',
-            result: json,
-          };
+        const retObj = {
+          msg: 'success',
+          result: json,
+        };
 
-          res.end(JSON.stringify(retObj));
-        });
-      };
-      _getTransaction();
-    } else {
-      const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
-      };
-
-      res.end(JSON.stringify(retObj));
-    }
+        res.end(JSON.stringify(retObj));
+      });
+    };
+    _getTransaction();
   });
 
   return api;

@@ -60,42 +60,35 @@ module.exports = (api) => {
   }
 
   api.get('/electrum/servers', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      if (req.query.abbr) { // (?) change
-        let _electrumServers = {};
+    if (req.query.abbr) { // (?) change
+      let _electrumServers = {};
 
-        for (let key in api.electrumServers) {
-          _electrumServers[key] = api.electrumServers[key];
-        }
-
-        const retObj = {
-          msg: 'success',
-          result: {
-            servers: _electrumServers,
-          },
-        };
-
-        res.end(JSON.stringify(retObj));
-      } else {
-        const retObj = {
-          msg: 'success',
-          result: {
-            servers: api.electrumServers,
-          },
-        };
-
-        res.end(JSON.stringify(retObj));
+      for (let key in api.electrumServers) {
+        _electrumServers[key] = api.electrumServers[key];
       }
+
+      const retObj = {
+        msg: 'success',
+        result: {
+          servers: _electrumServers,
+        },
+      };
+
+      res.end(JSON.stringify(retObj));
     } else {
       const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
+        msg: 'success',
+        result: {
+          servers: api.electrumServers,
+        },
       };
 
       res.end(JSON.stringify(retObj));
     }
   });
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/coins/server/set', (req, res, next) => {
     const _coin = req.query.coin.toLowerCase();
 
@@ -131,7 +124,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.getServerVersion = (port, ip, proto) => {
     const ecl = new api.electrumJSCore(
@@ -183,6 +176,8 @@ module.exports = (api) => {
     });
   };
 
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/electrum/servers/test', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       async function _serverTest() {
@@ -251,7 +246,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   // remote api switch wrapper
   api.ecl = async function(network, customElectrum) {

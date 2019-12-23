@@ -43,11 +43,11 @@ module.exports = (api) => {
   }
 
   /*
-   *  type: GET
+   *  type: POST
    *
    */
-  api.get('/sysinfo', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
+  api.post('/sysinfo', (req, res, next) => {
+    if (api.checkToken(req.body.token)) {
       const obj = api.SystemInfo();
       res.send(obj);
     } else {
@@ -61,11 +61,11 @@ module.exports = (api) => {
   });
 
   /*
-   *  type: GET
+   *  type: POST
    *
    */
-  api.get('/appinfo', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
+  api.post('/appinfo', (req, res, next) => {
+    if (api.checkToken(req.body.token)) {
       const obj = api.appInfo();
       res.send(obj);
     } else {

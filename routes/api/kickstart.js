@@ -6,6 +6,8 @@ module.exports = (api) => {
    *  type: GET
    *  params: coin, type
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/kick', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const _coin = req.query.coin;
@@ -48,7 +50,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

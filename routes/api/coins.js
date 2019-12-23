@@ -3,7 +3,8 @@ module.exports = (api) => {
    *  type: GET
    *
    */
-  api.get('/InstantDEX/allcoins', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/InstantDEX/allcoins', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       let retObj;
       let nativeCoindList = [];
@@ -41,7 +42,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

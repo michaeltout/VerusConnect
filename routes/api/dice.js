@@ -7,7 +7,8 @@ module.exports = (api) => {
    *  type: GET
    *  params: coin
    */
-  api.get('/native/dice/list', (req, res, next) => {
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*api.get('/native/dice/list', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const _coin = req.query.coin;
       const _token = req.query.token;
@@ -124,7 +125,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

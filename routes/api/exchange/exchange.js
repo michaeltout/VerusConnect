@@ -144,6 +144,8 @@ module.exports = (api) => {
    *  type: GET
    *
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/cache', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const provider = req.query.provider;
@@ -175,12 +177,13 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+  /*
   api.get('/exchanges/deposit/update', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const provider = req.query.provider;
@@ -206,12 +209,14 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   /*
    *  type: GET
    *
    */
+  //TODO: Re-evauluate as POST or eliminate use of API token
+  /*
   api.get('/exchanges/deposit', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const provider = req.query.provider;
@@ -234,7 +239,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

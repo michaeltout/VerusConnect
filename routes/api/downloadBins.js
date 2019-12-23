@@ -49,8 +49,8 @@ module.exports = (api) => {
    *  type:
    *  params:
    */
-   // TODO: promises
-   api.get('/update/bins/check', (req, res, next) => {
+   //TODO: Re-evauluate as POST or eliminate use of API token
+   /*api.get('/update/bins/check', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const rootLocation = path.join(__dirname, '../../');
       const retObj = {
@@ -112,7 +112,7 @@ module.exports = (api) => {
    *  Update bins
    *  type:
    *  params:
-   */
+   *
   api.get('/update/bins', (req, res, next) => {
     if (api.checkToken(req.query.token)) {
       const rootLocation = path.join(__dirname, '../../');
@@ -182,7 +182,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   return api;
 };

@@ -6,55 +6,45 @@ const UTXO_1MONTH_THRESHOLD_SECONDS = 2592000;
 
 module.exports = (api) => {
   api.get('/electrum/get_balances', (req, res, next) => {
-    if (api.checkToken(req.query.token)) {
-      
-      if (!req.query.chainTicker) {
-        res.end(JSON.stringify({msg: 'error', result: "No coin passed to electrum get_balances"}));
-      }
-      const coinLc = req.query.chainTicker.toLowerCase()
+    if (!req.query.chainTicker) {
+      res.end(JSON.stringify({msg: 'error', result: "No coin passed to electrum get_balances"}));
+    }
+    const coinLc = req.query.chainTicker.toLowerCase()
 
-      if (!api.electrumKeys[coinLc] || !api.electrumKeys[coinLc].pub) {
-        res.end(JSON.stringify({msg: 'error', result: `No address found for ${req.query.chainTicker}`}));
-      }
-      
-      api.electrum.get_balances(api.electrumKeys[coinLc].pub, req.query.chainTicker)
-      .then(balanceObj => {
-        const retObj = {
-          msg: 'success',
-          result: {
-            native: {
-              public: {
-                confirmed: balanceObj.confirmed,
-                unconfirmed: balanceObj.unconfirmed,
-                immature: null,
-                interest: balanceObj.interest
-              },
-              private: {
-                confirmed: null
-              }
-            },
-            reserve: {}
-          },
-        };
-
-        res.end(JSON.stringify(retObj));
-      })
-      .catch(e => {
-        const retObj = {
-          msg: 'error',
-          result: e.message
-        };
-
-        res.end(JSON.stringify(retObj));
-      })
-    } else {
+    if (!api.electrumKeys[coinLc] || !api.electrumKeys[coinLc].pub) {
+      res.end(JSON.stringify({msg: 'error', result: `No address found for ${req.query.chainTicker}`}));
+    }
+    
+    api.electrum.get_balances(api.electrumKeys[coinLc].pub, req.query.chainTicker)
+    .then(balanceObj => {
       const retObj = {
-        msg: 'error',
-        result: 'unauthorized access',
+        msg: 'success',
+        result: {
+          native: {
+            public: {
+              confirmed: balanceObj.confirmed,
+              unconfirmed: balanceObj.unconfirmed,
+              immature: null,
+              interest: balanceObj.interest
+            },
+            private: {
+              confirmed: null
+            }
+          },
+          reserve: {}
+        },
       };
 
       res.end(JSON.stringify(retObj));
-    }
+    })
+    .catch(e => {
+      const retObj = {
+        msg: 'error',
+        result: e.message
+      };
+
+      res.end(JSON.stringify(retObj));
+    })
   });
 
   api.electrum.get_balances = (address, coin) => {
