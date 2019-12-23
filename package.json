@@ -120,7 +120,7 @@
     },
     "linux": {
       "artifactName": "${productName}-Linux-v${version}.${ext}",
-      "icon": "assets/icons/vrsc.icns",
+      "icon": "assets/icons/agama_icons/vrsc.icns",
       "desktop": {
         "Encoding": "UTF-8"
       },
