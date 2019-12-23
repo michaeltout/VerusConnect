@@ -7,7 +7,7 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: dev
+  DEFAULT_VERUSCOIN_BRANCH: master
   VERUS_VERSION: 0.0.4-alpha
   VERUSCOIN_VERSION: 0.6.0-6
   KOMODO_VERSION: 0.5.0
