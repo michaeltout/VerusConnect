@@ -131,6 +131,8 @@ api = require('./api/native/idRegistration.js')(api);
 api = require('./api/native/idRevocation.js')(api);
 api = require('./api/native/idInformation.js')(api);
 api = require('./api/native/idRecovery.js')(api);
+api = require('./api/native/signdata.js')(api);
+api = require('./api/native/verifydata.js')(api);
 
 
 // dex

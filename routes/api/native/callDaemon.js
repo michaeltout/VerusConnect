@@ -24,6 +24,10 @@ module.exports = (api) => {
           token: token,
         };
       }
+
+      //TODO: DELETE (AFTER DEBUG)
+      console.log(cmd)
+      console.log(params)
   
       const options = {
         url: `http://127.0.0.1:${api.appConfig.general.main.agamaPort}/api/cli`,
@@ -38,6 +42,9 @@ module.exports = (api) => {
       request(options, (error, response, body) => {
         const rpcJsonParsed = api.native.convertRpcJson(body)
         
+        //TODO: DELETE (AFTER DEBUG)
+        console.log(rpcJsonParsed)
+
         if (rpcJsonParsed.msg === 'success') resolve(rpcJsonParsed.result);
         else reject(new Error(rpcJsonParsed.result))
       });
@@ -56,6 +63,10 @@ module.exports = (api) => {
         msg: 'success',
         result: rpcRes,
       };
+
+      //TODO: DELETE (AFTER DEBUG)
+      console.log("RETURN")
+      console.log(retObj)
   
       res.end(JSON.stringify(retObj));  
     })
