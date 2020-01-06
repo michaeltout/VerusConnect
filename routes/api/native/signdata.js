@@ -120,7 +120,7 @@ module.exports = (api) => {
     } = req.body;
 
     api.native
-      .sign_message(
+      .sign_file(
         chainTicker,
         token,
         address,
