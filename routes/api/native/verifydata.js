@@ -34,15 +34,9 @@ module.exports = (api) => {
           token
         )
       .then(verificationResult => {
-        //TODO: DELETE (AFTER DEBUG)
-        console.log("VERIF RES")
-        console.log(verificationResult)
         resolve(verificationResult)
       })
       .catch(err => {
-        //TODO: DELETE (AFTER DEBUG)
-        console.error(err)
-
         reject(err);
       });
     });
@@ -81,16 +75,9 @@ module.exports = (api) => {
           token
         )
       .then(verificationResult => {
-        //TODO: DELETE (AFTER DEBUG)
-        console.log("VERIF RES")
-        console.log(verificationResult)
-
         resolve(verificationResult)
       })
       .catch(err => {
-        //TODO: DELETE (AFTER DEBUG)
-        console.error(err)
-
         reject(err);
       });
     });
@@ -120,12 +107,6 @@ module.exports = (api) => {
           msg: "success",
           result: verificationResult
         };
-
-        //TODO: DELETE (AFTER DEBUG)
-        console.log("INSIDE CALL")
-        console.log(JSON.stringify(retObj))
-        console.log(retObj)
-
         res.end(JSON.stringify(retObj));
       })
       .catch(error => {
