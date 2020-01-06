@@ -125,13 +125,16 @@
         "Encoding": "UTF-8"
       },
       "target": [
-        "appimage"
+        "appimage",
+        "tar.gz",
+        "deb"
       ]
     },
     "win": {
       "artifactName": "${productName}-Windows-v${version}.${ext}",
       "target": [
-        "zip"
+        "zip",
+        "nsis"
       ],
       "icon": "assets/icons/vrsc.ico"
     }
