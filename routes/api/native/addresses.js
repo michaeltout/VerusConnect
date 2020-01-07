@@ -12,11 +12,14 @@ module.exports = (api) => {
   
   api.native.get_addresses = (coin, token, includePrivate) => {
     return new Promise((resolve, reject) => {
-      let addressPromises = [api.native.callDaemon(coin, 'getaddressesbyaccount', [''], token)]
+      let addressPromises = [api.native.callDaemon(coin, 'listaddressgroupings', [], token)]
       if (includePrivate) addressPromises.push(api.native.callDaemon(coin, 'z_listaddresses', [], token))
       
       Promise.all(addressPromises)
       .then(async (jsonResults) => {
+        // Flatten listaddressgroupings result
+        jsonResults[0] = [].concat(...([].concat(...jsonResults[0])))
+
         let resObj = {
           public: [],
           private: []
@@ -27,20 +30,23 @@ module.exports = (api) => {
           
           for (let i = 0; i < addressListResult.length; i++) {
             const address = addressListResult[i]
-            const addrTag = api.native.getAddressType(address)
-            let balanceObj = {native: 0, reserve: {}}
-            
-            try {
-              balanceObj.native = Number(await api.native.callDaemon(coin, 'z_getbalance', [address], token))
 
-              resObj[
-                addrTag === "sprout" || addrTag === "sapling"
-                  ? "private"
-                  : "public"
-              ].push({ address, tag: addrTag, balances: balanceObj });
+            if (typeof address === 'string' && address.length > 0) {
+              const addrTag = api.native.getAddressType(address)
+              let balanceObj = {native: 0, reserve: {}}
               
-            } catch (e) {
-              throw e
+              try {
+                balanceObj.native = Number(await api.native.callDaemon(coin, 'z_getbalance', [address], token))
+  
+                resObj[
+                  addrTag === "sprout" || addrTag === "sapling"
+                    ? "private"
+                    : "public"
+                ].push({ address, tag: addrTag, balances: balanceObj });
+                
+              } catch (e) {
+                throw e
+              }
             }
           }
         }
