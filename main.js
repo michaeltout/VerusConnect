@@ -232,7 +232,7 @@ module.exports = guiapp;
 let agamaIcon;
 
 if (os.platform() === 'linux') {
-	agamaIcon = path.join(__dirname, '/assets/icons/agama_icons/128x128.png');
+	agamaIcon = path.join(__dirname, '/assets/icons/vrsc_512x512x32.png');
 }
 if (os.platform() === 'win32') {
 	agamaIcon = path.join(__dirname, '/assets/icons/vrsc.ico');
