@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const request = require('request');
 
 module.exports = (api) => {
-  api.native.callDaemon = (coin, cmd, params, token) => {
+  api.native.callDaemon = (coin, cmd, params, token) => {    
     return new Promise((resolve, reject) => {
       let _payload;
   

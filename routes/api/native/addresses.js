@@ -13,44 +13,56 @@ module.exports = (api) => {
   api.native.get_addresses = (coin, token, includePrivate) => {
     return new Promise((resolve, reject) => {
       let addressPromises = [api.native.callDaemon(coin, 'listaddressgroupings', [], token)]
-      if (includePrivate) addressPromises.push(api.native.callDaemon(coin, 'z_listaddresses', [], token))
+      if (includePrivate) {
+        addressPromises.push(api.native.callDaemon(coin, 'z_listaddresses', [], token))
+        addressPromises.push(api.native.callDaemon(coin, 'z_gettotalbalance', [], token))
+      }
       
       Promise.all(addressPromises)
       .then(async (jsonResults) => {
-        // Flatten listaddressgroupings result
-        jsonResults[0] = [].concat(...([].concat(...jsonResults[0])))
-
         let resObj = {
           public: [],
           private: []
         }
-        
-        for (let j = 0; j < jsonResults.length; j++) {
-          let addressListResult = jsonResults[j]
-          
-          for (let i = 0; i < addressListResult.length; i++) {
-            const address = addressListResult[i]
+        let pubAddrsSeen = []
 
-            if (typeof address === 'string' && address.length > 0) {
-              const addrTag = api.native.getAddressType(address)
-              let balanceObj = {native: 0, reserve: {}}
-              
-              try {
+        // Compile public addresses
+        jsonResults[0].forEach(addressGrouping => {
+          addressGrouping.forEach(addressArr => {
+            if (!pubAddrsSeen.includes(addressArr[0])) {
+              let balanceObj = {native: addressArr[1], reserve: {}}
+              resObj.public.push({ address: addressArr[0], tag: 'public', balances: balanceObj })
+              pubAddrsSeen.push(addressArr[0])
+            }
+          })
+        })
+        
+        if (jsonResults.length > 1) {
+          //Compile private addresses
+          const privateAddrListResult = jsonResults[1]
+          const totalZBalance = Number(jsonResults[2].private)
+          let zBalanceSeen = 0
+                  
+          for (let i = 0; i < privateAddrListResult.length; i++) {
+            const address = privateAddrListResult[i]
+            const addrTag = api.native.getAddressType(address)
+            let balanceObj = {native: 0, reserve: {}}
+            
+            try {
+              //If z_balance has been reached, stop checking balances, improves performance
+              if (zBalanceSeen < totalZBalance) {
                 balanceObj.native = Number(await api.native.callDaemon(coin, 'z_getbalance', [address], token))
-  
-                resObj[
-                  addrTag === "sprout" || addrTag === "sapling"
-                    ? "private"
-                    : "public"
-                ].push({ address, tag: addrTag, balances: balanceObj });
-                
-              } catch (e) {
-                throw e
+                zBalanceSeen += balanceObj.native
+              } else {
+                balanceObj.native = 0
               }
+              
+              resObj.private.push({ address, tag: addrTag, balances: balanceObj });
+            } catch (e) {
+              throw e
             }
           }
         }
-
         
         resolve(resObj)
       })

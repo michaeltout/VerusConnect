@@ -133,6 +133,7 @@ api = require('./api/native/idInformation.js')(api);
 api = require('./api/native/idRecovery.js')(api);
 api = require('./api/native/signdata.js')(api);
 api = require('./api/native/verifydata.js')(api);
+api = require('./api/native/generate.js')(api);
 
 
 // dex
@@ -163,6 +164,7 @@ api = require('./api/auth.js')(api);
 api = require('./api/coindWalletKeys.js')(api);
 api = require('./api/addressBook.js')(api);
 api = require('./api/dice.js')(api);
+api = require('./api/system.js')(api);
 
 // elections
 api = require('./api/elections.js')(api);
