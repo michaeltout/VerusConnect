@@ -67,7 +67,6 @@
     "js-sha256": "^0.7.1",
     "marketmaker": "git://github.com/pbca26/marketmaker",
     "nodejs-aes256": "^1.0.1",
-    "osx-temperature-sensor": "^1.0.4",
     "passwd-strength": "https://github.com/michaeltout/passwd-strength.git",
     "portscanner": "^2.1.1",
     "ps-node": "^0.1.5",
@@ -79,6 +78,9 @@
     "systeminformation": "^4.18.0",
     "wif": "^2.0.6",
     "winston": "^3.1.0"
+  },
+  "optionalDependencies": {
+    "osx-temperature-sensor": "^1.0.4"
   },
   "build": {
     "appId": "Verus",
