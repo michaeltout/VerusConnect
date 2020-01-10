@@ -29,8 +29,8 @@ module.exports = (api) => {
           ],
           token
         )
-      .then(signature => {
-        resolve(signature)
+      .then(resultObj => {
+        resolve(resultObj)
       })
       .catch(err => {
         reject(err);
@@ -66,8 +66,8 @@ module.exports = (api) => {
           ],
           token
         )
-      .then(signature => {
-        resolve(signature)
+      .then(resultObj => {
+        resolve(resultObj)
       })
       .catch(err => {
         reject(err);
@@ -92,10 +92,10 @@ module.exports = (api) => {
         data,
         cursig
       )
-      .then(signature => {
+      .then(resultObj => {
         const retObj = {
           msg: "success",
-          result: signature
+          result: resultObj
         };
 
         res.end(JSON.stringify(retObj));
@@ -127,10 +127,10 @@ module.exports = (api) => {
         data,
         cursig
       )
-      .then(signature => {
+      .then(resultObj => {
         const retObj = {
           msg: "success",
-          result: signature
+          result: resultObj
         };
 
         res.end(JSON.stringify(retObj));
