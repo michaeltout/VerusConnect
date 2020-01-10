@@ -40,7 +40,8 @@
     "cross-env": "^5.2.0",
     "electron": "^4.2.12",
     "electron-builder": "21.2.0",
-    "electron-devtools-installer": "^2.2.4"
+    "electron-devtools-installer": "^2.2.4",
+    "electron-rebuild": "^1.8.8"
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
@@ -55,7 +56,6 @@
     "buffer-reverse": "^1.0.1",
     "coinselect": "github:bitcoinjs/coinselect",
     "create-hash": "git://github.com/pbca26/createHash#electron-v4",
-    "electron-rebuild": "^1.8.8",
     "ethereumjs-util": "^6.0.0",
     "ethers": "git://github.com/pbca26/ethers.js",
     "express": "^4.14.0",
