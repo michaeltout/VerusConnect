@@ -11,6 +11,7 @@ api.assetChainPortsDefault = require('./ports.js');
 api._appConfig = require('./appConfig.js');
 api.chainParams = require('./chainParams')
 
+api.coinsInitializing = [];
 api.coindInstanceRegistry = {};
 api.coindStdout = {};
 api.guiLog = {};

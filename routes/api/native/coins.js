@@ -46,6 +46,14 @@ module.exports = (api) => {
         const res = JSON.parse(body)
 
         if (res.msg === 'success') {
+          // Set timeout for "No running daemon message" to be 
+          // "Initializing daemon" for a few seconds
+          api.coinsInitializing.push(coin)
+
+          setTimeout(() => {
+            api.coinsInitializing.splice(api.coinsInitializing.indexOf(coin), 1);
+          }, 20000)
+
           api.log(`${coin} daemon activated successfully`, 'native.confd');
         } else {
           api.log(`${coin} failed to activate, error:`, 'native.confd');

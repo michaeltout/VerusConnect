@@ -317,11 +317,13 @@ module.exports = (api) => {
                       res.end(body);
                     } else {
                       const retObj = {
-                        result: 'error',
+                        result: "error",
                         error: {
                           code: 404,
-                          message: `No running ${payload.chain} daemon found.`,
-                        },
+                          message: api.coinsInitializing.includes(payload.chain)
+                            ? `Initializing ${payload.chain} daemon...`
+                            : `No running ${payload.chain} daemon found.`
+                        }
                       };
   
                       res.end(JSON.stringify(retObj));
