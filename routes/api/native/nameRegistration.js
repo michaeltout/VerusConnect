@@ -1,10 +1,18 @@
 const Promise = require('bluebird');
 
 module.exports = (api) => {    
-  api.native.register_id_name = (coin, token, name, controlAddress, referralId) => {
+  api.native.register_id_name = (coin, token, name, referralId) => {
     return new Promise((resolve, reject) => {      
-      let params = referralId ? [name, controlAddress, referralId] : [name, controlAddress]
-      api.native.callDaemon(coin, 'registernamecommitment', params, token)
+      let params = referralId ? [name, null, referralId] : [name, null]
+      let controlAddress
+
+      api.native.callDaemon(coin, 'getnewaddress', [], token)
+      .then(newAddress => {
+        params[1] = newAddress
+        controlAddress = newAddress
+
+        return api.native.callDaemon(coin, 'registernamecommitment', params, token)
+      })
       .then((nameCommitmentResult) => {
         if (
           nameCommitmentResult &&
@@ -12,7 +20,7 @@ module.exports = (api) => {
           nameCommitmentResult.namereservation
         ) {
           const localCommitments = api.loadLocalCommitments()
-          let saveCommitment = { ...nameCommitmentResult, controlAddress}
+          let saveCommitment = { ...nameCommitmentResult, controlAddress }
 
           api.saveLocalCommitments({
             ...localCommitments,
@@ -30,16 +38,16 @@ module.exports = (api) => {
   };
 
   //TODO: Check here with getidentity if identity and referral exists
-  api.native.register_id_name_preflight = (coin, token, name, controlAddress, referralId) => {
+  api.native.register_id_name_preflight = (coin, token, name, referralId) => {
     return new Promise((resolve, reject) => {      
-      resolve({ namereservation: { coin, name, controlAddress, referral: referralId } });
+      resolve({ namereservation: { coin, name, referral: referralId } });
     });
   };
 
   api.post('/native/register_id_name', (req, res, next) => {
-    const { token, chainTicker, name, controlAddress, referralId } = req.body
+    const { token, chainTicker, name, referralId } = req.body
 
-    api.native.register_id_name(chainTicker, token, name, controlAddress, referralId)
+    api.native.register_id_name(chainTicker, token, name, referralId)
     .then((nameCommitmentResult) => {
       const retObj = {
         msg: 'success',
@@ -59,9 +67,9 @@ module.exports = (api) => {
   });
 
   api.post('/native/register_id_name_preflight', (req, res, next) => {
-    const { token, chainTicker, name, controlAddress, referralId } = req.body
+    const { token, chainTicker, name, referralId } = req.body
 
-    api.native.register_id_name_preflight(chainTicker, token, name, controlAddress, referralId)
+    api.native.register_id_name_preflight(chainTicker, token, name, referralId)
     .then((preflightRes) => {
       const retObj = {
         msg: 'success',
