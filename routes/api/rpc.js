@@ -5,19 +5,27 @@ const execFile = require('child_process').execFile;
 const request = require('request');
 
 module.exports = (api) => {
-  api.getConf = (chain) => {
-    let _confLocation = chain === 'komodod' ? `${api.komodoDir}/komodo.conf` : `${api.komodoDir}/${chain}/${chain}.conf`;
-    _confLocation = chain === 'CHIPS' ? `${api.chipsDir}/chips.conf` : _confLocation;
-
-   
-
+  api.getConf = (chain) => {  
     // any coind
     if (chain) {
-      if (api.nativeCoindList[chain.toLowerCase()]) {
+      //TODO: DELETE DEPRECATED
+      /*if (api.nativeCoindList[chain.toLowerCase()]) {
         const _osHome = os.platform === 'win32' ? process.env.APPDATA : process.env.HOME;
         let coindDebugLogLocation = `${_osHome}/.${api.nativeCoindList[chain.toLowerCase()].bin.toLowerCase()}/debug.log`;
 
         _confLocation = `${_osHome}/.${api.nativeCoindList[chain.toLowerCase()].bin.toLowerCase()}/${api.nativeCoindList[chain.toLowerCase()].bin.toLowerCase()}.conf`;
+      } else if (api.appConfig.general.main.reservedChains.indexOf(chain) === -1) {
+        _confLocation = `${api.appConfig.general.main.pbaasTestmode ? api.verusTestDir : api.verusDir}/PBAAS/${chain}/${chain}.conf`;
+      } else if (chain === 'chips') {
+        _confLocation = `${api.chipsDir}/chips.conf`;
+      } else {
+        _confLocation = chain === 'komodod' ? `${api.komodoDir}/komodo.conf` : `${api.komodoDir}/${chain}/${chain}.conf`;
+      }*/
+
+      let _confLocation
+
+      if (api.appConfig.coin.native.dataDir[chain] && api.appConfig.coin.native.dataDir[chain].length > 0) {  
+        _confLocation = chain === 'komodod' ? `${api.appConfig.coin.native.dataDir[chain]}/komodo.conf` : `${api.appConfig.coin.native.dataDir[chain]}/${chain}.conf`
       } else if (api.appConfig.general.main.reservedChains.indexOf(chain) === -1) {
         _confLocation = `${api.appConfig.general.main.pbaasTestmode ? api.verusTestDir : api.verusDir}/PBAAS/${chain}/${chain}.conf`;
       } else if (chain === 'chips') {
@@ -124,8 +132,11 @@ module.exports = (api) => {
 
             let _arg = (_chain ? ' -ac_name=' + _chain : '') + ' ' + _cmd + (typeof _params === 'object' ? _params.join(' ') : _params);
 
-            if (api.appConfig.general.native.dataDir.length) {
-              _arg = `${_arg} -datadir=${api.appConfig.general.native.dataDir  + (_chain ? '/' + key : '')}`;
+            if (
+              api.appConfig.coin.native.dataDir[_chain] &&
+              api.appConfig.coin.native.dataDir[_chain].length > 0
+            ) {
+              _arg = `${_arg} -datadir=${api.appConfig.coin.native.dataDir[_chain]}`;
             }
 
             exec(`"${_coindCliBin}" ${_arg}`, {
@@ -344,8 +355,11 @@ module.exports = (api) => {
 
           let _arg = (_chain ? ' -ac_name=' + _chain : '') + ' ' + _cmd + _params;
 
-          if (api.appConfig.general.native.dataDir.length) {
-            _arg = `${_arg} -datadir=${api.appConfig.general.native.dataDir  + (_chain ? '/' + key : '')}`;
+          if (
+            api.appConfig.coin.native.dataDir[_chain] &&
+            api.appConfig.coin.native.dataDir[_chain].length > 0
+          ) {
+            _arg = `${_arg} -datadir=${api.appConfig.coin.native.dataDir[_chain]}`;
           }
 
           _arg = _arg.trim().split(' ');

@@ -112,11 +112,11 @@ api.log(`platform: ${osPlatform}`, 'init');
 api.log(`os_release: ${os.release()}`, 'init');
 api.log(`os_type: ${os.type()}`, 'init');
 
-// deprecated(?)
-appConfig['daemonOutput'] = false; // shadow setting
+// deprecated
+//appConfig['daemonOutput'] = false; // shadow setting
 
 let __defaultAppSettings = require('./routes/appConfig.js').config;
-__defaultAppSettings['daemonOutput'] = false; // shadow setting
+//__defaultAppSettings['daemonOutput'] = false; // shadow setting
 const _defaultAppSettings = __defaultAppSettings;
 
 api.log(`app started in ${(appConfig.general.main.dev || process.argv.indexOf('devmode') > -1 ? 'dev mode' : ' user mode')}`, 'init');

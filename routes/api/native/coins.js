@@ -71,7 +71,22 @@ module.exports = (api) => {
   api.post('/native/coins/activate', (req, res) => {
     if (api.checkToken(req.body.token)) {
       const { chainTicker, launchConfig } = req.body
-      const { startupParams, overrideDaemon, overrideRpcPort } = launchConfig
+      let { startupParams, overrideDaemon, overrideRpcPort } = launchConfig
+
+      // Push in startupOptions according to config file
+      if (
+        api.appConfig.coin.native.dataDir[chainTicker] &&
+        api.appConfig.coin.native.dataDir[chainTicker].length > 0
+      ) {
+        startupParams.push(`-datadir=${api.appConfig.coin.native.dataDir[chainTicker]}`)
+      }
+
+      if (
+        api.appConfig.coin.native.stakeGuard[chainTicker] &&
+        api.appConfig.coin.native.stakeGuard[chainTicker].length > 0
+      ) {
+        startupParams.push(`-cheatcatcher=${api.appConfig.coin.native.stakeGuard[chainTicker]}`)
+      }
 
       api.native.activateNativeCoin(chainTicker, startupParams, overrideDaemon, overrideRpcPort)
       .then((result) => {

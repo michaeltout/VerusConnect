@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const _fs = require('graceful-fs');
 const fsnode = require('fs');
 const Promise = require('bluebird');
-const deepmerge = require('../deepmerge.js');
+const deepmerge = require('../deepmerge');
 
 // map coin names to tickers
 const _ticker = {

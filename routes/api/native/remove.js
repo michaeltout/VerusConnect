@@ -37,6 +37,17 @@ module.exports = (api) => {
         }
   
         _arg.push('stop');
+
+        api.native.callDaemon(chain, 'stop', [], api.appSessionHash)
+        .then(res => {
+          api.log(`sent stop sig to ${key}, got result:`, '\nnative.process');
+          api.log(`${res}\n`, 'native.process')
+        })
+        .catch(e => {
+          api.log(`error sending stop sig to ${key}:`, '\nnative.process');
+          api.log(`${e.message}\n`, 'native.process')
+        })
+        /*
         execFile(`${_coindQuitCmd}`, _arg, (error, stdout, stderr) => {
           api.log(`stdout: ${stdout}`, 'native.debug');
           api.log(`stderr: ${stderr}`, 'native.debug');
@@ -45,7 +56,7 @@ module.exports = (api) => {
           if (error !== null) {
             api.log(`exec error: ${error}`, 'native.process');
           }
-        });
+        });*/
       }
   
       const didDaemonQuit = () => {

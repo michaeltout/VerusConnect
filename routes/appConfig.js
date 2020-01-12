@@ -3,11 +3,15 @@ const fiatList = require('./fiatList');
 const zcashParamsSources = require('./zcashParamsSources')
 
 let zCoins = {}
+let nativeCoinStrings = {}
+
 const coinObjArray = coinDataTranslated.getSimpleCoinArray().map(simpleCoinObj => {
   const coinObj = coinDataTranslated.getCoinObj(simpleCoinObj.id, false)
 
   if (coinObj.tags.includes('is_zcash')) zCoins[coinObj.id] = true
   else zCoins[coinObj.id] = false
+
+  if (coinObj.available_modes.native === true) nativeCoinStrings[coinObj.id] = ''
 
   return coinObj
 })
@@ -67,7 +71,8 @@ const appConfig = {
         includePrivateAddrs: zCoins,
         includePrivateBalances: zCoins,
         includePrivateTransactions: zCoins,
-        stakeGuard: {},
+        stakeGuard: nativeCoinStrings,
+        dataDir: nativeCoinStrings
       },
     },
     pubkey: '',
@@ -169,8 +174,13 @@ const appConfig = {
         },*/
         stakeGuard: {
           type: 'text_input',
-          displayName: 'StakeGuard Address',
+          displayName: 'StakeGuard address',
           info: 'Sapling address for Verus StakeGuard. (Will be used when Verus is started)',
+        },
+        dataDir: {
+          type: 'text_input',
+          displayName: 'Custom data directory',
+          info: 'A custom directory for coin data.',
         },
       },
     },
