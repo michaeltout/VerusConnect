@@ -8,18 +8,6 @@ module.exports = (api) => {
 
     return new Promise((resolve, reject) => {
       const chain = key !== 'komodod' ? key : null;
-
-      //TODO: DELETE ----------- 
-      let _coindQuitCmd = api.appConfig.general.main.reservedChains.indexOf(key) === -1 ? api.veruscliBin : api.komodocliBin;
-  
-        // any coind
-      if (api.nativeCoindList[key.toLowerCase()]) {
-        _coindQuitCmd = `${api.coindRootDir}/${key.toLowerCase()}/${api.nativeCoindList[key.toLowerCase()].bin.toLowerCase()}-cli`;
-      }
-      if (key === 'CHIPS') {
-        _coindQuitCmd = api.chipscliBin;
-      }
-      // -----------------------
   
       const execCliStop = () => {
         let _arg = [];
@@ -50,16 +38,6 @@ module.exports = (api) => {
           api.log(`error sending stop sig to ${key}:`, '\nnative.process');
           api.log(`${e.message}\n`, 'native.process')
         })
-        /*
-        execFile(`${_coindQuitCmd}`, _arg, (error, stdout, stderr) => {
-          api.log(`stdout: ${stdout}`, 'native.debug');
-          api.log(`stderr: ${stderr}`, 'native.debug');
-          api.log(`send stop sig to ${key}`, 'native.process');
-  
-          if (error !== null) {
-            api.log(`exec error: ${error}`, 'native.process');
-          }
-        });*/
       }
   
       const didDaemonQuit = () => {

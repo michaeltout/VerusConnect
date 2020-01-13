@@ -5,6 +5,8 @@ module.exports = (api) => {
     if (address[0] === 'z') {
       if (address[1] === 'c') return 'sprout'
       if (address[1] === 's') return 'sapling'
+    } else if (address[0] === 'i') {
+      return 'identity'
     } else {
       return 'public'
     }
@@ -31,7 +33,19 @@ module.exports = (api) => {
           addressGrouping.forEach(addressArr => {
             if (!pubAddrsSeen.includes(addressArr[0])) {
               let balanceObj = {native: addressArr[1], reserve: {}}
-              resObj.public.push({ address: addressArr[0], tag: 'public', balances: balanceObj })
+
+              // Addresses that start with an 'R' and dont include an account field are labeled
+              // as change
+              let tag =
+                addressArr[0][0] === "R" && addressArr.length < 3
+                  ? "change"
+                  : api.native.getAddressType(addressArr[0]);
+
+              // Only include change addresses if they have a balance
+              if (tag !== 'change' || (tag === 'change' && addressArr[1] > 0)) {
+                resObj.public.push({ address: addressArr[0], tag, balances: balanceObj })
+              }
+              
               pubAddrsSeen.push(addressArr[0])
             }
           })
