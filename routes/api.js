@@ -1,3 +1,5 @@
+// TODO: CLEANUP THIS FILE
+
 const electron = require('electron');
 const express = require('express');
 const app = electron.app;
@@ -63,16 +65,17 @@ api.appConfig = api._appConfig.config;
 api = require('./api/paths.js')(api);
 
 api.pathsAgama();
+api.pathsDaemons();
 
 // core
 api = require('./api/log.js')(api);
 api = require('./api/config.js')(api);
 api = require('./api/users.js')(api);
 api = require('./api/nameCommitments.js')(api);
+api = require('./api/init.js')(api);
 
+api.createAgamaDirs();
 api.appConfig = api.loadLocalConfig();
-
-api.pathsDaemons();
 
 api.appConfigSchema = api._appConfig.schema;
 api.defaultAppConfig = Object.assign({}, api.appConfig);
@@ -149,7 +152,6 @@ api = require('./api/coins.js')(api);*/
 api = require('./api/dashboardUpdate.js')(api);
 api = require('./api/binsUtils.js')(api);
 api = require('./api/downloadUtil.js')(api);
-api = require('./api/init.js')(api);
 api = require('./api/pin.js')(api);
 api = require('./api/downloadBins.js')(api);
 api = require('./api/downloadPatch.js')(api);

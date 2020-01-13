@@ -4,7 +4,6 @@ const fsnode = require('fs');
 const Promise = require('bluebird');
 const defaultConf = require('../appConfig.js').config;
 const {
-  deepmerge,
   addMerge,
   flattenObjectProps,
   removeElementByProperties,
@@ -83,159 +82,37 @@ module.exports = (api) => {
     api.log('Setting config to default...', 'settings');
     api.saveLocalAppConf(defaultConf);
     return defaultConf
-
-
-    api.log('unable to parse local config.json', 'settings');
-    /*if (fs.existsSync(`${api.agamaDir}/config.json`)) {
-      let localAppConfig = fs.readFileSync(`${api.agamaDir}/config.json`, 'utf8');
-
-      try {
-        JSON.parse(localAppConfig);
-      } catch (e) {
-        api.log('unable to parse local config.json', 'settings');
-        localAppConfig = JSON.stringify(defaultConf);
-      }
-
-      api.log('app config set from local file', 'settings');
-      api.writeLog('app config set from local file');
-
-      function propertiesToArray(obj) {
-        const isObject = val => typeof val === "object" && !Array.isArray(val);
-
-        const addDelimiter = (a, b) => (a ? `${a}.${b}` : b);
-
-        const paths = (obj = {}, head = "") => {
-          return Object.entries(obj).reduce((product, [key, value]) => {
-            let fullPath = addDelimiter(head, key);
-            return isObject(value)
-              ? product.concat(paths(value, fullPath))
-              : product.concat(fullPath);
-          }, []);
-        };
-
-        return paths(obj);
-      }
-
-      function updateLocalConf(localObj, defaultObj) {
-        const flatLocal = propertiesToArray(localObj);
-        const flatDefault = propertiesToArray(defaultObj);
-        let newLocal = localObj;
-
-        //DELET
-        console.log(localObj)
-
-        flatDefault.forEach(propertyList => {
-          if (!flatLocal.includes(propertyList)) {
-            const propertyArr = propertyList.split(".");
-            let updateObj = propertyArr.reduce(function(
-              accumulator,
-              currentValue
-            ) {
-              return accumulator[currentValue];
-            },
-            defaultObj);
-
-            propertyArr
-              .slice()
-              .reverse()
-              .forEach((property, index) => {
-                updateObj = { [property]: updateObj };
-              });
-
-            newLocal = deepmerge(updateObj, newLocal);
-          }
-        });
-
-        return newLocal;
-      }
-
-      
-
-      if (localAppConfig) {
-        let _localAppConfig = JSON.parse(localAppConfig);
-        // update config to v2.42 compatible
-        if (_localAppConfig.general != null && _localAppConfig.coin != null) {
-          const localConf = JSON.parse(localAppConfig)
-
-          //DELET
-          console.log("DIFF")
-          console.log(propertiesToArray(defaultConf).filter(x => !propertiesToArray(localConf).includes(x)))
-
-          if (JSON.stringify(propertiesToArray(defaultConf)) !== JSON.stringify(propertiesToArray(localConf))) {
-            const newConfig = updateLocalConf(localConf, defaultConf)
-
-            api.log("config diff is found, updating local config", "settings");
-            api.saveLocalAppConf(newConfig);
-            return newConfig;
-          } else {
-            return localConf
-          }
-        } 
-      }
-    } 
-    
-    api.log('local config file is not found or corrupted!', 'settings');
-    api.writeLog('local config file is not found or corrupted!');
-    api.saveLocalAppConf(api.appConfig);
-
-    return api.appConfig;*/
   };
 
   api.saveLocalAppConf = (appSettings) => {
-    const appConfFileName = `${api.agamaDir}/config.json`;
+    const configFileName = `${api.agamaDir}/config.json`;
 
-    _fs.access(api.agamaDir, fs.constants.R_OK, (err) => {
-      if (!err) {
-        const FixFilePermissions = () => {
-          return new Promise((resolve, reject) => {
-            const result = 'config.json file permissions updated to Read/Write';
-
-            fsnode.chmodSync(appConfFileName, '0666');
-
-            setTimeout(() => {
-              api.log(result, 'settings');
-              api.writeLog(result);
-              resolve(result);
-            }, 1000);
-          });
+    try {
+      try {
+        _fs.accessSync(api.agamaDir, fs.constants.R_OK)
+      } catch (e) {
+        if (e.code == 'EACCES') {
+          fsnode.chmodSync(configFileName, '0666');
+        } else if (e.code === 'ENOENT') {
+          api.log('config directory not found', 'settings');
         }
-
-        const FsWrite = () => {
-          return new Promise((resolve, reject) => {
-            const result = 'config.json write file is done';
-
-            fs.writeFile(appConfFileName, JSON.stringify({}), "utf8", err => {
-              if (err) return api.log(err);
-            });
-
-            fsnode.chmodSync(appConfFileName, '0666');
-
-            fs.writeFile(
-              appConfFileName,
-              JSON.stringify(appSettings)
-                .replace(/,/g, ",\n") // format json in human readable form
-                .replace(/":/g, '": ')
-                .replace(/{/g, "{\n")
-                .replace(/}/g, "\n}"),
-              "utf8",
-              err => {
-                if (err) return api.log(err);
-              }
-            );
-
-            setTimeout(() => {
-              api.log(result, 'settings');
-              api.log(`app conf.json file is created successfully at: ${api.agamaDir}`, 'settings');
-              api.writeLog(`app conf.json file is created successfully at: ${api.agamaDir}`);
-              resolve(result);
-            }, 2000);
-          });
-        }
-
-        FsWrite()
-        .then(FixFilePermissions());
       }
-    });
+     
+      fs.writeFileSync(configFileName,
+                  JSON.stringify(appSettings)
+                  .replace(/,/g, ',\n') // format json in human readable form
+                  .replace(/":/g, '": ')
+                  .replace(/{/g, '{\n')
+                  .replace(/}/g, '\n}'), 'utf8');
+
+      
+      api.log('config.json write file is done', 'settings');
+      api.log(`app config.json file is created successfully at: ${api.agamaDir}`, 'settings');
+      api.writeLog(`app config.json file is created successfully at: ${api.agamaDir}`);
+    } catch (e) {
+      api.log('error writing config', 'settings');
+      api.log(e, 'settings');
+    }
   }
 
   /*

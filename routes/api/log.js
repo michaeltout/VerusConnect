@@ -150,7 +150,7 @@ module.exports = (api) => {
    *  type: POST
    *  params: payload
    */
-  api.post('/guilog', (req, res, next) => {
+  /* api.post('/guilog', (req, res, next) => {
     if (api.checkToken(req.body.token)) {
       const logLocation = `${api.agamaDir}/shepherd`;
       const timestamp = req.body.timestamp;
@@ -192,7 +192,7 @@ module.exports = (api) => {
 
       res.end(JSON.stringify(retObj));
     }
-  });
+  }); */
 
   /*
    *  type: GET

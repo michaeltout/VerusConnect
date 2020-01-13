@@ -1,4 +1,5 @@
 // main proc for Agama
+// TODO: CLEANUP THIS FILE
 
 const electron = require('electron');
 const {
@@ -40,9 +41,8 @@ let api = require('./routes/api');
 
 let guiapp = express();
 
-api.createAgamaDirs();
-
-let appConfig = api.loadLocalConfig(); // load app config
+//TODO: add more things here
+const { appConfig } = api
 
 /*const nativeCoindList = api.scanNativeCoindBins(); // dex related
 api.setVar('nativeCoindList', nativeCoindList);*/
