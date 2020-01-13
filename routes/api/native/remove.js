@@ -8,6 +8,8 @@ module.exports = (api) => {
 
     return new Promise((resolve, reject) => {
       const chain = key !== 'komodod' ? key : null;
+
+      //TODO: DELETE ----------- 
       let _coindQuitCmd = api.appConfig.general.main.reservedChains.indexOf(key) === -1 ? api.veruscliBin : api.komodocliBin;
   
         // any coind
@@ -17,6 +19,7 @@ module.exports = (api) => {
       if (key === 'CHIPS') {
         _coindQuitCmd = api.chipscliBin;
       }
+      // -----------------------
   
       const execCliStop = () => {
         let _arg = [];
@@ -38,7 +41,7 @@ module.exports = (api) => {
   
         _arg.push('stop');
 
-        api.native.callDaemon(chain, 'stop', [], api.appSessionHash)
+        api.native.callDaemon(chain == null ? "KMD" : chain, 'stop', [], api.appSessionHash)
         .then(res => {
           api.log(`sent stop sig to ${key}, got result:`, '\nnative.process');
           api.log(`${res}\n`, 'native.process')

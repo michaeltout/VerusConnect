@@ -137,11 +137,6 @@ const appConfig = {
         }, 
       },
       native: {
-        dataDir: {
-          type: 'text_input',
-          displayName: 'Data Directory',
-          info: 'The location of the KMD data directory.'
-        },
         listtransactionsMaxLength: {
           type: 'number_input',
           displayName: 'Max Transaction List Length',
