@@ -34,48 +34,23 @@ module.exports = (api) => {
 
     _fs.access(api.agamaDir, fs.constants.R_OK, (err) => {
       if (!err) {
-        const FixFilePermissions = () => {
-          return new Promise((resolve, reject) => {
-            const result = 'nameCommits.json file permissions updated to Read/Write';
+        const result = 'nameCommits.json write file is done';
 
+        fs.writeFile(commitmentsFileName,
+                    JSON.stringify(commitments)
+                    .replace(/,/g, ',\n') // format json in human readable form
+                    .replace(/":/g, '": ')
+                    .replace(/{/g, '{\n')
+                    .replace(/}/g, '\n}'), 'utf8', (err) => {
+          if (err) {
+            return api.log(err);
+          } else {
             fsnode.chmodSync(commitmentsFileName, '0666');
-
-            setTimeout(() => {
-              api.log(result, 'commitments');
-              api.writeLog(result);
-              resolve(result);
-            }, 1000);
-          });
-        }
-
-        const FsWrite = () => {
-          return new Promise((resolve, reject) => {
-            const result = 'nameCommits.json write file is done';
-
-            fs.writeFile(commitmentsFileName,
-                        JSON.stringify(commitments)
-                        .replace(/,/g, ',\n') // format json in human readable form
-                        .replace(/":/g, '": ')
-                        .replace(/{/g, '{\n')
-                        .replace(/}/g, '\n}'), 'utf8', (err) => {
-              if (err) {
-                return api.log(err);
-              } else {
-                fsnode.chmodSync(commitmentsFileName, '0666');
-              }
-            });
-            
-            setTimeout(() => {
-              api.log(result, 'commitments');
-              api.log(`app nameCommits.json file is created successfully at: ${api.agamaDir}`, 'commitments');
-              api.writeLog(`app nameCommits.json file is created successfully at: ${api.agamaDir}`);
-              resolve(result);
-            }, 2000);
-          });
-        }
-
-        FsWrite()
-        .then(FixFilePermissions());
+            api.log(result, 'commitments');
+            api.log(`app nameCommits.json file is created successfully at: ${api.agamaDir}`, 'commitments');
+            api.writeLog(`app nameCommits.json file is created successfully at: ${api.agamaDir}`);
+          }
+        });
       }
     });
   }
