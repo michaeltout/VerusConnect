@@ -32,54 +32,32 @@ module.exports = (api) => {
   api.saveLocalUsers = (users) => {
     const usersFileName = `${api.agamaDir}/users.json`;
 
-    _fs.access(api.agamaDir, fs.constants.R_OK, (err) => {
-      if (!err) {
-        const FixFilePermissions = () => {
-          return new Promise((resolve, reject) => {
-            const result = 'user.json file permissions updated to Read/Write';
-
-            fsnode.chmodSync(usersFileName, '0666');
-
-            setTimeout(() => {
-              api.log(result, 'users');
-              api.writeLog(result);
-              resolve(result);
-            }, 1000);
-          });
+    try {
+      try {
+        _fs.accessSync(api.agamaDir, fs.constants.R_OK)
+      } catch (e) {
+        if (e.code == 'EACCES') {
+          fsnode.chmodSync(usersFileName, '0666');
+        } else if (e.code === 'ENOENT') {
+          api.log('users directory not found', 'settings');
         }
-
-        const FsWrite = () => {
-          return new Promise((resolve, reject) => {
-            const result = 'users.json write file is done';
-
-            fs.writeFile(usersFileName,
-                        JSON.stringify(users)
-                        .replace(/,/g, ',\n') // format json in human readable form
-                        .replace(/":/g, '": ')
-                        .replace(/{/g, '{\n')
-                        .replace(/}/g, '\n}'), 'utf8', (err) => {
-              if (err) {
-                return api.log(err);
-            } else {
-              try {
-                fsnode.chmodSync(usersFileName, '0666');
-                api.log(result, 'users');
-                api.log(`app users.json file is created successfully at: ${api.agamaDir}`, 'users');
-                api.writeLog(`app users.json file is created successfully at: ${api.agamaDir}`);
-                resolve(result);
-              } catch (e) {
-                api.log(e)
-                resolve("Error changing file permissions while saving.")
-              }
-            }
-            });
-          });
-        }
-
-        FsWrite()
-        .then(FixFilePermissions());
       }
-    });
+     
+      fs.writeFileSync(usersFileName,
+                  JSON.stringify(users)
+                  .replace(/,/g, ',\n') // format json in human readable form
+                  .replace(/":/g, '": ')
+                  .replace(/{/g, '{\n')
+                  .replace(/}/g, '\n}'), 'utf8');
+
+      
+      api.log('users.json write file is done', 'settings');
+      api.log(`app users.json file is created successfully at: ${api.agamaDir}`, 'settings');
+      api.writeLog(`app users.json file is created successfully at: ${api.agamaDir}`);
+    } catch (e) {
+      api.log('error writing users', 'settings');
+      api.log(e, 'settings');
+    }
   }
 
   /*
