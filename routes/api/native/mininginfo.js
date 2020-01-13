@@ -1,11 +1,12 @@
 const Promise = require('bluebird');
+const { standardizeMiningInfo } = require('../utils/standardization/standardization')
 
 module.exports = (api) => {    
   api.native.get_mininginfo = (coin, token) => {
     return new Promise((resolve, reject) => {      
       api.native.callDaemon(coin, 'getmininginfo', [], token)
       .then((mininginfo) => {
-        resolve(mininginfo)
+        resolve(standardizeMiningInfo(mininginfo))
       })
       .catch(err => {
         reject(err)
