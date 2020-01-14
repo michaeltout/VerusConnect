@@ -108,7 +108,6 @@ api = require('./api/electrum/createtx-multi.js')(api);
 api = require('./api/electrum/interest.js')(api);
 api = require('./api/electrum/listunspent.js')(api);
 api = require('./api/electrum/estimate.js')(api);
-api = require('./api/electrum/btcFees.js')(api);
 api = require('./api/electrum/insight.js')(api);
 api = require('./api/electrum/cache.js')(api);
 api = require('./api/electrum/proxy.js')(api);
@@ -117,6 +116,11 @@ api = require('./api/electrum/csv.js')(api);
 api = require('./api/electrum/utils.js')(api);
 api = require('./api/electrum/remove')(api);
 api = require('./api/electrum/send.js')(api);
+
+// general network calls
+api.networkFees = {}
+api = require('./api/network/fees/btc/btcFees')(api)
+api = require('./api/network/fees/networkFees')(api)
 
 //native
 api = require('./api/native/coins')(api);

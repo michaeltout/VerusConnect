@@ -16,7 +16,8 @@ module.exports = (api) => {
     txValue,
     fee,
     totalInterest,
-    rawTx
+    rawTx,
+    feePerByte
   ) => {
     let warnings = [];
 
@@ -34,6 +35,7 @@ module.exports = (api) => {
       balance: fromSats(balance),
       value: fromSats(txValue),
       fee: fromSats(fee),
+      feePerByte: feePerByte,
       total: fromSats(txValue + fee),
       remainingBalance: fromSats(balance - (txValue + fee)),
       warnings,
@@ -473,7 +475,8 @@ module.exports = (api) => {
                       amount,
                       value,
                       fee,
-                      totalInterest
+                      totalInterest,
+                      feePerByte
                     )
                   );
                 } else {
@@ -514,7 +517,8 @@ module.exports = (api) => {
                       value,
                       fee,
                       totalInterest,
-                      _rawtx
+                      _rawtx,
+                      feePerByte
                     )
                   );
                 }
