@@ -39,7 +39,7 @@ module.exports = (api) => {
         if (e.code == 'EACCES') {
           fsnode.chmodSync(usersFileName, '0666');
         } else if (e.code === 'ENOENT') {
-          api.log('users directory not found', 'settings');
+          api.log('users directory not found', 'users');
         }
       }
      
@@ -51,12 +51,12 @@ module.exports = (api) => {
                   .replace(/}/g, '\n}'), 'utf8');
 
       
-      api.log('users.json write file is done', 'settings');
-      api.log(`app users.json file is created successfully at: ${api.agamaDir}`, 'settings');
+      api.log('users.json write file is done', 'users');
+      api.log(`app users.json file is created successfully at: ${api.agamaDir}`, 'users');
       api.writeLog(`app users.json file is created successfully at: ${api.agamaDir}`);
     } catch (e) {
-      api.log('error writing users', 'settings');
-      api.log(e, 'settings');
+      api.log('error writing users', 'users');
+      api.log(e, 'users');
     }
   }
 
