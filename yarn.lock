@@ -80,7 +80,7 @@ after@0.8.2:
 
 "agama-wallet-lib@git+https://github.com/VerusCoin/agama-wallet-lib.git#dev":
   version "0.3.4"
-  resolved "git+https://github.com/VerusCoin/agama-wallet-lib.git#1c2743bf91dbac15e644496df7627b2511253247"
+  resolved "git+https://github.com/VerusCoin/agama-wallet-lib.git#7104af4bc3bfd6057dba5cc8c5f244a3115c97f3"
   dependencies:
     bigi "^1.4.2"
     bip32 "^1.0.2"
