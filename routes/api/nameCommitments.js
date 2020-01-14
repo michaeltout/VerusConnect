@@ -30,29 +30,34 @@ module.exports = (api) => {
   };
 
   api.saveLocalCommitments = (commitments) => {
-    const commitmentsFileName = `${api.agamaDir}/nameCommits.json`;
+    const commitsFileName = `${api.agamaDir}/nameCommits.json`;
 
-    _fs.access(api.agamaDir, fs.constants.R_OK, (err) => {
-      if (!err) {
-        const result = 'nameCommits.json write file is done';
-
-        fs.writeFile(commitmentsFileName,
-                    JSON.stringify(commitments)
-                    .replace(/,/g, ',\n') // format json in human readable form
-                    .replace(/":/g, '": ')
-                    .replace(/{/g, '{\n')
-                    .replace(/}/g, '\n}'), 'utf8', (err) => {
-          if (err) {
-            return api.log(err);
-          } else {
-            fsnode.chmodSync(commitmentsFileName, '0666');
-            api.log(result, 'commitments');
-            api.log(`app nameCommits.json file is created successfully at: ${api.agamaDir}`, 'commitments');
-            api.writeLog(`app nameCommits.json file is created successfully at: ${api.agamaDir}`);
-          }
-        });
+    try {
+      try {
+        _fs.accessSync(api.agamaDir, fs.constants.R_OK)
+      } catch (e) {
+        if (e.code == 'EACCES') {
+          fsnode.chmodSync(commitsFileName, '0666');
+        } else if (e.code === 'ENOENT') {
+          api.log('name commitments directory not found', 'nameCommits');
+        }
       }
-    });
+     
+      fs.writeFileSync(commitsFileName,
+                  JSON.stringify(commitments)
+                  .replace(/,/g, ',\n') // format json in human readable form
+                  .replace(/":/g, '": ')
+                  .replace(/{/g, '{\n')
+                  .replace(/}/g, '\n}'), 'utf8');
+
+      
+      api.log('nameCommits.json write file is done', 'nameCommits');
+      api.log(`app nameCommits.json file is created successfully at: ${api.agamaDir}`, 'nameCommits');
+      api.writeLog(`nameCommits.json file is created successfully at: ${api.agamaDir}`);
+    } catch (e) {
+      api.log('error writing name commitments', 'nameCommits');
+      api.log(e, 'nameCommits');
+    }
   }
 
   return api;
