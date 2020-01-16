@@ -44,7 +44,6 @@ const assetChainPorts = {
   KOIN: 10702,
   DION: 23895,
   PTX: 61939,
-  LUMBER: 26301,
   KSB: 21066,
   OUR: 45672,
   RICK: 28223,
