@@ -14,75 +14,118 @@ module.exports = (api) => {
   
   api.native.get_addresses = (coin, token, includePrivate) => {
     return new Promise((resolve, reject) => {
-      let addressPromises = [api.native.callDaemon(coin, 'listaddressgroupings', [], token)]
+      let addressPromises = [
+        api.native.callDaemon(coin, "listaddressgroupings", [], token),
+        api.native.callDaemon(coin, "getaddressesbyaccount", [""], token),
+        api.native.callDaemon(coin, "z_gettotalbalance", [], token)
+      ];
+
       if (includePrivate) {
-        addressPromises.push(api.native.callDaemon(coin, 'z_listaddresses', [], token))
-        addressPromises.push(api.native.callDaemon(coin, 'z_gettotalbalance', [], token))
+        addressPromises.push(
+          api.native.callDaemon(coin, "z_listaddresses", [], token)
+        );
       }
-      
+
       Promise.all(addressPromises)
-      .then(async (jsonResults) => {
-        let resObj = {
-          public: [],
-          private: []
-        }
-        let pubAddrsSeen = []
+        .then(async jsonResults => {
+          let resObj = {
+            public: [],
+            private: []
+          };
+          let pubAddrsSeen = [];
+          let zBalanceSeen = (tBalanceSeen = 0);
 
-        // Compile public addresses
-        jsonResults[0].forEach(addressGrouping => {
-          addressGrouping.forEach(addressArr => {
-            if (!pubAddrsSeen.includes(addressArr[0])) {
-              let balanceObj = {native: addressArr[1], reserve: {}}
+          const addressGroupings = jsonResults[0];
+          const addressesByAccount = jsonResults[1];
+          const totalBalance = jsonResults[2];
+          const privateAddrListResult =
+            jsonResults.length > 3 ? jsonResults[3] : [];
 
-              // Addresses that start with an 'R' and dont include an account field are labeled
-              // as change
-              let tag =
-                addressArr[0][0] === "R" && addressArr.length < 3
-                  ? "change"
-                  : api.native.getAddressType(addressArr[0]);
+          // Compile public addresses
+          addressGroupings.forEach(addressGrouping => {
+            addressGrouping.forEach(addressArr => {
+              if (!pubAddrsSeen.includes(addressArr[0])) {
+                let balanceObj = { native: addressArr[1], reserve: {} };
+                tBalanceSeen += addressArr[1]
 
-              // Only include change addresses if they have a balance
-              if (tag !== 'change' || (tag === 'change' && addressArr[1] > 0)) {
-                resObj.public.push({ address: addressArr[0], tag, balances: balanceObj })
+                // Addresses that start with an 'R' and dont include an account field are labeled
+                // as change
+                let tag =
+                  addressArr[0][0] === "R" && addressArr.length < 3
+                    ? "change"
+                    : api.native.getAddressType(addressArr[0]);
+
+                // Only include change addresses if they have a balance
+                if (
+                  tag !== "change" ||
+                  (tag === "change" && addressArr[1] > 0)
+                ) {
+                  resObj.public.push({
+                    address: addressArr[0],
+                    tag,
+                    balances: balanceObj
+                  });
+                }
+
+                pubAddrsSeen.push(addressArr[0]);
               }
-              
-              pubAddrsSeen.push(addressArr[0])
-            }
-          })
-        })
-        
-        if (jsonResults.length > 1) {
-          //Compile private addresses
-          const privateAddrListResult = jsonResults[1]
-          const totalZBalance = Number(jsonResults[2].private)
-          let zBalanceSeen = 0
-                  
-          for (let i = 0; i < privateAddrListResult.length; i++) {
-            const address = privateAddrListResult[i]
-            const addrTag = api.native.getAddressType(address)
-            let balanceObj = {native: 0, reserve: {}}
-            
-            try {
-              //If z_balance has been reached, stop checking balances, improves performance
-              if (zBalanceSeen < totalZBalance) {
-                balanceObj.native = Number(await api.native.callDaemon(coin, 'z_getbalance', [address], token))
-                zBalanceSeen += balanceObj.native
-              } else {
-                balanceObj.native = 0
+            });
+          });
+
+          //Compile private addresses and addresses not covered by listaddressgroupings
+          let fullAddrList = privateAddrListResult.concat(addressesByAccount);
+
+          const totalZBalance = Number(totalBalance.private);
+          const totalTBalance = Number(totalBalance.transparent);
+
+          for (let i = 0; i < fullAddrList.length; i++) {
+            const address = fullAddrList[i];
+
+            if (!pubAddrsSeen.includes(address)) {
+              const addrTag = api.native.getAddressType(address);
+              const isZ = addrTag === "sapling" || addrTag === "sprout";
+              let balanceObj = { native: 0, reserve: {} };
+
+              try {
+                //If balance for type has been reached, stop checking balances, improves performance
+                if (
+                  (isZ && zBalanceSeen < totalZBalance) ||
+                  (!isZ && tBalanceSeen < totalTBalance)
+                ) {                  
+                  balanceObj.native = Number(
+                    await api.native.callDaemon(
+                      coin,
+                      "z_getbalance",
+                      [address],
+                      token
+                    )
+                  );
+
+                  isZ
+                    ? (zBalanceSeen += balanceObj.native)
+                    : (tBalanceSeen += balanceObj.native);
+                } else {
+                  balanceObj.native = 0;
+                }
+
+                const addrObj = {
+                  address,
+                  tag: addrTag,
+                  balances: balanceObj
+                }
+
+                isZ ? resObj.private.push(addrObj) : resObj.public.push(addrObj)
+              } catch (e) {
+                throw e;
               }
-              
-              resObj.private.push({ address, tag: addrTag, balances: balanceObj });
-            } catch (e) {
-              throw e
             }
           }
-        }
-        
-        resolve(resObj)
-      })
-      .catch(err => {
-        reject(err)
-      })
+
+          resolve(resObj);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   };
 
