@@ -120,7 +120,7 @@ build:windows:
     - zip -r ${VERUS_WINDOWS_ZIP} Verus-Desktop-Windows-v${VERUS_VERSION}
     - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
     - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
-    - mv ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256 ..
+    - mv ${VERUS_WINDOWS_NSIS} ${VERUS_WINDOWS_NSIS}.sha256 ..
     - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256  ..
   after_script:
     - curl -F file=@"$VERUS_WINDOWS_ZIP"
