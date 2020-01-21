@@ -80,7 +80,6 @@ module.exports = (api) => {
       try {
         rpcJson = JSON.parse(json)
       } catch (e) {
-        console.log(json)
         return({ msg: 'error', result: 'JSON format unrecognized' });
       }
       

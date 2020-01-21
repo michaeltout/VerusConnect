@@ -62,7 +62,9 @@ const appConfig = {
         dataDir: '',
         listtransactionsMaxLength: 300,
         csvListtransactionsMaxLength: 1000,
-        zcashParamsSrc: 'z.cash'
+        zcashParamsSrc: 'z.cash',
+        includeP2shAddrs: false,
+        includeEmptyChangeAddrs: false
         //TODO: Make update intervals configurable
       }
     },
@@ -129,12 +131,7 @@ const appConfig = {
           type: 'number_input',
           displayName: 'Max Transaction List Length',
           info: 'The maximum number of transactions to fetch per call.'
-        },
-        syncServerListFromKv: {
-          type: 'checkbox',
-          displayName: 'Use proxy server',
-          info: 'Use a proxy server to connect to electrum.'
-        }, 
+        }
       },
       native: {
         listtransactionsMaxLength: {
@@ -147,6 +144,16 @@ const appConfig = {
           options: Object.keys(zcashParamsSources),
           displayName: 'ZCash Parameter Source',
           info: 'The source for the initial ZCash parameter download.'
+        },
+        includeP2shAddrs: {
+          type: 'checkbox',
+          displayName: 'Include Pay to Script Hash Addresses',
+          info: 'Include Pay to Script Hash addresses in your address list (ONLY SEND TO THESE IF YOU KNOW WHAT YOU ARE DOING).'
+        },
+        includeEmptyChangeAddrs: {
+          type: 'checkbox',
+          displayName: 'Include Empty Change Addresses',
+          info: "Include automatically generated change adresses in your address list, even if they're empty."
         },
       }
     },

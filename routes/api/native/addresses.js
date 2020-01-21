@@ -7,6 +7,8 @@ module.exports = (api) => {
       if (address[1] === 's') return 'sapling'
     } else if (address[0] === 'i') {
       return 'identity'
+    } else if (address[0] === 'b') {
+      return 'P2SH'
     } else {
       return 'public'
     }
@@ -57,9 +59,12 @@ module.exports = (api) => {
 
                 // Only include change addresses if they have a balance
                 if (
-                  tag !== "change" ||
-                  (tag === "change" && addressArr[1] > 0)
+                  (tag !== "change" && tag !== "P2SH") ||
+                  (tag === "change" && addressArr[1] > 0) ||
+                  (tag === "change" && api.appConfig.general.native.includeEmptyChangeAddrs) ||
+                  (tag === "P2SH" && api.appConfig.general.native.includeP2shAddrs)
                 ) {
+
                   resObj.public.push({
                     address: addressArr[0],
                     tag,
@@ -91,7 +96,7 @@ module.exports = (api) => {
                 if (
                   (isZ && zBalanceSeen < totalZBalance) ||
                   (!isZ && tBalanceSeen < totalTBalance)
-                ) {                  
+                ) {
                   balanceObj.native = Number(
                     await api.native.callDaemon(
                       coin,
@@ -112,9 +117,17 @@ module.exports = (api) => {
                   address,
                   tag: addrTag,
                   balances: balanceObj
-                }
+                };
 
-                isZ ? resObj.private.push(addrObj) : resObj.public.push(addrObj)
+                if (
+                  addrObj.tag !== "P2SH" ||
+                  (addrObj.tag === "P2SH" &&
+                    api.appConfig.general.native.includeP2shAddrs)
+                ) {
+                  isZ
+                    ? resObj.private.push(addrObj)
+                    : resObj.public.push(addrObj);
+                }
               } catch (e) {
                 throw e;
               }
