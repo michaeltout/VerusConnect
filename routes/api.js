@@ -138,6 +138,7 @@ api = require('./api/native/signdata.js')(api);
 api = require('./api/native/verifydata.js')(api);
 api = require('./api/native/generate.js')(api);
 api = require('./api/native/coinSupply.js')(api);
+api = require('./api/native/blockSubsidy.js')(api);
 
 // general network calls
 api.networkFees = {}
