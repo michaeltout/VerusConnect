@@ -35,6 +35,7 @@ module.exports = (api) => {
             private: []
           };
           let pubAddrsSeen = [];
+          let addressGroupingsParsed = {}
           let zBalanceSeen = (tBalanceSeen = 0);
 
           const addressGroupings = jsonResults[0];
@@ -43,39 +44,61 @@ module.exports = (api) => {
           const privateAddrListResult =
             jsonResults.length > 3 ? jsonResults[3] : [];
 
-          // Compile public addresses
+          // Compile public addresses from listaddressgroupings
           addressGroupings.forEach(addressGrouping => {
             addressGrouping.forEach(addressArr => {
-              if (!pubAddrsSeen.includes(addressArr[0])) {
-                let balanceObj = { native: addressArr[1], reserve: {} };
-                tBalanceSeen += addressArr[1]
+              const address = addressArr[0]
+
+              if (!pubAddrsSeen.includes(address)) {
+                //let balanceObj = ;
+                let balance = addressArr[1]
+                tBalanceSeen += balance
 
                 // Addresses that start with an 'R' and dont include an account field are labeled
                 // as change
                 let tag =
-                  addressArr[0][0] === "R" && addressArr.length < 3
+                  address[0] === "R" && addressArr.length < 3
                     ? "change"
-                    : api.native.getAddressType(addressArr[0]);
+                    : api.native.getAddressType(address);
 
-                // Only include change addresses if they have a balance
-                if (
-                  (tag !== "change" && tag !== "P2SH") ||
-                  (tag === "change" && addressArr[1] > 0) ||
-                  (tag === "change" && api.appConfig.general.native.includeEmptyChangeAddrs) ||
-                  (tag === "P2SH" && api.appConfig.general.native.includeP2shAddrs)
-                ) {
-
-                  resObj.public.push({
-                    address: addressArr[0],
-                    tag,
-                    balances: balanceObj
-                  });
+                addressGroupingsParsed[address] = {
+                  address,
+                  tag,
+                  balances: { native: balance, reserve: {} }
                 }
 
-                pubAddrsSeen.push(addressArr[0]);
+                pubAddrsSeen.push(address);
+              } else {
+                // If duplicate, add to balance and double check if it is really 
+                // a change address
+                const { tag, balances } = addressGroupingsParsed[address]
+                
+                const newTag =
+                  tag === "change" && addressArr.length > 2
+                    ? api.native.getAddressType(address)
+                    : tag;
+
+                const newBalance = balances.native + addressArr[1]
+
+                addressGroupingsParsed[address] = {
+                  balances: { native: newBalance, reserve: {} },
+                  tag: newTag,
+                  address
+                }
               }
             });
           });
+
+          // Filter out addresses according to settings
+          resObj.public = resObj.public.concat(Object.values(addressGroupingsParsed).filter(addressObj => {
+            const { tag, balances } = addressObj
+            const balance = balances.native
+
+            return (tag !== "change" && tag !== "P2SH") ||
+              (tag === "change" && balance > 0) ||
+              (tag === "change" && api.appConfig.general.native.includeEmptyChangeAddrs) ||
+              (tag === "P2SH" && api.appConfig.general.native.includeP2shAddrs)
+          }))
 
           //Compile private addresses and addresses not covered by listaddressgroupings
           let fullAddrList = privateAddrListResult.concat(addressesByAccount);
