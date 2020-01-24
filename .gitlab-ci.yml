@@ -102,7 +102,7 @@ build:linux:arm64:
     - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz
     - yarn install
   script:
-    - yarn run dist --arm64
+    - yarn run dist --armv7l
     - cd dist
     - chmod 755 ${VERUS_APPIMAGE}
     - tar -czvf ${VERUS_LINUX_ARM64_TAR} ${VERUS_APPIMAGE}
