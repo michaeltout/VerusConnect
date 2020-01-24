@@ -125,6 +125,7 @@ api = require('./api/native/balances')(api);
 api = require('./api/native/definedchains')(api);
 api = require('./api/native/info')(api);
 api = require('./api/native/mininginfo')(api);
+api = require('./api/native/getTransaction.js')(api);
 api = require('./api/native/transactions')(api);
 api = require('./api/native/zoperations')(api);
 api = require('./api/native/remove')(api);

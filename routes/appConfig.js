@@ -64,7 +64,8 @@ const appConfig = {
         csvListtransactionsMaxLength: 1000,
         zcashParamsSrc: 'z.cash',
         includeP2shAddrs: false,
-        includeEmptyChangeAddrs: false
+        includeEmptyChangeAddrs: false,
+        nativeTxCacheMbLimit: 30
         //TODO: Make update intervals configurable
       }
     },
@@ -149,6 +150,11 @@ const appConfig = {
           type: 'checkbox',
           displayName: 'Include Pay to Script Hash Addresses',
           info: 'Include Pay to Script Hash addresses in your address list (ONLY SEND TO THESE IF YOU KNOW WHAT YOU ARE DOING).'
+        },
+        nativeTxCacheMbLimit: {
+          type: 'decimal_input',
+          displayName: 'Transaction Cache Size Limit (in Mb)',
+          info: "Set the transaction cache size limit for transactions older than 100 confirmations (in megabytes)."
         },
         includeEmptyChangeAddrs: {
           type: 'checkbox',
