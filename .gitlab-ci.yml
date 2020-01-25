@@ -123,6 +123,7 @@ build:linux:arm64:
     paths:
       - ${VERUS_LINUX_ARM64_TAR}
       - ${VERUS_LINUX_ARM64_TAR}.sha256
+      - dist
     expire_in: 1 week
 ########################################################################################################################
 ####END####                                              LINUX                                               ####END####

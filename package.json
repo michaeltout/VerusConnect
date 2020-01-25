@@ -125,7 +125,8 @@
         "Encoding": "UTF-8"
       },
       "target": [
-        "appimage"
+        "appimage",
+        "tar.xz"
       ]
     },
     "win": {
