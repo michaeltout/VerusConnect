@@ -102,7 +102,7 @@ build:linux:arm64:
     - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz
     - yarn install
   script:
-    - yarn run dist --armv7l
+    - yarn run dist --arm64
     - cd dist
     - chmod 755 ${VERUS_APPIMAGE}
     - tar -czvf ${VERUS_LINUX_ARM64_TAR} ${VERUS_APPIMAGE}
@@ -110,6 +110,11 @@ build:linux:arm64:
     - mv ${VERUS_LINUX_ARM64_TAR} ${VERUS_LINUX_ARM64_TAR}.sha256 ..
   after_script:
     - curl -F file=@"$VERUS_LINUX_TAR"
+      -F channels="$VERUS_POST_CHANNEL"
+      -F initial_comment="${POST_COMMENT}"
+      -H "${SLACK_BOT_AUTH}"
+      "https://slack.com/api/files.upload"
+    - curl -F file=@"VERUS_LINUX_ARM64_TAR"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
