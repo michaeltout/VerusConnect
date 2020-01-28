@@ -7,9 +7,9 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: dev
-  VERUS_VERSION: 0.0.8-alpha-2
-  VERUSCOIN_VERSION: 0.6.2-2
+  DEFAULT_VERUSCOIN_BRANCH: master
+  VERUS_VERSION: 0.6.3-beta
+  VERUSCOIN_VERSION: 0.6.3
   KOMODO_VERSION: 0.5.2
   BINARY_SOURCE: VerusCoin
   EASYDEX_GUI_BUILD: build.tar.gz
@@ -109,11 +109,6 @@ build:linux:arm64:
     - sha256sum ${VERUS_LINUX_ARM64_TAR} > ${VERUS_LINUX_ARM64_TAR}.sha256
     - mv ${VERUS_LINUX_ARM64_TAR} ${VERUS_LINUX_ARM64_TAR}.sha256 ..
   after_script:
-    - curl -F file=@"$VERUS_LINUX_TAR"
-      -F channels="$VERUS_POST_CHANNEL"
-      -F initial_comment="${POST_COMMENT}"
-      -H "${SLACK_BOT_AUTH}"
-      "https://slack.com/api/files.upload"
     - curl -F file=@"VERUS_LINUX_ARM64_TAR"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
