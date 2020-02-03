@@ -7,11 +7,11 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: master
+  DEFAULT_VERUSCOIN_BRANCH: dev
   VERUS_VERSION: 0.6.3-beta
-  VERUSCOIN_VERSION: 0.6.3
+  VERUSCOIN_VERSION: 0.6.1
   KOMODO_VERSION: 0.5.2
-  BINARY_SOURCE: VerusCoin
+  BINARY_SOURCE: VerusDev
   EASYDEX_GUI_BUILD: build.tar.gz
   VERUS_APPIMAGE: Verus-Desktop-Linux-v${VERUS_VERSION}.AppImage
   VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-amd64.tar.gz
