@@ -15,7 +15,7 @@ module.exports = (api) => {
       const chain = req.query.chain;
 
       // ref: https://gist.github.com/kendricktan/1e62495150ad236b38616d733aac4eb9
-      let _walletDatLocation = chain === 'komodo' || chain === 'KMD' || chain === 'null' ? `${api.komodoDir}/wallet.dat` : `${api.komodoDir}/${chain}/wallet.dat`;
+      let _walletDatLocation = chain === 'komodo' || chain === 'KMD' || chain === 'null' ? `${api.kmdDir}/wallet.dat` : `${api.kmdDir}/${chain}/wallet.dat`;
       _walletDatLocation = chain === 'CHIPS' ? `${api.chipsDir}/wallet.dat` : _walletDatLocation;
 
       try {

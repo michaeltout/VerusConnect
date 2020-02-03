@@ -4,7 +4,7 @@ const Promise = require('bluebird');
 module.exports = (api) => {
   api.getMaxconKMDConf = () => {
     return new Promise((resolve, reject) => {
-      fs.readFile(`${api.komodoDir}/komodo.conf`, 'utf8', (err, data) => {
+      fs.readFile(`${api.kmdDir}/komodo.conf`, 'utf8', (err, data) => {
         if (err) {
           api.log('kmd conf maxconnections param read failed', 'native.confd');
           resolve('unset');
@@ -25,11 +25,11 @@ module.exports = (api) => {
 
   api.setMaxconKMDConf = (limit) => {
     return new Promise((resolve, reject) => {
-      fs.readFile(`${api.komodoDir}/komodo.conf`, 'utf8', (err, data) => {
+      fs.readFile(`${api.kmdDir}/komodo.conf`, 'utf8', (err, data) => {
         const _maxconVal = limit ? 1 : 10;
 
         if (err) {
-          api.log(`error reading ${api.komodoDir}/komodo.conf`, 'native.confd');
+          api.log(`error reading ${api.kmdDir}/komodo.conf`, 'native.confd');
           resolve(false);
         } else {
           if (data.indexOf('maxconnections=') > -1) {
@@ -40,9 +40,9 @@ module.exports = (api) => {
             data = `${data}\nmaxconnections=${_maxconVal}\n`;
           }
 
-          fs.writeFile(`${api.komodoDir}/komodo.conf`, data, (err) => {
+          fs.writeFile(`${api.kmdDir}/komodo.conf`, data, (err) => {
             if (err) {
-              api.log(`error writing ${api.komodoDir}/komodo.conf maxconnections=${_maxconVal}`, 'native.confd');
+              api.log(`error writing ${api.kmdDir}/komodo.conf maxconnections=${_maxconVal}`, 'native.confd');
               resolve(false);
             } else {
               api.log(`kmd conf maxconnections is set to ${_maxconVal}`, 'native.confd');

@@ -1,10 +1,12 @@
 module.exports = (api) => {
+  // TODO: Delete, deprecated
+  
   /*
    *  list native coind
    *  type:
    *  params:
    */
-  api.get('/coind/list', (req, res, next) => {
+  /*api.get('/coind/list', (req, res, next) => {
     const successObj = {
       msg: 'success',
       result: api.nativeCoindList,
@@ -38,7 +40,7 @@ module.exports = (api) => {
     }
 
     return nativeCoindList;
-  }
+  }*/
 
   return api;
 };

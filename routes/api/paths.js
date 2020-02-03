@@ -1,7 +1,8 @@
 const {
   pathsAgama,
   pathsDaemons,
-  customPathsDaemons
+  setDaemonPath,
+  setCoinDir
 } = require('./pathsUtil');
 const path = require('path');
 const fixPath = require('fix-path');
@@ -16,8 +17,12 @@ module.exports = (api) => {
     api = pathsDaemons(api);
   }
 
-  api.customPathsDaemons = (daemonName) => {
-    api = customPathsDaemons(api, daemonName);
+  api.setDaemonPath = (daemonName) => {
+    api = setDaemonPath(api, daemonName);
+  }
+
+  api.setCoinDir = (coin, dirNames) => {
+    api = setCoinDir(api, coin, dirNames)
   }
 
   return api;

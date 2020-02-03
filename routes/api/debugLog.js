@@ -19,23 +19,23 @@ module.exports = (api) => {
 
       switch (_platform) {
         case 'darwin':
-          api.komodoDir = api.appConfig.general.native.dataDir.length ? api.appConfig.general.native.dataDir : `${process.env.HOME}/Library/Application Support/Komodo`;
+          api.kmdDir = api.appConfig.general.native.dataDir.length ? api.appConfig.general.native.dataDir : `${process.env.HOME}/Library/Application Support/Komodo`;
           break;
         case 'linux':
-          api.komodoDir = api.appConfig.general.native.dataDir.length ? api.appConfig.general.native.dataDir : `${process.env.HOME}/.komodo`;
+          api.kmdDir = api.appConfig.general.native.dataDir.length ? api.appConfig.general.native.dataDir : `${process.env.HOME}/.komodo`;
           break;
         case 'win32':
-          api.komodoDir = api.appConfig.general.native.dataDir.length ? api.appConfig.general.native.dataDir : `${process.env.APPDATA}/Komodo`;
-          api.komodoDir = path.normalize(api.komodoDir);
+          api.kmdDir = api.appConfig.general.native.dataDir.length ? api.appConfig.general.native.dataDir : `${process.env.APPDATA}/Komodo`;
+          api.kmdDir = path.normalize(api.kmdDir);
           break;
       }
 
       if (_ac && api.appConfig.general.main.reservedChains.indexOf(_ac) === -1) {
         _location = `${api.appConfig.general.main.pbaasTestmode ? api.verusTestDir : api.verusDir}/PBAAS/${_ac}`
       } else if (_herd === 'komodo') {
-        _location = api.komodoDir;
+        _location = api.kmdDir;
       } else if (_ac) {
-        _location = `${api.komodoDir}/${_ac}`;
+        _location = `${api.kmdDir}/${_ac}`;
 
         if (_ac === 'CHIPS') {
           _location = api.chipsDir;

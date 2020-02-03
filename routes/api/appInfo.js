@@ -23,7 +23,7 @@ module.exports = (api) => {
     const releaseInfo = api.appBasicInfo;
     const dirs = {
       agamaDir: api.agamaDir,
-      komodoDir: api.komodoDir,
+      kmdDir: api.kmdDir,
       komododBin: api.komododBin,
       configLocation: `${api.agamaDir}/config.json`,
       cacheLocation: `${api.agamaDir}/spv-cache.json`,

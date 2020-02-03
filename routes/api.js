@@ -15,6 +15,8 @@ api.chainParams = require('./chainParams')
 
 api.coinsInitializing = [];
 api.coindInstanceRegistry = {};
+api.confFileIndex = {};
+api.logFileIndex = {};
 api.coindStdout = {};
 api.guiLog = {};
 api.rpcConf = {};
@@ -82,6 +84,10 @@ api.defaultAppConfig = Object.assign({}, api.appConfig);
 api.kmdMainPassiveMode = false;
 api.native = {
   startParams: {},
+  cache: {
+    tx_cache: {},
+    addr_balance_cache: {}
+  }
 };
 api.seed = null;
 
@@ -118,6 +124,7 @@ api = require('./api/electrum/remove')(api);
 api = require('./api/electrum/send.js')(api);
 
 //native
+api = require('./api/native/addrBalance.js')(api);
 api = require('./api/native/coins')(api);
 api = require('./api/native/callDaemon')(api);
 api = require('./api/native/addresses')(api);
@@ -148,16 +155,8 @@ api.coinSupply = {}
 api = require('./api/network/fees/btc/btcFees')(api)
 api = require('./api/network/fees/networkFees')(api)
 api = require('./api/network/supply/vrsc/vrscCoinSupply')(api)
+api = require('./api/network/supply/zec/zecCoinSupply')(api)
 api = require('./api/network/supply/coinSupply')(api)
-
-
-// dex
-/*api = require('./api/dex/coind.js')(api);
-api = require('./api/dex/mmControl.js')(api);
-api = require('./api/dex/mmRequest.js')(api);
-api = require('./api/dex/electrumServersList.js')(api);
-api = require('./api/coins.js')(api);*/
-
 
 // core
 api = require('./api/dashboardUpdate.js')(api);
@@ -173,6 +172,7 @@ api = require('./api/kickstart.js')(api);
 api = require('./api/debugLog.js')(api);
 api = require('./api/confMaxconnections.js')(api);
 api = require('./api/appInfo.js')(api);
+api = require('./api/conf.js')(api);
 api = require('./api/daemonControl.js')(api);
 api = require('./api/auth.js')(api);
 api = require('./api/coindWalletKeys.js')(api);

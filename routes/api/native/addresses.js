@@ -121,12 +121,7 @@ module.exports = (api) => {
                   (!isZ && tBalanceSeen < totalTBalance)
                 ) {
                   balanceObj.native = Number(
-                    await api.native.callDaemon(
-                      coin,
-                      "z_getbalance",
-                      [address],
-                      token
-                    )
+                    await api.native.get_addr_balance(coin, token, address)
                   );
 
                   isZ

@@ -245,10 +245,10 @@ module.exports = (api) => {
     api.log(`agama dir: ${api.agamaDir}`, 'env');
     api.log('--------------------------', 'env')
     api.log(`komodo dir: ${api.komododBin}`, 'env');
-    api.log(`komodo bin: ${api.komodoDir}`, 'env');
+    api.log(`komodo bin: ${api.kmdDir}`, 'env');
     api.writeLog(`agama dir: ${api.agamaDir}`);
     api.writeLog(`komodo dir: ${api.komododBin}`);
-    api.writeLog(`komodo bin: ${api.komodoDir}`);
+    api.writeLog(`komodo bin: ${api.kmdDir}`);
   }
 
   return api;

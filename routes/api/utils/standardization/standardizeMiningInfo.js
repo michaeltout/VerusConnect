@@ -8,6 +8,10 @@ const standardizeMiningInfo = (mininginfo) => {
   if (mininginfo.localsolps != null && mininginfo.localhashps == null)
     mininginfo.localhashps = mininginfo.localsolps;
 
+  if (mininginfo.numthreads == null && mininginfo.genproclimit != null) {
+    mininginfo.numthreads = mininginfo.genproclimit
+  }
+
   if (mininginfo.numthreads === -1) mininginfo.numthreads = 0
 
   return mininginfo

@@ -17,26 +17,16 @@ module.exports = (api) => {
               let zBalance = null
 
               const iBalance = Number(
-                await api.native.callDaemon(
-                  coin,
-                  "z_getbalance",
-                  [iAddr],
-                  token
-                )
+                await api.native.get_addr_balance(coin, token, iAddr)
               )
               
               if (zAddr != null) {
                 try {
                   zBalance = Number(
-                    await api.native.callDaemon(
-                      coin,
-                      "z_getbalance",
-                      [zAddr],
-                      token
-                    )
-                  )
-                } catch(e) {
-                  api.log(e.message, 'get_identities');
+                    await api.native.get_addr_balance(coin, token, zAddr)
+                  );
+                } catch (e) {
+                  api.log(e.message, "get_identities");
                 }
               }
               

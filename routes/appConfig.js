@@ -65,7 +65,7 @@ const appConfig = {
         zcashParamsSrc: 'z.cash',
         includeP2shAddrs: false,
         includeEmptyChangeAddrs: false,
-        nativeTxCacheMbLimit: 30
+        nativeCacheMbLimit: 30
         //TODO: Make update intervals configurable
       }
     },
@@ -151,10 +151,10 @@ const appConfig = {
           displayName: 'Include Pay to Script Hash Addresses',
           info: 'Include Pay to Script Hash addresses in your address list (ONLY SEND TO THESE IF YOU KNOW WHAT YOU ARE DOING).'
         },
-        nativeTxCacheMbLimit: {
+        nativeCacheMbLimit: {
           type: 'decimal_input',
-          displayName: 'Transaction Cache Size Limit (in Mb)',
-          info: "Set the transaction cache size limit for transactions older than 100 confirmations (in megabytes)."
+          displayName: 'Native Cache Size Limit (in Mb)',
+          info: "Set the native cache size limit (in megabytes). (Improves performance by storing blockchain data in local memory)"
         },
         includeEmptyChangeAddrs: {
           type: 'checkbox',

@@ -2,9 +2,15 @@ const Promise = require('bluebird');
 
 module.exports = (api) => {    
   api.native.start_mining = (coin, token, numThreads) => {
+    //TODO: DELETE
+    console.log("STARTING TO MINE")
+
     return new Promise((resolve, reject) => {      
       api.native.callDaemon(coin, 'setgenerate', [true, numThreads], token)
       .then(() => {
+        //TODO: DELETE
+        console.log("GOT BACK MINING RESULT")
+        
         resolve(true)
       })
       .catch(err => {

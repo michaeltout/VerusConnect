@@ -5,7 +5,7 @@ const exec = require('child_process').exec;
 
 module.exports = (api) => {
   // osx and linux
-  api.binFixRights = () => {
+  /*api.binFixRights = () => {
     const osPlatform = os.platform();
     const _bins = [
       api.komododBin,
@@ -28,7 +28,7 @@ module.exports = (api) => {
         });
       }
     }
-  }
+  }*/
 
   api.killRogueProcess = (processName) => {
     // kill rogue process copies on start

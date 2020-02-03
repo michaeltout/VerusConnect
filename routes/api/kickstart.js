@@ -21,7 +21,7 @@ module.exports = (api) => {
 
         res.end(JSON.stringify(retObj));
       } else {
-        const _location = path.join(_coin === 'KMD' ? api.komodoDir : `${api.komodoDir}/${_coin}`);
+        const _location = path.join(_coin === 'KMD' ? api.kmdDir : `${api.kmdDir}/${_coin}`);
 
         if (fs.existsSync(_location)) {
           const items = fs.readdirSync(_location);

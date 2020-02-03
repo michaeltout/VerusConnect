@@ -4,7 +4,7 @@ const {
 } = require('agama-wallet-lib/src/keys');
 
 module.exports = (api) => {  
-  api.get('/eth/priv', (req, res, next) => {
+  /*api.get('/eth/priv', (req, res, next) => {
     const seed = req.query.seed;
     const mnemonicWallet = api.eth._keys(seed, true);
     
@@ -14,10 +14,10 @@ module.exports = (api) => {
     };
 
     res.end(JSON.stringify(retObj));
-  });
+  });*/
 
   // for debug purpose, not used in the app
-  api.post('/eth/keys', (req, res, next) => {
+  /*api.post('/eth/keys', (req, res, next) => {
     const seed = req.body.seed;
     
     if (api.eth.wallet &&
@@ -36,7 +36,7 @@ module.exports = (api) => {
       };
       res.end(JSON.stringify(retObj));
     }
-  });
+  });*/
 
   api.eth._keys = (seed) => {
     seed = seedToPriv(seed, 'eth');
