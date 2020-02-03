@@ -9,6 +9,17 @@ module.exports = (api) => {
           resolve([])
         } else {
           let formattedIds = identities.slice()
+          let txcount = null
+          let useCache = true
+
+          try {
+            const walletinfo = await api.native.callDaemon(coin, "getwalletinfo", [], token)
+            txcount = walletinfo.txcount
+          } catch (e) {
+            useCache = false
+            api.log('Not using address balance cache:', 'get_identities')
+            api.log(e, 'get_identities')
+          }
           
           for (let i = 0; i < formattedIds.length; i++) {
             try {
@@ -17,13 +28,13 @@ module.exports = (api) => {
               let zBalance = null
 
               const iBalance = Number(
-                await api.native.get_addr_balance(coin, token, iAddr)
+                await api.native.get_addr_balance(coin, token, iAddr, useCache, txcount)
               )
               
               if (zAddr != null) {
                 try {
                   zBalance = Number(
-                    await api.native.get_addr_balance(coin, token, zAddr)
+                    await api.native.get_addr_balance(coin, token, zAddr, useCache, txcount)
                   );
                 } catch (e) {
                   api.log(e.message, "get_identities");

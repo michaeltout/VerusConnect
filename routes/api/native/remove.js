@@ -50,10 +50,14 @@ module.exports = (api) => {
               delete api.coindInstanceRegistry[key];
               delete api.native.startParams[key];
 
+              Object.keys(api.native.cache).map(cacheType => {
+                delete api.native.cache[cacheType][key];
+              });
+
               if (api.rpcConf[key] && api.rpcConf[key].updateTimeoutId) {
                 clearTimeout(api.rpcConf[key].updateTimeoutId)
               }
-              
+
               delete api.rpcConf[key];
 
               clearInterval(coindPingInterval[key]);

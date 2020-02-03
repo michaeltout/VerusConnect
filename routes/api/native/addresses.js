@@ -19,7 +19,8 @@ module.exports = (api) => {
       let addressPromises = [
         api.native.callDaemon(coin, "listaddressgroupings", [], token),
         api.native.callDaemon(coin, "getaddressesbyaccount", [""], token),
-        api.native.callDaemon(coin, "z_gettotalbalance", [], token)
+        api.native.callDaemon(coin, "z_gettotalbalance", [], token),
+        api.native.callDaemon(coin, "getwalletinfo", [], token)
       ];
 
       if (includePrivate) {
@@ -41,8 +42,10 @@ module.exports = (api) => {
           const addressGroupings = jsonResults[0];
           const addressesByAccount = jsonResults[1];
           const totalBalance = jsonResults[2];
+          const walletInfo = jsonResults[3];
+          const { txcount } = walletInfo
           const privateAddrListResult =
-            jsonResults.length > 3 ? jsonResults[3] : [];
+            jsonResults.length > 3 ? jsonResults[4] : [];
 
           // Compile public addresses from listaddressgroupings
           addressGroupings.forEach(addressGrouping => {
@@ -121,7 +124,7 @@ module.exports = (api) => {
                   (!isZ && tBalanceSeen < totalTBalance)
                 ) {
                   balanceObj.native = Number(
-                    await api.native.get_addr_balance(coin, token, address)
+                    await api.native.get_addr_balance(coin, token, address, true, txcount)
                   );
 
                   isZ

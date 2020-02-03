@@ -5,50 +5,82 @@ const BYTES_PER_MB = 1000000
 
 module.exports = (api) => {      
   // Gets an address balance (z_getbalance)
-  api.native.get_addr_balance = async (coin, token, address) => {
-    if (api.native.cache.addr_balance_cache[coin] == null) api.native.cache.addr_balance_cache[coin] = {}
-    const addrCache = api.native.cache.addr_balance_cache[coin]
+  api.native.get_addr_balance = async (coin, token, address, useCache, txCount) => {
+    //TODO: DELETE
+    console.log("CACHE ? " + useCache)
 
-    if (addrCache[address] != null) {
-      //TODO: DELETE
-      console.log(`Used cached address balance for ${coin}, ${address}`)
-
-      return new Promise((resolve, reject) => resolve(addrCache[address]))
-    }
-
-    return new Promise((resolve, reject) => {      
-      api.native.callDaemon(coin, 'z_getbalance', [address], token)
-      .then((balance) => {
-        const cacheSize = getObjBytes(api.native.cache)
-
-        if (
-          !isNaN(api.appConfig.general.native.nativeCacheMbLimit) &&
-          cacheSize <
-            api.appConfig.general.native.nativeCacheMbLimit * BYTES_PER_MB
-        ) {
-          addrCache[address] = balance;
-        } else {
-          //TODO: DELETE
-          console.log("addr balance cache size limit exceeded, deleting and adding addr");
-
-          delete addrCache[Object.keys(addrCache)[0]]
-          addrCache[address] = balance;
-        }
-
+    if (useCache) {
+      if (
+        api.native.cache.addr_balance_cache[coin] != null &&
+        txCount !== api.native.cache.addr_balance_cache[coin].tx_count
+      ) {
         //TODO: DELETE
-        console.log("ADDR BALANCE CACHE")
-        console.log(
-          `${cacheSize}, ${
-            Object.keys(addrCache).length
-          }`
-        );
-
+        console.log(`Transaction count changed, clearing ${coin} address balance cache`)
+  
+        api.native.cache.addr_balance_cache[coin].tx_count = txCount;
+        delete api.native.cache.addr_balance_cache[coin].data;
+      }
         
-        resolve(balance)
-      })
-      .catch(err => {
-        reject(err)
-      })
+      if (api.native.cache.addr_balance_cache[coin] == null) {
+        api.native.cache.addr_balance_cache[coin] = {
+          tx_count: -1,
+          data: {}
+        };
+      } else if (api.native.cache.addr_balance_cache[coin].data == null) {
+        api.native.cache.addr_balance_cache[coin].data = {}
+      }
+  
+      if (api.native.cache.addr_balance_cache[coin].data[address] != null) {
+        //TODO: DELETE
+        console.log(`Used cached address balance for ${coin}, ${address}`)
+  
+        return new Promise((resolve, reject) => resolve(api.native.cache.addr_balance_cache[coin].data[address]))
+      }
+    }
+    
+    return new Promise((resolve, reject) => {
+      api.native
+        .callDaemon(coin, "z_getbalance", [address], token)
+        .then(balance => {
+          const cacheSize = getObjBytes(api.native.cache);
+
+          if (useCache) {
+            if (!isNaN(api.appConfig.general.native.nativeCacheMbLimit)) {
+              if (
+                cacheSize <
+                api.appConfig.general.native.nativeCacheMbLimit * BYTES_PER_MB
+              ) {
+                api.native.cache.addr_balance_cache[coin].data[address] = balance;
+              } else if (
+                Object.keys(api.native.cache.addr_balance_cache[coin].data).length >
+                0
+              ) {
+                //TODO: DELETE
+                console.log(
+                  "addr balance cache size limit exceeded, deleting old data"
+                );
+
+                delete api.native.cache.addr_balance_cache[coin].data[
+                  Object.keys(api.native.cache.addr_balance_cache[coin].data)[0]
+                ];
+                api.native.cache.addr_balance_cache[coin].data[address] = balance;
+              }
+            }
+          }
+
+          //TODO: DELETE
+          console.log("ADDR BALANCE CACHED");
+          console.log(
+            `${cacheSize}, ${
+              Object.keys(api.native.cache.addr_balance_cache[coin].data).length
+            }`
+          );
+
+          resolve(balance);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   };
 

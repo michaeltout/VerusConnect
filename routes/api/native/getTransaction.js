@@ -11,9 +11,6 @@ module.exports = (api) => {
     if (api.native.cache.tx_cache[coin] == null) api.native.cache.tx_cache[coin] = {}
 
     if (compact && api.native.cache.tx_cache[coin][txid] != null) {
-      //TODO: DELETE
-      console.log(`Used cached transaction for ${coin}, ${txid}`)
-
       return new Promise((resolve, reject) => resolve(api.native.cache.tx_cache[coin][txid]))
     }
 
@@ -58,17 +55,8 @@ module.exports = (api) => {
                 api.appConfig.general.native.nativeCacheMbLimit * BYTES_PER_MB
             ) {
               api.native.cache.tx_cache[coin][txid] = compactTx;
-            } else {
-              //TODO: DELETE
-              console.log("Cache size limit exceeded");
             }
-
-            //TODO: DELETE
-            console.log(
-              `${cacheSize}, ${
-                Object.keys(api.native.cache.tx_cache[coin]).length
-              }`
-            );
+            //TODO: Add in smart caching here
           }
 
          
