@@ -45,26 +45,12 @@ module.exports = (api) => {
           const cacheSize = getObjBytes(api.native.cache);
 
           if (useCache) {
-            if (!isNaN(api.appConfig.general.native.nativeCacheMbLimit)) {
-              if (
-                cacheSize <
+            if (
+              !isNaN(api.appConfig.general.native.nativeCacheMbLimit) &&
+              cacheSize <
                 api.appConfig.general.native.nativeCacheMbLimit * BYTES_PER_MB
-              ) {
-                api.native.cache.addr_balance_cache[coin].data[address] = balance;
-              } else if (
-                Object.keys(api.native.cache.addr_balance_cache[coin].data).length >
-                0
-              ) {
-                //TODO: DELETE
-                console.log(
-                  "addr balance cache size limit exceeded, deleting old data"
-                );
-
-                delete api.native.cache.addr_balance_cache[coin].data[
-                  Object.keys(api.native.cache.addr_balance_cache[coin].data)[0]
-                ];
-                api.native.cache.addr_balance_cache[coin].data[address] = balance;
-              }
+            ) {
+              api.native.cache.addr_balance_cache[coin].data[address] = balance;
             }
           }
 
