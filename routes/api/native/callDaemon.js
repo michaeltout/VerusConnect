@@ -1,5 +1,13 @@
 const Promise = require('bluebird');
 const request = require('request');
+const {
+  RPC_TIMEOUT,
+  RPC_WORK_QUEUE_DEPTH_EXCEEDED,
+  RPC_ERROR_UNKNOWN,
+  RPC_OK,
+  RPC_PARSE_ERROR
+} = require("../utils/rpc/rpcStatusCodes");
+const RpcError = require('../utils/rpc/rpcError')
 
 module.exports = (api) => {
   api.native.callDaemon = (coin, cmd, params, token) => {   
@@ -44,7 +52,7 @@ module.exports = (api) => {
         const rpcJsonParsed = api.native.convertRpcJson(body)
 
         if (rpcJsonParsed.msg === 'success') resolve(rpcJsonParsed.result);
-        else reject(new Error(rpcJsonParsed.result))
+        else reject(new RpcError(rpcJsonParsed.code, rpcJsonParsed.result))
       });
     });
   }
@@ -76,24 +84,40 @@ module.exports = (api) => {
 
   api.native.convertRpcJson = (json) => {
     if (json === 'Work queue depth exceeded') {
-      return({ msg: 'error', result: 'Daemon is busy' });
+      return {
+        msg: "error",
+        code: RPC_WORK_QUEUE_DEPTH_EXCEEDED,
+        result: "Daemon is busy"
+      };
     } else if (!json) {
-      return({ msg: 'error', result: 'No response from daemon' });
+      return {
+        msg: "error",
+        code: RPC_TIMEOUT,
+        result: "No response from daemon"
+      };
     } else {
       let rpcJson
 
       try {
         rpcJson = JSON.parse(json)
       } catch (e) {
-        return({ msg: 'error', result: 'JSON format unrecognized' });
+        return {
+          msg: "error",
+          code: RPC_PARSE_ERROR,
+          result: "JSON format unrecognized"
+        };
       }
       
       if (rpcJson.error || rpcJson.result === "error") {
-        return({ msg: 'error', result: rpcJson.error ? rpcJson.error.message : 'Unknown error' });
+        return {
+          msg: "error",
+          code: rpcJson.error ? rpcJson.error.code : RPC_ERROR_UNKNOWN,
+          result: rpcJson.error ? rpcJson.error.message : "Unknown error"
+        };
       } else if (rpcJson.hasOwnProperty('msg') && rpcJson.hasOwnProperty('result')) {
         return rpcJson
       } else {
-        return({ msg: 'success', result: rpcJson.result });
+        return { msg: "success", code: RPC_OK, result: rpcJson.result };
       }
     }
   }

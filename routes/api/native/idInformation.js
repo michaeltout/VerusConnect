@@ -37,7 +37,7 @@ module.exports = (api) => {
                     await api.native.get_addr_balance(coin, token, zAddr, useCache, txcount)
                   );
                 } catch (e) {
-                  api.log(e.message, "get_identities");
+                  api.log(e, "get_identities");
                 }
               }
               

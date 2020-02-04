@@ -1,5 +1,9 @@
 const Promise = require('bluebird');
 const getObjBytes = require('../utils/objectUtil/getBytes')
+const {
+  RPC_INVALID_ADDRESS_OR_KEY
+} = require("../utils/rpc/rpcStatusCodes");
+const RpcError = require("../utils/rpc/rpcError");
 
 const BYTES_PER_MB = 1000000
 
@@ -8,6 +12,29 @@ module.exports = (api) => {
   api.native.get_addr_balance = async (coin, token, address, useCache, txCount) => {
     //TODO: DELETE
     console.log("CACHE ? " + useCache)
+
+    const cacheAddrBalanceResult = (result) => {
+      const cacheSize = getObjBytes(api.native.cache);
+
+      if (
+        !isNaN(api.appConfig.general.native.nativeCacheMbLimit) &&
+        cacheSize <
+          api.appConfig.general.native.nativeCacheMbLimit * BYTES_PER_MB
+      ) {
+        api.native.cache.addr_balance_cache[coin].data[address] = result;
+
+        //TODO: DELETE
+        console.log("ADDR BALANCE CACHED");
+        console.log(
+          `${cacheSize}, ${
+            Object.keys(api.native.cache.addr_balance_cache[coin].data).length
+          }`
+        );
+      } else {
+        //TODO: DELETE
+        console.log('addr cache full')
+      }
+    }
 
     if (useCache) {
       if (
@@ -34,7 +61,12 @@ module.exports = (api) => {
         //TODO: DELETE
         console.log(`Used cached address balance for ${coin}, ${address}`)
   
-        return new Promise((resolve, reject) => resolve(api.native.cache.addr_balance_cache[coin].data[address]))
+        return new Promise((resolve, reject) => {
+          if (api.native.cache.addr_balance_cache[coin].data[address] instanceof RpcError) {
+            console.log(`GOT ERROR FROM CACHE`)
+            reject(api.native.cache.addr_balance_cache[coin].data[address])
+          } else resolve(api.native.cache.addr_balance_cache[coin].data[address])
+        })
       }
     }
     
@@ -42,29 +74,15 @@ module.exports = (api) => {
       api.native
         .callDaemon(coin, "z_getbalance", [address], token)
         .then(balance => {
-          const cacheSize = getObjBytes(api.native.cache);
-
-          if (useCache) {
-            if (
-              !isNaN(api.appConfig.general.native.nativeCacheMbLimit) &&
-              cacheSize <
-                api.appConfig.general.native.nativeCacheMbLimit * BYTES_PER_MB
-            ) {
-              api.native.cache.addr_balance_cache[coin].data[address] = balance;
-            }
-          }
-
-          //TODO: DELETE
-          console.log("ADDR BALANCE CACHED");
-          console.log(
-            `${cacheSize}, ${
-              Object.keys(api.native.cache.addr_balance_cache[coin].data).length
-            }`
-          );
-
+          if (useCache) cacheAddrBalanceResult(balance)
           resolve(balance);
         })
         .catch(err => {
+          //DELET
+          console.error(err)
+
+          if (err.code === RPC_INVALID_ADDRESS_OR_KEY) cacheAddrBalanceResult(err)
+          
           reject(err);
         });
     });
