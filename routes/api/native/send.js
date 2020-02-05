@@ -30,7 +30,7 @@ module.exports = (api) => {
    * @param {Boolean} preConvert (optional, forces all pbaas params to be required) auto-convert to PBaaS currency at market price, this only works if the order is mined before block start of the chain
    * @param {Number} lastPriceInRoot (optional) The last price of the chain to send to vs the chain to send from, for display purposes
    */
-  api.native.txPreflight = (
+  api.native.txPreflight = async (
     chainTicker,
     toAddress,
     amount = 0,
@@ -53,81 +53,106 @@ module.exports = (api) => {
     let spendAmount = amount
     let deductedAmount = Number((spendAmount + fee).toFixed(8))
 
-    if (deductedAmount > balance) {
-      warnings.push({
-        field: "value",
-        message: `Original amount + fee (${deductedAmount}) is larger than balance, amount has been changed.`
-      });
-      spendAmount = Number((spendAmount - fee).toFixed(8));
-      deductedAmount = Number((spendAmount + fee).toFixed(8));
-    }
+    try {
+      const balances = await api.native.get_balances(chainTicker, api.appSessionHash, false)
+      const { interest } = balances.native.public
 
-    if (fromAddress || toAddress[0] === "z" || customFee != null) {
-      cliCmd = "z_sendmany";
-      if (customFee) fee = customFee;
-      if (!fromAddress) throw new Error("You must specify a from address in a private transaction.")
-
-      txParams = [
-        fromAddress,
-        [
-          {
-            address: toAddress,
-            amount: spendAmount
-          }
-        ],
-        1,
-        fee
-      ];
-
-      if (memo) {
-        if (toAddress[0] !== 'z') throw new Error("Memos can only be attached to transactions going to z addresses.")
-        txParams[1][0].memo = api.native.encodeMemo(memo);
-      }
-    } else if (
-      toChain ||
-      toNative != null ||
-      toReserve != null ||
-      preConvert != null
-    ) {
-      cliCmd = "sendreserve";
-      txParams = [
-        {
-          name: toChain,
-          paymentaddress: toAddress,
-          refundaddress: fromAddress,
-          amount: spendAmount,
-          tonative: toNative ? 1 : 0,
-          toreserve: toReserve ? 1 : 0,
-          preconvert: preConvert ? 1 : 0,
-          subtractfee: 0
+      if (deductedAmount > balance) {
+        if (interest == null || interest == 0) {
+          warnings.push({
+            field: "value",
+            message: `Original amount + fee (${deductedAmount}) is larger than balance, amount has been changed.`
+          });
         }
-      ];
-    } else {
-      cliCmd = "sendtoaddress";
-      txParams = [toAddress, spendAmount];
-    }
+        
+        spendAmount = Number((spendAmount - fee).toFixed(8));
+        deductedAmount = Number((spendAmount + fee).toFixed(8));
+      }
+  
+      if (fromAddress || toAddress[0] === "z" || customFee != null) {
+        cliCmd = "z_sendmany";
+        if (customFee) fee = customFee;
+        if (!fromAddress) throw new Error("You must specify a from address in a private transaction.")
+  
+        txParams = [
+          fromAddress,
+          [
+            {
+              address: toAddress,
+              amount: spendAmount
+            }
+          ],
+          1,
+          fee
+        ];
+  
+        if (memo) {
+          if (toAddress[0] !== 'z') throw new Error("Memos can only be attached to transactions going to z addresses.")
+          txParams[1][0].memo = api.native.encodeMemo(memo);
+        }
+      } else if (
+        toChain ||
+        toNative != null ||
+        toReserve != null ||
+        preConvert != null
+      ) {
+        cliCmd = "sendreserve";
+        txParams = [
+          {
+            name: toChain,
+            paymentaddress: toAddress,
+            refundaddress: fromAddress,
+            amount: spendAmount,
+            tonative: toNative ? 1 : 0,
+            toreserve: toReserve ? 1 : 0,
+            preconvert: preConvert ? 1 : 0,
+            subtractfee: 0
+          }
+        ];
+      } else {
+        cliCmd = "sendtoaddress";
+        txParams = [toAddress, spendAmount];
+      }
 
-    const remainingBalance = balance != null && deductedAmount != null ? (balance - deductedAmount).toFixed(8) : 0
-    if (remainingBalance < 0) throw new Error("Insufficient funds")
-    
-    return {
-      cliCmd,
-      txParams,
-      chainTicker,
-      to: toAddress,
-      from: fromAddress ? fromAddress : cliCmd === 'sendtoaddress' ? 'Transparent Funds' : null,
-      balance: balance ? balance.toFixed(8) : balance,
-      value: spendAmount,
-      fee: fee ? fee.toFixed(8) : fee,
-      message: memo,
-      total: deductedAmount ? deductedAmount.toFixed(8) : deductedAmount,
-      lastPrice: lastPriceInRoot ? lastPriceInRoot.toFixed(8) : lastPriceInRoot,
-      remainingBalance,
-      warnings,
-    };
+      let remainingBalance = balance != null && deductedAmount != null ? (balance - deductedAmount).toFixed(8) : 0
+      if (remainingBalance < 0) throw new Error("Insufficient funds")
+  
+      if (interest != null && interest > 0) {
+        if (cliCmd !== "sendtoaddress") {
+          warnings.unshift({
+            field: "interest",
+            message:
+              `You have ${interest} ${chainTicker} in unclaimed interest that may be lost if you send this transaction, ` +
+              `claim it first to ensure you do not lose it.`
+          });
+        } else {
+          remainingBalance = (Number(remainingBalance) + (2 * interest)).toFixed(8)
+          deductedAmount -= interest
+        }
+      } 
+      
+      return {
+        cliCmd,
+        txParams,
+        chainTicker,
+        to: toAddress,
+        from: fromAddress ? fromAddress : cliCmd === 'sendtoaddress' ? 'Transparent Funds' : null,
+        balance: balance ? balance.toFixed(8) : balance,
+        value: spendAmount,
+        interest: interest == null || interest == 0 ? null : interest,
+        fee: fee ? fee.toFixed(8) : fee,
+        message: memo,
+        total: deductedAmount ? deductedAmount.toFixed(8) : deductedAmount,
+        lastPrice: lastPriceInRoot ? lastPriceInRoot.toFixed(8) : lastPriceInRoot,
+        remainingBalance,
+        warnings,
+      };
+    } catch (e) {
+      throw e
+    }
   };
 
-  api.post('/native/sendtx', (req, res, next) => {
+  api.post('/native/sendtx', async (req, res, next) => {
     const token = req.body.token;
 
     if (api.checkToken(token)) {
@@ -147,7 +172,7 @@ module.exports = (api) => {
       } = req.body;
 
       try {
-        const preflightRes = api.native.txPreflight(
+        const preflightRes = await api.native.txPreflight(
           chainTicker,
           toAddress,
           amount,
@@ -181,6 +206,7 @@ module.exports = (api) => {
           msg: "error",
           result: e.message
         };
+
         res.end(JSON.stringify(retObj));
       }
     } else {
@@ -192,7 +218,7 @@ module.exports = (api) => {
     }
   });
 
-  api.post("/native/tx_preflight", (req, res, next) => {
+  api.post("/native/tx_preflight", async (req, res, next) => {
     const token = req.body.token;
 
     if (api.checkToken(token)) {
@@ -215,7 +241,7 @@ module.exports = (api) => {
         res.end(
           JSON.stringify({
             msg: "success",
-            result: api.native.txPreflight(
+            result: await api.native.txPreflight(
               chainTicker,
               toAddress,
               amount,

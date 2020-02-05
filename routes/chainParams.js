@@ -142,10 +142,6 @@ const chainParams = {
 		ac_name: "ETOMIC",
 		ac_supply: 100000000,
 	},
-	BTCH: {
-		ac_name: "BTCH",
-		ac_supply: 20998641,
-	},
 	BEER: {
 		ac_name: "BEER",
 		ac_supply: 100000000,

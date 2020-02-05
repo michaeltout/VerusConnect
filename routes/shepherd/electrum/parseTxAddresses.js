@@ -100,9 +100,11 @@ module.exports = (shepherd) => {
 
       // send to self
       if (isSelfSend.inputs && isSelfSend.outputs) {
+        const amount = _sum.inputs - _sum.outputs
+
         result = {
-          type: 'self',
-          amount: Number(_sum.inputs - _sum.outputs).toFixed(8),
+          type: amount < 0 ? 'interest' : 'self',
+          amount: Number(amount).toFixed(8),
           address: targetAddress,
           timestamp: tx.timestamp,
           txid: tx.format.txid,

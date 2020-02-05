@@ -435,7 +435,7 @@ module.exports = (api) => {
         if (_call === 'listtransactions') {
           _params = [
             '*',
-            api.appConfig.general.native.listtransactionsMaxLength,
+            api.appConfig.general.native.maxTxListLength,
             0,
           ];
         }

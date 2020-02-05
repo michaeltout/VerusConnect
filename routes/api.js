@@ -89,6 +89,7 @@ api.native = {
     addr_balance_cache: {}
   }
 };
+
 api.seed = null;
 
 // prices and price APIs

@@ -100,10 +100,6 @@ module.exports = (api) => {
             msg: "error",
             result: e.message
           };
-
-          //TODO: DELETE
-          console.error(e)
-
           res.end(JSON.stringify(retObj));
         });
     } else {

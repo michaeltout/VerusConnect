@@ -31,7 +31,6 @@ const assetChainPorts = {
   AXO: 12927,
   ETOMIC: 10271,
   NINJA: 8427,
-  BTCH: 8800,
   BNTN: 14358,
   EQL: 10306,
   PRLPAY: 9679,

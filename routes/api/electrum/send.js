@@ -37,9 +37,9 @@ module.exports = (api) => {
       fee: fromSats(fee),
       feePerByte: feePerByte,
       total: fromSats(txValue + fee),
-      remainingBalance: fromSats(balance - (txValue + fee)),
+      remainingBalance: fromSats(balance - (txValue + fee)) + (totalInterest == null ? 0 : fromSats(totalInterest)),
       warnings,
-      totalInterest,
+      interest: totalInterest == null || totalInterest == 0 ? null : fromSats(totalInterest),
       rawTx
     };
   };
@@ -286,7 +286,6 @@ module.exports = (api) => {
               for (let i = 0; i < inputs.length; i++) {
                 if (Number(inputs[i].interestSats) > interestClaimThreshold) {
                   totalInterest += Number(inputs[i].interestSats);
-                  totalInterestUTXOCount++;
                 }
               }
             }
@@ -475,7 +474,7 @@ module.exports = (api) => {
                       amount,
                       value,
                       fee,
-                      totalInterest,
+                      totalInterest != null && totalInterest < 0 ? 0 : totalInterest,
                       feePerByte
                     )
                   );
@@ -516,7 +515,7 @@ module.exports = (api) => {
                       amount,
                       value,
                       fee,
-                      totalInterest,
+                      totalInterest != null && totalInterest < 0 ? 0 : totalInterest,
                       _rawtx,
                       feePerByte
                     )
@@ -669,19 +668,19 @@ module.exports = (api) => {
     if (api.checkToken(token)) {
       const {
         chainTicker,
-      toAddress,
-      amount,
-      verify,
-      lumpFee,
-      feePerByte,
-      noSigature,
-      offlineTx,
-      unsigned,
-      customUtxos,
-      votingTx,
-      opreturn,
-      customWif,
-      customFromAddress
+        toAddress,
+        amount,
+        verify,
+        lumpFee,
+        feePerByte,
+        noSigature,
+        offlineTx,
+        unsigned,
+        customUtxos,
+        votingTx,
+        opreturn,
+        customWif,
+        customFromAddress
       } = req.body;
 
       api.electrum.txPreflight(

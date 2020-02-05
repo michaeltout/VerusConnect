@@ -1,9 +1,6 @@
 const request = require('request');
 
 const standardizeZecInfo = (info) => {
-  //TODO: DELETE
-  console.log("GETTING ZEC CHAIN")
-
   return new Promise((resolve, reject) => {
     const options = {
       url: `https://api.zcha.in/v2/mainnet/network`,
@@ -50,9 +47,6 @@ const standardizeInfo = (info, coin, api) => {
   let standardizationPromises = []
 
   if (standardizationFns[coin] != null) {
-    //TODO: DELETE
-    console.log("RUNNING ZEC STANDARDIZATION")
-
     standardizationPromises.push(
       standardizationFns[coin](info)
     );
