@@ -127,7 +127,7 @@ const template = [
         }
       },
       {
-        label: 'Show komodo-cli folder',
+        label: 'Show binary folder',
         click (item, focusedWindow) {
           shell.openItem(pathsDaemons().komodocliDir);
         }
