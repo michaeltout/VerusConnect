@@ -55,7 +55,7 @@ build:linux:
     - gsutil cp $STAGING/$VERUS_CLI_LINUX .
     - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tar.gz --strip=1 --directory assets/bin/linux64/verusd
     - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tar.gz
-    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-linux-amd64.tar.gz
+    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-linux-amd64.tar.gz .
     - tar -xzvf zcashd-linux-amd64.tar.gz --directory assets/bin/linux64/
     - wget https://github.com/KomodoPlatform/komodo/releases/download/${KOMODO_VERSION}/linux64_${KOMODO_VERSION}.tar.gz
     - tar -xzvf linux64_${KOMODO_VERSION}.tar.gz --strip=1 --directory assets/bin/linux64
@@ -101,7 +101,7 @@ build:linux:arm64:
     - mkdir -p assets/bin/linux64/verusd
     - gsutil cp $STAGING/$VERUS_CLI_LINUX .
     - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz --strip=1 --directory assets/bin/linux64/verusd
-    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz
+    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz .
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-linux-arm64.tar.gz
     - tar -xzvf zcashd-linux-arm64.tar.gz --directory assets/bin/linux64/
     - rm zcashd-linux-arm64.tar.gz
@@ -156,7 +156,7 @@ build:windows:
     - mv assets/bin/win64/verus-cli assets/bin/win64/verusd
     - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-tx.exe
     - rm Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
-    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz
+    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz .
     - tar -xzvf zcashd-win.tar.gz -directory assets/bin/win64/
     - rm zcashd-win.tar.gz
     - yarn install
@@ -214,7 +214,7 @@ build:mac:
     - tar -xzvf macos_${KOMODO_VERSION}.tar.gz  --strip=1 --directory assets/bin/osx/komodod
     - rm macos_${KOMODO_VERSION}.tar.gz
     - rm Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tar.gz
-    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-macos.tar.gz
+    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-macos.tar.gz .
     - tar -xzvf zcashd-macos.tar.gz -directory assets/bin/osx/
     - rm zcashd-macos.tar.gz
     - yarn install
