@@ -8,7 +8,7 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DEFAULT_VERUSCOIN_BRANCH: dev
-  VERUS_VERSION: 0.6.3-dev-2
+  VERUS_VERSION: 0.6.3-rc1
   VERUSCOIN_VERSION: 0.6.3-rc1
   KOMODO_VERSION: 0.5.2
   BINARY_SOURCE: VerusCoin
@@ -43,7 +43,7 @@ build:linux:
       --key-file AUTH_KEY.json &&
       rm AUTH_KEY.json
     - if [ -z "${UPSTREAM_CLI_BRANCH}" ]; then export
-      VERUS_CLI_LINUX="${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH}/Linux/Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tar.gz"
+      VERUS_CLI_LINUX="${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH}/Linux/Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tgz"
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
@@ -53,8 +53,8 @@ build:linux:
     - cd ../../..
     - mkdir -p assets/bin/linux64/verusd
     - gsutil cp $STAGING/$VERUS_CLI_LINUX .
-    - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tar.gz --strip=1 --directory assets/bin/linux64/verusd
-    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tar.gz
+    - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tgz --strip=1 --directory assets/bin/linux64/verusd
+    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-amd64.tgz
     - mkdir -p assets/bin/linux64/komodod
     - wget https://github.com/KomodoPlatform/komodo/releases/download/${KOMODO_VERSION}/linux64_${KOMODO_VERSION}.tar.gz
     - tar -xzvf linux64_${KOMODO_VERSION}.tar.gz --strip=1 --directory assets/bin/linux64/komodod
@@ -92,7 +92,7 @@ build:linux:arm64:
       --key-file AUTH_KEY.json &&
       rm AUTH_KEY.json
     - if [ -z "${UPSTREAM_CLI_BRANCH}" ]; then export
-      VERUS_CLI_LINUX="${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH}/Linux/Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz"
+      VERUS_CLI_LINUX="${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH}/Linux/Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tgz"
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
@@ -102,8 +102,8 @@ build:linux:arm64:
     - cd ../../..
     - mkdir -p assets/bin/linux64/verusd
     - gsutil cp $STAGING/$VERUS_CLI_LINUX .
-    - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz --strip=1 --directory assets/bin/linux64/verusd
-    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz
+    - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tgz --strip=1 --directory assets/bin/linux64/verusd
+    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tgz
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-linux-arm64.tar.gz .
     - tar -xzvf zcashd-linux-arm64.tar.gz --directory assets/bin/linux64/
     - rm zcashd-linux-arm64.tar.gz
@@ -212,10 +212,10 @@ build:mac:
     - wget https://github.com/KomodoPlatform/komodo/releases/download/${KOMODO_VERSION}/macos_${KOMODO_VERSION}.tar.gz
     - mkdir -p assets/bin/osx/verusd
     - mkdir -p assets/bin/osx/komodod
-    - tar -xzf Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tar.gz --strip=1 --directory assets/bin/osx/verusd
+    - tar -xzf Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tgz --strip=1 --directory assets/bin/osx/verusd
     - tar -xzvf macos_${KOMODO_VERSION}.tar.gz  --strip=1 --directory assets/bin/osx/komodod
     - rm macos_${KOMODO_VERSION}.tar.gz
-    - rm Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tar.gz
+    - rm Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tgz
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-macos.tar.gz .
     - tar -xzvf zcashd-macos.tar.gz --directory assets/bin/osx/
     - rm zcashd-macos.tar.gz
