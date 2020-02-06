@@ -200,7 +200,7 @@ build:mac:
   tags: ["Mojave"]
   before_script:
     - if [ -z "${UPSTREAM_CLI_BRANCH}" ]; then export
-      VERUS_CLI_MACOS="${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH}/MacOS/Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tar.gz";
+      VERUS_CLI_MACOS="${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH}/MacOS/Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tgz";
       POST_COMMENT="${POST_COMMENT}Using ${BINARY_SOURCE}/${DEFAULT_VERUSCOIN_BRANCH} binaries.";
       else
       export POST_COMMENT="${POST_COMMENT}Using ${UPSTREAM_TRIGGER}/${UPSTREAM_CLI_BRANCH} binaries."; fi
