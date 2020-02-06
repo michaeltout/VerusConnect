@@ -15,8 +15,8 @@ variables:
   EASYDEX_GUI_BUILD: build.tar.gz
   VERUS_APPIMAGE_X64: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.AppImage
   VERUS_APPIMAGE_ARM64: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.AppImage
-  VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-amd64.tgz
-  VERUS_LINUX_ARM64_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.tgz
+  VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-amd64.tar.gz
+  VERUS_LINUX_ARM64_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.tar.gz
   VERUS_WINDOWS_ZIP: Verus-Desktop-Windows-v${VERUS_VERSION}.zip
   VERUS_WINDOWS_NSIS: Verus-Desktop-Windows-v${VERUS_VERSION}.exe
   VERUS_MACOS: Verus-Desktop-MacOS-v${VERUS_VERSION}.dmg

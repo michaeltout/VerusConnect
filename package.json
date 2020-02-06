@@ -129,7 +129,9 @@
     "win": {
       "artifactName": "${productName}-Windows-v${version}.${ext}",
       "target": [
-        "zip"],
+        "zip",
+        "nsis"
+      ],
       "icon": "assets/icons/vrsc.ico"
     },
     "nsis": {
