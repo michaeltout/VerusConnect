@@ -215,7 +215,7 @@ build:mac:
     - rm macos_${KOMODO_VERSION}.tar.gz
     - rm Verus-CLI-MacOS-v${VERUSCOIN_VERSION}.tar.gz
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-macos.tar.gz .
-    - tar -xzvf zcashd-macos.tar.gz -directory assets/bin/osx/
+    - tar -xzvf zcashd-macos.tar.gz --directory assets/bin/osx/
     - rm zcashd-macos.tar.gz
     - yarn install
   script:
