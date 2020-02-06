@@ -101,8 +101,8 @@ build:linux:arm64:
     - mkdir -p assets/bin/linux64/verusd
     - gsutil cp $STAGING/$VERUS_CLI_LINUX .
     - tar -xzvf Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz --strip=1 --directory assets/bin/linux64/verusd
-    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz .
-    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-linux-arm64.tar.gz
+    - rm Verus-CLI-Linux-v${VERUSCOIN_VERSION}-arm64.tar.gz
+    - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-linux-arm64.tar.gz .
     - tar -xzvf zcashd-linux-arm64.tar.gz --directory assets/bin/linux64/
     - rm zcashd-linux-arm64.tar.gz
     - yarn install
