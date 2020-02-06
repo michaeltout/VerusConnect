@@ -4,6 +4,7 @@ const {
   RPC_INVALID_ADDRESS_OR_KEY
 } = require("../utils/rpc/rpcStatusCodes");
 const RpcError = require("../utils/rpc/rpcError");
+const { fromSats } = require("agama-wallet-lib/src/utils");
 
 const BYTES_PER_MB = 1000000
 
@@ -43,17 +44,23 @@ module.exports = (api) => {
       if (api.native.cache.addr_balance_cache[coin].data[address] != null) {  
         return new Promise((resolve, reject) => {
           if (api.native.cache.addr_balance_cache[coin].data[address] instanceof RpcError) {
-            console.log(`GOT ERROR FROM CACHE`)
             reject(api.native.cache.addr_balance_cache[coin].data[address])
           } else resolve(api.native.cache.addr_balance_cache[coin].data[address])
         })
       }
     }
     
+    // Optimization, TODO: Apply to all verusd coins
+    const useGetAddrBalance = (coin === 'VRSC' || coin === 'VRSCTEST') && address[0] !== 'z'
+
     return new Promise((resolve, reject) => {
       api.native
-        .callDaemon(coin, "z_getbalance", [address], token)
+        .callDaemon(coin, useGetAddrBalance ? "getaddressbalance" : "z_getbalance", [address], token)
         .then(balance => {
+          if (useGetAddrBalance) {
+            balance = fromSats(balance.balance)
+          }
+          
           if (useCache) cacheAddrBalanceResult(balance)
           resolve(balance);
         })

@@ -91,7 +91,7 @@ module.exports = api => {
               return api.native.callDaemon(
                 coin,
                 "z_listreceivedbyaddress",
-                [address],
+                [address, 0],
                 token
               );
             })

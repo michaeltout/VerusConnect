@@ -34,6 +34,10 @@ module.exports = (api) => {
       privateaddress
     }
 
+    if (privateaddress == null) {
+      delete idJson.privateaddress
+    }
+
     return new Promise((resolve, reject) => {
       api.native
         .callDaemon(

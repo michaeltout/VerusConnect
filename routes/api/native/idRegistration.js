@@ -49,6 +49,10 @@ module.exports = (api) => {
       }
     }
 
+    if (privateaddress == null) {
+      delete idJson.identity.privateaddress
+    }
+
     if (referral) {
       idJson.namereservation.referral = referral
     }
