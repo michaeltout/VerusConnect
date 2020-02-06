@@ -157,7 +157,7 @@ build:windows:
     - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-tx.exe
     - rm Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz .
-    - tar -xzvf zcashd-win.tar.gz -directory assets/bin/win64/
+    - tar -xzvf zcashd-win.tar.gz --directory assets/bin/win64/
     - rm zcashd-win.tar.gz
     - yarn install
   script:
