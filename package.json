@@ -1,7 +1,7 @@
 {
   "name": "verus-desktop",
   "productName": "Verus-Desktop",
-  "version": "0.6.3-rc1",
+  "version": "0.6.4-beta",
   "description": "Verus Desktop Wallet App",
   "main": "main.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "dist-win": "electron-builder --publish=never  --win",
     "test": "mocha",
     "update-agamalib": "rm -rf node_modules/agama-wallet-lib/ && yarn install",
-    "postinstall": "rm -rf node_modules/bitgo-utxo-lib/node_modules/create-hash"
+    "postinstall": "rm -rf node_modules/bitgo-utxo-lib/node_modules/create-hash && electron-builder install-app-deps"
   },
   "engines": {
     "node": ">11"
@@ -99,7 +99,8 @@
       "artifactName": "${productName}-MacOS-v${version}.${ext}",
       "icon": "assets/icons/agama_icons/vrsc.icns",
       "target": [
-        "dmg"]
+        "dmg"
+      ]
     },
     "dmg": {
       "icon": "assets/icons/vrsc.icns",
@@ -139,7 +140,6 @@
       "allowToChangeInstallationDirectory": true,
       "installerIcon": "assets/icons/vrsc.ico"
     }
-
   },
   "resolutions": {
     "lodash": "^4.17.11",
