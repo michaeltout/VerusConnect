@@ -103,7 +103,7 @@ module.exports = (shepherd) => {
         const amount = _sum.inputs - _sum.outputs
 
         result = {
-          type: amount < 0 ? 'interest' : 'self',
+          type: 'self',
           amount: Number(amount).toFixed(8),
           address: targetAddress,
           timestamp: tx.timestamp,
