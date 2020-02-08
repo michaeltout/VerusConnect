@@ -8,13 +8,13 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DEFAULT_VERUSCOIN_BRANCH: master
-  VERUS_VERSION: 0.6.4-beta
+  VERUS_VERSION: 0.6.4-beta-1
   VERUSCOIN_VERSION: 0.6.4
   KOMODO_VERSION: 0.5.2
   BINARY_SOURCE: VerusCoin
   VERUS_APPIMAGE_X64: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.AppImage
   VERUS_APPIMAGE_ARM64: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.AppImage
-  VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-amd64.tar.gz
+  VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.tar.gz
   VERUS_LINUX_ARM64_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.tar.gz
   VERUS_WINDOWS_ZIP: Verus-Desktop-Windows-v${VERUS_VERSION}.zip
   VERUS_WINDOWS_NSIS: Verus-Desktop-Windows-v${VERUS_VERSION}.exe
@@ -80,7 +80,6 @@ build:linux:
   artifacts:
     paths:
       - ${VERUS_LINUX_TAR}
-      - ${VERUS_LINUX_TAR}.sha256
     expire_in: 1 week
 
 build:linux:arm64:
@@ -124,7 +123,6 @@ build:linux:arm64:
   artifacts:
     paths:
       - ${VERUS_LINUX_ARM64_TAR}
-      - ${VERUS_LINUX_ARM64_TAR}.sha256
       - dist
     expire_in: 1 week
 ########################################################################################################################
@@ -151,12 +149,14 @@ build:windows:
     - cd ../../..
     - mkdir -p assets/bin/win64/komodod
     - wget https://github.com/KomodoPlatform/komodo/releases/download/${KOMODO_VERSION}/win64_${KOMODO_VERSION}.zip
-    - unzip win64_${KOMODO_VERSION}.zip -d assets/bin/komodod
+    - unzip win64_${KOMODO_VERSION}.zip
+    - mv win64/komodod.exe win64/komodo-cli.exe assets/bin/win64/komodod
+    - rm -rf win64
     - rm win64_${KOMODO_VERSION}.zip
     - gsutil cp $STAGING/$VERUS_CLI_WINDOWS .
     - unzip -qq Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip -d assets/bin/win64
     - mv assets/bin/win64/verus-cli assets/bin/win64/verusd
-    - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-tx.exe
+    - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe
     - rm Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz .
     - tar -xzvf zcashd-win.tar.gz --directory assets/bin/win64/
@@ -186,9 +186,7 @@ build:windows:
   artifacts:
     paths:
       - ${VERUS_WINDOWS_ZIP}
-      - ${VERUS_WINDOWS_ZIP}.sha256
       - ${VERUS_WINDOWS_NSIS}
-      - ${VERUS_WINDOWS_NSIS}.sha256
     expire_in: 1 week
 ########################################################################################################################
 ####END####                                             WINDOWS                                              ####END####
@@ -235,7 +233,6 @@ build:mac:
   artifacts:
     paths:
       - ${VERUS_MACOS}
-      - ${VERUS_MACOS}.sha256
     expire_in: 1 week
 
 
@@ -261,13 +258,8 @@ deploy:
   artifacts:
     paths:
       - ${VERUS_LINUX_TAR}
-      - ${VERUS_LINUX_TAR}.sha256
       - ${VERUS_LINUX_ARM64_TAR}
-      - ${VERUS_LINUX_ARM64_TAR}.sha256
       - ${VERUS_WINDOWS_ZIP}
-      - ${VERUS_WINDOWS_ZIP}.sha256
       - ${VERUS_WINDOWS_NSIS}
-      - ${VERUS_WINDOWS_NSIS}.sha256
       - ${VERUS_MACOS}
-      - ${VERUS_MACOS}.sha256
     expire_in: 1 week
