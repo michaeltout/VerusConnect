@@ -15,7 +15,7 @@ module.exports = (api) => {
       protocol: "Electrum",
       name,
       txfee,
-      server: `${server.ip}:${server.port}:${server.port}`,
+      server: `${server.ip}:${server.port}:${server.proto}`,
       serverList: serverList.toString()
     }}));
       

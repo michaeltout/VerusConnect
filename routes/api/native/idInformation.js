@@ -2,9 +2,18 @@ const Promise = require('bluebird');
 
 module.exports = (api) => {    
   api.native.get_identities = (coin, token, includeCanSpend = true, includeCanSign = false, includeWatchOnly = false) => {
+    const promiseArr = [
+      api.native.callDaemon(coin, 'listidentities', [includeCanSpend, includeCanSign, includeWatchOnly], token),
+      api.native.callDaemon(coin, "z_gettotalbalance", [], token)
+    ]
+
     return new Promise((resolve, reject) => {      
-      api.native.callDaemon(coin, 'listidentities', [includeCanSpend, includeCanSign, includeWatchOnly], token)
-      .then(async (identities) => {
+      Promise.all(promiseArr)
+      .then(async (resultArr) => {
+        const identities = resultArr[0]
+        const balances = resultArr[1]
+        const totalBalance = Number(balances.total)
+
         if (!identities) {
           resolve([])
         } else {
@@ -28,13 +37,13 @@ module.exports = (api) => {
               let zBalance = null
 
               const iBalance = Number(
-                await api.native.get_addr_balance(coin, token, iAddr, useCache, txcount)
+                await api.native.get_addr_balance(coin, token, iAddr, useCache, txcount, totalBalance)
               )
               
               if (zAddr != null) {
                 try {
                   zBalance = Number(
-                    await api.native.get_addr_balance(coin, token, zAddr, useCache, txcount)
+                    await api.native.get_addr_balance(coin, token, zAddr, useCache, txcount, totalBalance)
                   );
                 } catch (e) {
                   api.log(e, "get_identities");
