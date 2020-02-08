@@ -4,7 +4,6 @@ const zcashParamsSources = require('./zcashParamsSources')
 
 let zCoins = {}
 let nativeCoinStrings = {}
-let rpcCooldownTimes = {}
 
 const coinObjArray = coinDataTranslated.getSimpleCoinArray().map(simpleCoinObj => {
   const coinObj = coinDataTranslated.getCoinObj(simpleCoinObj.id, false)
@@ -14,7 +13,6 @@ const coinObjArray = coinDataTranslated.getSimpleCoinArray().map(simpleCoinObj =
 
   if (coinObj.available_modes.native === true) {
     nativeCoinStrings[coinObj.id] = ''
-    rpcCooldownTimes[coinObj.id] = 2000
   }
 
   return coinObj
@@ -81,8 +79,7 @@ const appConfig = {
         includePrivateBalances: zCoins,
         includePrivateTransactions: zCoins,
         stakeGuard: nativeCoinStrings,
-        dataDir: nativeCoinStrings,
-        rpcCooldownTimeout: rpcCooldownTimes
+        dataDir: nativeCoinStrings
       }
     },
     pubkey: "",
@@ -203,13 +200,6 @@ const appConfig = {
           type: "text_input",
           displayName: "Custom data directory",
           info: "A custom directory for coin data."
-        },
-        rpcCooldownTimeout: {
-          type: "number_input",
-          displayName: "Wallet Call Cooldown Timeout (MS)",
-          info:
-            "The maximum number of milliseconds in cooldown time that the wallet " +
-            "will take in between each call to the blockchain native wallet."
         }
       }
     }
