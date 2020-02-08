@@ -80,7 +80,6 @@ build:linux:
   artifacts:
     paths:
       - ${VERUS_LINUX_TAR}
-      - ${VERUS_LINUX_TAR}.sha256
     expire_in: 1 week
 
 build:linux:arm64:
@@ -124,7 +123,6 @@ build:linux:arm64:
   artifacts:
     paths:
       - ${VERUS_LINUX_ARM64_TAR}
-      - ${VERUS_LINUX_ARM64_TAR}.sha256
       - dist
     expire_in: 1 week
 ########################################################################################################################
@@ -158,7 +156,7 @@ build:windows:
     - gsutil cp $STAGING/$VERUS_CLI_WINDOWS .
     - unzip -qq Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip -d assets/bin/win64
     - mv assets/bin/win64/verus-cli assets/bin/win64/verusd
-    - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-tx.exe
+    - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe
     - rm Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz .
     - tar -xzvf zcashd-win.tar.gz --directory assets/bin/win64/
@@ -188,9 +186,7 @@ build:windows:
   artifacts:
     paths:
       - ${VERUS_WINDOWS_ZIP}
-      - ${VERUS_WINDOWS_ZIP}.sha256
       - ${VERUS_WINDOWS_NSIS}
-      - ${VERUS_WINDOWS_NSIS}.sha256
     expire_in: 1 week
 ########################################################################################################################
 ####END####                                             WINDOWS                                              ####END####
@@ -237,7 +233,6 @@ build:mac:
   artifacts:
     paths:
       - ${VERUS_MACOS}
-      - ${VERUS_MACOS}.sha256
     expire_in: 1 week
 
 
@@ -263,13 +258,8 @@ deploy:
   artifacts:
     paths:
       - ${VERUS_LINUX_TAR}
-      - ${VERUS_LINUX_TAR}.sha256
       - ${VERUS_LINUX_ARM64_TAR}
-      - ${VERUS_LINUX_ARM64_TAR}.sha256
       - ${VERUS_WINDOWS_ZIP}
-      - ${VERUS_WINDOWS_ZIP}.sha256
       - ${VERUS_WINDOWS_NSIS}
-      - ${VERUS_WINDOWS_NSIS}.sha256
       - ${VERUS_MACOS}
-      - ${VERUS_MACOS}.sha256
     expire_in: 1 week
