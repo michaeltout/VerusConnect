@@ -7,9 +7,9 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: master
+  DEFAULT_VERUSCOIN_BRANCH: dev
   VERUS_VERSION: 0.6.4-beta-1
-  VERUSCOIN_VERSION: 0.6.4
+  VERUSCOIN_VERSION: 0.6.4-1
   KOMODO_VERSION: 0.5.2
   BINARY_SOURCE: VerusCoin
   VERUS_APPIMAGE_X64: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.AppImage
