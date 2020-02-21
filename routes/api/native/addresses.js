@@ -45,7 +45,7 @@ module.exports = (api) => {
           const walletInfo = jsonResults[3];
           const { txcount } = walletInfo
           const privateAddrListResult =
-            jsonResults.length > 3 ? jsonResults[4] : [];
+            jsonResults.length > 4 ? jsonResults[4] : [];
 
           // Compile public addresses from listaddressgroupings
           addressGroupings.forEach(addressGrouping => {
