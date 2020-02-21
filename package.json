@@ -138,6 +138,7 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
+      "license": "LICENSE",
       "installerIcon": "assets/icons/vrsc.ico"
     }
   },

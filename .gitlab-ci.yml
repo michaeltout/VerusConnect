@@ -7,9 +7,9 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: master
+  DEFAULT_VERUSCOIN_BRANCH: release
   VERUS_VERSION: 0.6.4-beta-1
-  VERUSCOIN_VERSION: 0.6.4
+  VERUSCOIN_VERSION: 0.6.4-1
   KOMODO_VERSION: 0.5.2
   BINARY_SOURCE: VerusCoin
   VERUS_APPIMAGE_X64: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.AppImage
@@ -154,8 +154,10 @@ build:windows:
     - rm -rf win64
     - rm win64_${KOMODO_VERSION}.zip
     - gsutil cp $STAGING/$VERUS_CLI_WINDOWS .
-    - unzip -qq Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip -d assets/bin/win64
-    - mv assets/bin/win64/verus-cli assets/bin/win64/verusd
+    - unzip -qq Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
+    - mkdir -p assets/bin/win64/verusd
+    - mv verus-cli/verusd.exe verus-cli/verusd.exe.signature.txt verus-cli/verus.exe verus-cli/verus.exe.signature.txt assets/bin/win64/verusd/
+    - rm -rf verus-cli
     - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe
     - rm Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz .
