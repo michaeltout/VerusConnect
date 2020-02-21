@@ -92,7 +92,7 @@ const template = [
   },
   {
     role: 'help',
-    label: 'Debug',
+    label: 'Help',
     submenu: [
       // TODO: Reimplement
       //{
