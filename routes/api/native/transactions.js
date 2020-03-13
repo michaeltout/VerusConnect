@@ -2,16 +2,17 @@ const Promise = require('bluebird');
 
 const PRIVATE_ADDRESSES = 1
 const PUBLIC_TRANSACTIONS = 0
+const NUM_BLOCK_INDEX = 2
 const MAX_TRANSACTIONS = 2147483647 // Max # of transactions
 
 module.exports = api => {
-  const getZTransactions = (coin, array, token) => {
+  const getZTransactions = (coin, array, token, currentHeight) => {
     let promiseArray = [];
     for (let i = 0; i < array.length; i++) {
       promiseArray.push(
         new Promise((resolve, reject) => {
           api.native
-            .get_transaction(coin, token, array[i].txid, true)
+            .get_transaction(coin, token, array[i].txid, true, currentHeight)
             .then(__json => {
               resolve(__json);
             });
@@ -21,7 +22,7 @@ module.exports = api => {
     return Promise.all(promiseArray);
   };
 
-  const getZTransactionGroups = (coin, array, results, token) => {
+  const getZTransactionGroups = (coin, array, results, token, currentHeight) => {
     let txInputGroups = [{ coin: coin, group: array.slice(0, 100) }];
     let numCounted = txInputGroups[0].group.length;
 
@@ -35,7 +36,7 @@ module.exports = api => {
 
     return txInputGroups.reduce((p, a) => {
       return p.then(chainResults => {
-        return getZTransactions(a.coin, a.group, token).then(txGroup => {
+        return getZTransactions(a.coin, a.group, token, currentHeight).then(txGroup => {
           return chainResults.concat(txGroup);
         });
       });
@@ -50,6 +51,7 @@ module.exports = api => {
   ) => {
     let privateAddresses = [];
     let transactions = [];
+    let currentHeight = null
 
     return new Promise((resolve, reject) => {
       let transactionPromises = [
@@ -60,10 +62,15 @@ module.exports = api => {
           token
         )
       ];
-      if (includePrivate)
+      if (includePrivate) {
         transactionPromises.push(
           api.native.callDaemon(coin, "z_listaddresses", [], token)
         );
+        transactionPromises.push(
+          api.native.callDaemon(coin, "getinfo", [], token)
+        );
+      }
+        
 
       Promise.all(transactionPromises)
         .then(jsonResults => {
@@ -83,6 +90,8 @@ module.exports = api => {
               });
             } else if (index === PRIVATE_ADDRESSES) {
               privateAddresses = result;
+            } else if (index === NUM_BLOCK_INDEX) {
+              currentHeight = result.longestchain
             }
           });
 
@@ -111,7 +120,7 @@ module.exports = api => {
             .flat();
 
           return privateTxs.length > 0
-            ? getZTransactionGroups(coin, privateTxs, [privateTxs], token)
+            ? getZTransactionGroups(coin, privateTxs, [privateTxs], token, currentHeight)
             : [[]];
         })
         .then(gottenTransactionsArray => {
