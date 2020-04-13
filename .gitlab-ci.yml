@@ -66,7 +66,7 @@ build:linux:
     - yarn run dist
   after_script:
     - cd dist
-    - gsutil cp ${VERUS_APPIMAGE_X64} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
+    - gsutil cp ${VERUS_APPIMAGE_X64} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}/
     - curl -F file=@"$VERUS_APPIMAGE_X64"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
@@ -103,7 +103,7 @@ build:linux:arm64:
     - yarn run dist --arm64
   after_script:
     - cd dist
-    - gsutil cp ${VERUS_APPIMAGE_ARM64} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
+    - gsutil cp ${VERUS_APPIMAGE_ARM64} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}/
     - curl -F file=@"$VERUS_APPIMAGE_ARM64"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
@@ -150,7 +150,7 @@ build:windows:
     - yarn run dist-win
   after_script:
     - cd dist
-    - gsutil cp ${VERUS_WINDOWS_NSIS} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
+    - gsutil cp ${VERUS_WINDOWS_NSIS} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}/
     - curl -F file=@"$VERUS_WINDOWS_NSIS"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
@@ -192,7 +192,7 @@ build:mac:
     - yarn run dist
   after_script:
     - cd dist
-    - gsutil cp ${VERUS_MACOS} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
+    - gsutil cp ${VERUS_MACOS} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}/
     - curl -F file=@"${VERUS_MACOS}"
       -F channels="${VERUS_POST_CHANNEL}"
       -F initial_comment="${POST_COMMENT}"
