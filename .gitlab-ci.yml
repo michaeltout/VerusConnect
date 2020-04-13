@@ -7,18 +7,16 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: release
-  VERUS_VERSION: 0.6.4-beta-1
-  VERUSCOIN_VERSION: 0.6.4-1
+  DEFAULT_VERUSCOIN_BRANCH: dev
+  VERUS_VERSION: 0.6.4-dev-2
+  VERUSCOIN_VERSION: 0.6.4-dev-3
   KOMODO_VERSION: 0.5.2
   BINARY_SOURCE: VerusCoin
-  VERUS_APPIMAGE_X64: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.AppImage
-  VERUS_APPIMAGE_ARM64: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.AppImage
-  VERUS_LINUX_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-x86_64.tar.gz
-  VERUS_LINUX_ARM64_TAR: Verus-Desktop-Linux-v${VERUS_VERSION}-arm64.tar.gz
+  VERUS_APPIMAGE_X64: Verus-Desktop-v${VERUS_VERSION}-x86_64.AppImage
+  VERUS_APPIMAGE_ARM64: Verus-Desktop-v${VERUS_VERSION}-arm64.AppImage
   VERUS_WINDOWS_ZIP: Verus-Desktop-Windows-v${VERUS_VERSION}.zip
-  VERUS_WINDOWS_NSIS: Verus-Desktop-Windows-v${VERUS_VERSION}.exe
-  VERUS_MACOS: Verus-Desktop-MacOS-v${VERUS_VERSION}.dmg
+  VERUS_WINDOWS_NSIS: Verus-Desktop-v${VERUS_VERSION}.exe
+  VERUS_MACOS: Verus-Desktop-v${VERUS_VERSION}.dmg
   GIT_SUBMODULE_STRATEGY: recursive
   POST_COMMENT: "Pipeline Trigger: ${CI_PIPELINE_SOURCE}\n
       Branch: ${CI_COMMIT_REF_NAME}\n
@@ -66,21 +64,15 @@ build:linux:
     - yarn install
   script:
     - yarn run dist
-    - cd dist
-    - chmod 755 ${VERUS_APPIMAGE_X64}
-    - tar -czvf ${VERUS_LINUX_TAR} ${VERUS_APPIMAGE_X64}
-    - sha256sum ${VERUS_LINUX_TAR} > ${VERUS_LINUX_TAR}.sha256
-    - mv ${VERUS_LINUX_TAR} ${VERUS_LINUX_TAR}.sha256 ..
   after_script:
-    - curl -F file=@"$VERUS_LINUX_TAR"
+    - cd dist
+    - gsutil cp ${VERUS_APPIMAGE_X64} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
+    - curl -F file=@"$VERUS_APPIMAGE_X64"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
-  artifacts:
-    paths:
-      - ${VERUS_LINUX_TAR}
-    expire_in: 1 week
+
 
 build:linux:arm64:
   image: asherd/agama-builder
@@ -109,22 +101,14 @@ build:linux:arm64:
     - yarn install
   script:
     - yarn run dist --arm64
-    - cd dist
-    - chmod 755 ${VERUS_APPIMAGE_ARM64}
-    - tar -czvf ${VERUS_LINUX_ARM64_TAR} ${VERUS_APPIMAGE_ARM64}
-    - sha256sum ${VERUS_LINUX_ARM64_TAR} > ${VERUS_LINUX_ARM64_TAR}.sha256
-    - mv ${VERUS_LINUX_ARM64_TAR} ${VERUS_LINUX_ARM64_TAR}.sha256 ..
   after_script:
-    - curl -F file=@"VERUS_LINUX_ARM64_TAR"
+    - cd dist
+    - gsutil cp ${VERUS_APPIMAGE_ARM64} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
+    - curl -F file=@"$VERUS_APPIMAGE_ARM64"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
-  artifacts:
-    paths:
-      - ${VERUS_LINUX_ARM64_TAR}
-      - dist
-    expire_in: 1 week
 ########################################################################################################################
 ####END####                                              LINUX                                               ####END####
 ########################################################################################################################
@@ -154,10 +138,8 @@ build:windows:
     - rm -rf win64
     - rm win64_${KOMODO_VERSION}.zip
     - gsutil cp $STAGING/$VERUS_CLI_WINDOWS .
-    - unzip -qq Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
-    - mkdir -p assets/bin/win64/verusd
-    - mv verus-cli/verusd.exe verus-cli/verusd.exe.signature.txt verus-cli/verus.exe verus-cli/verus.exe.signature.txt assets/bin/win64/verusd/
-    - rm -rf verus-cli
+    - unzip -qq Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip -d assets/bin/win64
+    - mv assets/bin/win64/verus-cli assets/bin/win64/verusd
     - strip --strip-unneeded  assets/bin/win64/komodod/komodod.exe && strip --strip-unneeded  assets/bin/win64/komodod/komodo-cli.exe
     - rm Verus-CLI-Windows-v${VERUSCOIN_VERSION}.zip
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-win.tar.gz .
@@ -166,30 +148,15 @@ build:windows:
     - yarn install
   script:
     - yarn run dist-win
-    - cd dist
-    - unzip ${VERUS_WINDOWS_ZIP} -d Verus-Desktop-Windows-v${VERUS_VERSION}
-    - rm ${VERUS_WINDOWS_ZIP}
-    - zip -r ${VERUS_WINDOWS_ZIP} Verus-Desktop-Windows-v${VERUS_VERSION}
-    - sha256sum ${VERUS_WINDOWS_ZIP} > ${VERUS_WINDOWS_ZIP}.sha256
-    - sha256sum ${VERUS_WINDOWS_NSIS} > ${VERUS_WINDOWS_NSIS}.sha256
-    - mv ${VERUS_WINDOWS_NSIS} ${VERUS_WINDOWS_NSIS}.sha256 ..
-    - mv ${VERUS_WINDOWS_ZIP} ${VERUS_WINDOWS_ZIP}.sha256  ..
   after_script:
-    - curl -F file=@"$VERUS_WINDOWS_ZIP"
-      -F channels="$VERUS_POST_CHANNEL"
-      -F initial_comment="${POST_COMMENT}"
-      -H "${SLACK_BOT_AUTH}"
-      "https://slack.com/api/files.upload"
+    - cd dist
+    - gsutil cp ${VERUS_WINDOWS_NSIS} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
     - curl -F file=@"$VERUS_WINDOWS_NSIS"
       -F channels="$VERUS_POST_CHANNEL"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
-  artifacts:
-    paths:
-      - ${VERUS_WINDOWS_ZIP}
-      - ${VERUS_WINDOWS_NSIS}
-    expire_in: 1 week
+
 ########################################################################################################################
 ####END####                                             WINDOWS                                              ####END####
 ########################################################################################################################
@@ -223,45 +190,11 @@ build:mac:
   script:
     - export USE_HARD_LINKS=false
     - yarn run dist
-    - cd dist
-    - shasum -a 256 ${VERUS_MACOS} > ${VERUS_MACOS}.sha256
-    - mv ${VERUS_MACOS} ${VERUS_MACOS}.sha256 ..
   after_script:
+    - cd dist
+    - gsutil cp ${VERUS_MACOS} $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/${VERUS_VERSION}
     - curl -F file=@"${VERUS_MACOS}"
       -F channels="${VERUS_POST_CHANNEL}"
       -F initial_comment="${POST_COMMENT}"
       -H "${SLACK_BOT_AUTH}"
       "https://slack.com/api/files.upload"
-  artifacts:
-    paths:
-      - ${VERUS_MACOS}
-    expire_in: 1 week
-
-
-deploy:
-  stage: deploy
-  image: google/cloud-sdk:alpine
-  dependencies:
-    - build:linux
-    - build:linux:arm64
-    - build:windows
-    - build:mac
-  script:
-    - mkdir -p $CI_COMMIT_REF_NAME/Windows
-    - mkdir -p $CI_COMMIT_REF_NAME/Linux
-    - mkdir -p $CI_COMMIT_REF_NAME/MacOS
-    - cp ${VERUS_LINUX_TAR} ${CI_COMMIT_REF_NAME}/Linux
-    - cp ${VERUS_LINUX_ARM64_TAR} ${CI_COMMIT_REF_NAME}/Linux
-    - cp ${VERUS_WINDOWS_ZIP} ${CI_COMMIT_REF_NAME}/Windows
-    - cp ${VERUS_MACOS} ${CI_COMMIT_REF_NAME}/MacOS
-    - echo ${AUTH_KEY} > AUTH_KEY.json
-    - gcloud auth activate-service-account --key-file AUTH_KEY.json
-    - gsutil rsync -r $CI_COMMIT_REF_NAME $STAGING/Verus-Desktop/$CI_COMMIT_REF_NAME/
-  artifacts:
-    paths:
-      - ${VERUS_LINUX_TAR}
-      - ${VERUS_LINUX_ARM64_TAR}
-      - ${VERUS_WINDOWS_ZIP}
-      - ${VERUS_WINDOWS_NSIS}
-      - ${VERUS_MACOS}
-    expire_in: 1 week
