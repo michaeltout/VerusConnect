@@ -107,6 +107,12 @@ const template = [
           shell.openExternal('https://discord.gg/VRKMP2S');
         }
       },
+      {
+        label: 'Verus Wiki',
+        click (item, focusedWindow) {
+          shell.openExternal('https://wiki.veruscoin.io/#!index.md');
+        }
+      },
       // ref: https://github.com/sindresorhus/new-github-issue-url
       {
         label: 'Add Github issue',
