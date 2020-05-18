@@ -63,6 +63,7 @@ module.exports = (api) => {
         'pin',
         'csv',
         'log',
+        'currencies'
       ];
 
       for (let i = 0; i < _subFolders.length; i++) {

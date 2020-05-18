@@ -73,7 +73,7 @@ api.pathsDaemons();
 api = require('./api/log.js')(api);
 api = require('./api/config.js')(api);
 api = require('./api/users.js')(api);
-api = require('./api/nameCommitments.js')(api);
+api = require('./api/data_files/jsonFileManager')(api);
 api = require('./api/init.js')(api);
 
 api.createAgamaDirs();
@@ -142,6 +142,8 @@ api = require('./api/native/nameRegistration.js')(api);
 api = require('./api/native/idRegistration.js')(api);
 api = require('./api/native/idRevocation.js')(api);
 api = require('./api/native/idInformation.js')(api);
+api = require('./api/native/getCurrency.js')(api);
+api = require('./api/native/currencyGraylist.js')(api);
 api = require('./api/native/idRecovery.js')(api);
 api = require('./api/native/signdata.js')(api);
 api = require('./api/native/verifydata.js')(api);

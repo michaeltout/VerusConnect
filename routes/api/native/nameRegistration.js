@@ -19,13 +19,23 @@ module.exports = (api) => {
           nameCommitmentResult.txid &&
           nameCommitmentResult.namereservation
         ) {
-          const localCommitments = api.loadLocalCommitments()
+          let localCommitments = api.loadLocalCommitments()
           let saveCommitment = { ...nameCommitmentResult, controlAddress }
 
-          api.saveLocalCommitments({
-            ...localCommitments,
-            [coin]: localCommitments[coin] ? [...localCommitments[coin], saveCommitment] : [saveCommitment]
-          });
+          if (localCommitments[coin]) {
+            const existingIndex = localCommitments[coin].findIndex((value) => value.namereservation.name === name)
+            
+            if (existingIndex !== -1) {
+              localCommitments[coin][existingIndex] = saveCommitment
+            } else {
+              localCommitments[coin] = [...localCommitments[coin], saveCommitment]
+            }
+          } else {
+            localCommitments[coin] = [saveCommitment]
+          }
+
+          api.saveLocalCommitments(localCommitments);
+
           resolve({...saveCommitment, coin});
         } else {
           throw new Error(nameCommitmentResult)
@@ -37,7 +47,6 @@ module.exports = (api) => {
     });
   };
 
-  //TODO: Check here with getidentity if identity and referral exists
   api.native.register_id_name_preflight = (coin, token, name, referralId) => {
     return new Promise((resolve, reject) => {      
       resolve({ namereservation: { coin, name, referral: referralId } });
