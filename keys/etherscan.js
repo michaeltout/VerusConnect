@@ -4,5 +4,5 @@
 // own here or ETH/ERC20 coins will not work
 
 module.exports = {
-  ETHERSCAN_API_KEY: 'PUT_YOUR_ETHERSCAN_API_KEY_HERE'
+  ETHERSCAN_API_KEY: "${process.env.ETHERSCAN_API_KEY}"
 }
