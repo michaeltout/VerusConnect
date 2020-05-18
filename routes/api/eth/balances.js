@@ -3,6 +3,7 @@ const Promise = require('bluebird');
 const request = require('request');
 const erc20ContractId = require('agama-wallet-lib/src/eth-erc20-contract-id');
 const decimals = require('agama-wallet-lib/src/eth-erc20-decimals');
+const { ETHERSCAN_API_KEY } = require('../../../keys/etherscan')
 
 module.exports = (api) => {  
   api.get('/eth/get_balances', (req, res, next) => {
@@ -85,7 +86,7 @@ module.exports = (api) => {
         'action=balance',
         `address=${address}`,
         'tag=latest',
-        'apikey=YourApiKeyToken',
+        `apikey=${ETHERSCAN_API_KEY}`,
       ];
       const _etherscanEndPoint = network === 'homestead' ? 'https://api.etherscan.io/api?' : `https://api-${network}.etherscan.io/api?`;
       const options = {
@@ -126,17 +127,14 @@ module.exports = (api) => {
       `address=${address}`,
       `contractaddress=${erc20ContractId[coin]}`,
       'tag=latest',
-      'apikey=YourApiKeyToken',
+      `apikey=${ETHERSCAN_API_KEY}`,
     ];
-    let _balance = {};
 
     return new Promise((resolve, reject) => {
       const options = {
         url: 'https://api.etherscan.io/api?' + _url.join('&'),
         method: 'GET',
       };
-
-      api.log(`_balanceERC20 url ${options.url}`);
       
       request(options, (error, response, body) => {
         if (response &&
@@ -166,7 +164,7 @@ module.exports = (api) => {
   };
   
   api.eth._balanceERC20All = (address) => {
-    const _url = `http://api.ethplorer.io/getAddressInfo/${address}?apiKey=freekey`;
+    const _url = `http://api.ethplorer.io/getAddressInfo/${address}?apiKey=${ETHERSCAN_API_KEY}`;
     let _balance = {};
 
     return new Promise((resolve, reject) => {
@@ -174,8 +172,6 @@ module.exports = (api) => {
         url: _url,
         method: 'GET',
       };
-
-      api.log(`_balanceERC20All url ${_url}`);
 
       request(options, (error, response, body) => {
         if (response &&
@@ -205,8 +201,8 @@ module.exports = (api) => {
             reject(e)
           }
         } else {
-          api.log(`ethplorer balance error: unable to request http://api.ethplorer.io/getAddressInfo/${address}?apiKey=freekey`, 'eth.erc20-balance');
-          reject(new Error(`Unable to request http://api.ethplorer.io/getAddressInfo/${address}?apiKey=freekey`))
+          api.log(`ethplorer balance error: unable to request http://api.ethplorer.io/getAddressInfo/${address}?apiKey=****`, 'eth.erc20-balance');
+          reject(new Error(`Unable to request http://api.ethplorer.io/getAddressInfo/${address}?apiKey=****`))
         }
       });
     });

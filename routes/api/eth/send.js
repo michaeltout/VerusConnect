@@ -46,48 +46,25 @@ module.exports = (api) => {
 
     return new Promise((resolve, reject) => {
       Promise.all([
-        api.eth._balanceEtherscan(fromAddress, network),
-        api._getGasPrice()
-      ]).then(ethNetworkInfo => {
-        maxBalance = ethNetworkInfo[0]
-        gasPrice = ethNetworkInfo[1][speed]
+        chainTicker === "ETH"
+          ? api.eth._balanceEtherscan(fromAddress, network)
+          : api.eth._balanceERC20(fromAddress, chainTicker),
+        api._getGasPrice(),
+      ])
+        .then((ethNetworkInfo) => {
+          maxBalance = ethNetworkInfo[0];
+          gasPrice = ethNetworkInfo[1][speed];
 
-        try {
-          ethers.utils.getAddress(toAddress)
-        } catch (e) {
-          throw new Error(`"${toAddress}" is not a valid ${chainTicker} address.`)
-        }
-        
-        if (chainTicker === "ETH") {
-          const gasLimit = fees[chainTicker.toLowerCase()]
-          const preflightObj = api.eth.createPreflightObj(
-            chainTicker,
-            toAddress,
-            fromAddress,
-            maxBalance,
-            amount,
-            gasLimit,
-            gasPrice
-          );
+          try {
+            ethers.utils.getAddress(toAddress);
+          } catch (e) {
+            throw new Error(
+              `"${toAddress}" is not a valid ${chainTicker} address.`
+            );
+          }
 
-          if (preflightObj.remainingBalance < 0) throw new Error("Insufficient funds")
-          
-          resolve(preflightObj)
-        } else {
-          const contractAddress = erc20ContractId[chainTicker.toUpperCase()];
-
-          const contract = new ethers.Contract(
-            contractAddress,
-            standardABI,
-            api.eth.connect[chainTicker.toUpperCase()]
-          );
-          const numberOfDecimals = decimals[chainTicker.toUpperCase()] || 18;
-          const numberOfTokens = ethers.utils.parseUnits(
-            amount.toString(),
-            numberOfDecimals
-          );
-
-          return contract.estimate.transfer(contractAddress, numberOfTokens).then(gasLimit => {
+          if (chainTicker === "ETH") {
+            const gasLimit = fees[chainTicker.toLowerCase()];
             const preflightObj = api.eth.createPreflightObj(
               chainTicker,
               toAddress,
@@ -95,20 +72,52 @@ module.exports = (api) => {
               maxBalance,
               amount,
               gasLimit,
-              gasPrice,
-              numberOfTokens,
-              contract
+              gasPrice
             );
 
-            if (preflightObj.remainingBalance < 0) throw new Error("Insufficient funds")
-            
-            resolve(preflightObj)
-          })
-        }
-      })
-      .catch(err => {
-        reject(err)
-      })
+            if (preflightObj.remainingBalance < 0)
+              throw new Error("Insufficient funds");
+
+            resolve(preflightObj);
+          } else {
+            const contractAddress = erc20ContractId[chainTicker.toUpperCase()];
+
+            const contract = new ethers.Contract(
+              contractAddress,
+              standardABI,
+              api.eth.connect[chainTicker.toUpperCase()]
+            );
+            const numberOfDecimals = decimals[chainTicker.toUpperCase()] || 18;
+            const numberOfTokens = ethers.utils.parseUnits(
+              amount.toString(),
+              numberOfDecimals
+            );
+
+            return contract.estimate
+              .transfer(contractAddress, numberOfTokens)
+              .then((gasLimit) => {
+                const preflightObj = api.eth.createPreflightObj(
+                  chainTicker,
+                  toAddress,
+                  fromAddress,
+                  maxBalance,
+                  amount,
+                  gasLimit,
+                  gasPrice,
+                  numberOfTokens,
+                  contract
+                );
+
+                if (preflightObj.remainingBalance < 0)
+                  throw new Error("Insufficient funds");
+
+                resolve(preflightObj);
+              });
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
     })
   }
 
@@ -122,7 +131,7 @@ module.exports = (api) => {
       api.eth.txPreflight(chainTicker, toAddress, amount, speed, network)
       .then(preflightObj => {
         txResult = preflightObj
-        const { to, value, gasPrice, gasLimit, numberOfTokens, contract } = txResult;
+        const { to, value, gasPrice, gasLimit, numberOfTokens } = txResult;
         
         return chainTicker === "ETH"
           ? api.eth.connect[chainTicker].sendTransaction({
@@ -131,7 +140,11 @@ module.exports = (api) => {
               gasPrice: Number(gasPrice),
               gasLimit: Number(gasLimit)
             })
-          : contract.transfer(dest, numberOfTokens, { gasPrice });
+          : new ethers.Contract(
+            erc20ContractId[chainTicker.toUpperCase()],
+            standardABI,
+            api.eth.connect[chainTicker.toUpperCase()]
+          ).transfer(to, numberOfTokens, { gasPrice });
       })
       .then(tx => {
         const retObj = {

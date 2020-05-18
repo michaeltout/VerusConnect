@@ -3,6 +3,7 @@ const Promise = require('bluebird');
 const { ethTransactionsToBtc } = require('agama-wallet-lib/src/eth');
 const erc20ContractId = require('agama-wallet-lib/src/eth-erc20-contract-id');
 const decimals = require('agama-wallet-lib/src/eth-erc20-decimals');
+const { ETHERSCAN_API_KEY } = require('../../../keys/etherscan')
 
 module.exports = (api) => {  
   api.get('/eth/get_transactions', (req, res, next) => {
@@ -57,7 +58,7 @@ module.exports = (api) => {
         'startblock=0',
         'endblock=99999999',
         `sort=${sort}`,
-        'apikey=YourApiKeyToken',
+        `apikey=${ETHERSCAN_API_KEY}`,
       ];
       const _etherscanEndPoint = network === 'homestead' ? 'https://api.etherscan.io/api?' : `https://api-${network}.etherscan.io/api?`;
       const options = {
@@ -104,7 +105,7 @@ module.exports = (api) => {
         //`page=${page}'
         //`offset=100&sort=asc
         `sort=${sort}`,
-        'apikey=YourApiKeyToken',
+        `apikey=${ETHERSCAN_API_KEY}`,
       ];
       const options = {
         url: 'https://api.etherscan.io/api?' + _url.join('&'),

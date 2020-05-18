@@ -6,6 +6,7 @@ const { maxSpend } = require('agama-wallet-lib/src/eth');
 const erc20ContractId = require('agama-wallet-lib/src/eth-erc20-contract-id');
 const standardABI = require('agama-wallet-lib/src/erc20-standard-abi');
 const decimals = require('agama-wallet-lib/src/eth-erc20-decimals');
+const { ETHERSCAN_API_KEY } = require('../../../keys/etherscan')
 
 // TODO: error handling, input vars check
 
@@ -114,7 +115,7 @@ module.exports = (api) => {
       'module=contract',
       'action=getabi',
       `address=${address}`,
-      'apikey=YourApiKeyToken',
+      `apikey=${ETHERSCAN_API_KEY}`,
     ];
     let _balance = {};
 
@@ -123,8 +124,6 @@ module.exports = (api) => {
         url: 'https://api.etherscan.io/api?' + _url.join('&'),
         method: 'GET',
       };
-
-      api.log(`_getContractABI url ${_url}`);
       
       request(options, (error, response, body) => {
         if (response &&
@@ -261,7 +260,7 @@ module.exports = (api) => {
   });
 
   api.eth._tokenInfo = (symbol) => {
-    const _url = `https://api.ethplorer.io/getTokenInfo/${erc20ContractId[symbol.toUpperCase()]}?apiKey=freekey`;
+    const _url = `https://api.ethplorer.io/getTokenInfo/${erc20ContractId[symbol.toUpperCase()]}?apiKey=${ETHERSCAN_API_KEY}`;
 
     return new Promise((resolve, reject) => {
       if (!api.eth.tokenInfo[symbol.toUpperCase()]) {
@@ -269,8 +268,6 @@ module.exports = (api) => {
           url: _url,
           method: 'GET',
         };
-
-        api.log(`_tokenInfo url ${_url}`);
 
         request(options, (error, response, body) => {
           if (response &&
