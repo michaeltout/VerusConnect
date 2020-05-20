@@ -114,6 +114,15 @@ module.exports = (api) => {
     })
   }
 
+  api.WriteAddNode = (address, confFile, port) => {
+    return new Promise((resolve, reject) => {
+      api.log(`creating rpcpassword for ${confFile}...`, "native.process");
+      fs.appendFile(confFile, `\naddnode=${address}:${port}`)
+          .then(resolve)
+          .catch(e => reject(e))
+    })
+  }
+
   api.initConffile = (coin, confName, fallbackPort) => {
     const coinLc = coin.toLowerCase()
     return new Promise((resolve, reject) => {
@@ -179,12 +188,21 @@ module.exports = (api) => {
                 "native.process"
               );
               api.confFileIndex[coin] = confFile;
-
-              return Promise.all([
-                api.writeRpcPort(coin, confFile, fallbackPort),
-                api.writeRpcPassword(confFile),
-                api.writeRpcUser(confFile)
-              ]);
+              if (coin === 'VRSCTEST') {
+                return Promise.all([
+                  api.writeRpcPort(coin, confFile, fallbackPort),
+                  api.writeRpcPassword(confFile),
+                  api.writeRpcUser(confFile),
+                  api.WriteAddNode('185.25.48.72', confFile, '16329'),
+                  api.WriteAddNode('185.64.105.111', confFile, '16329')
+                ]);
+              } else {
+                return Promise.all([
+                  api.writeRpcPort(coin, confFile, fallbackPort),
+                  api.writeRpcPassword(confFile),
+                  api.writeRpcUser(confFile)
+                ]);
+              }
             })
             .then(resolve)
             .catch(e => reject(e));
