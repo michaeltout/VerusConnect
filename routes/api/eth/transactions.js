@@ -67,27 +67,33 @@ module.exports = (api) => {
       };
 
       request(options, (error, response, body) => {
-        if (response &&
-            response.statusCode &&
-            response.statusCode === 200) {
+        if (response && response.statusCode && response.statusCode === 200) {
           try {
             const _json = JSON.parse(body);
 
-            if ((_json.message === 'OK' || _json.message === 'No transactions found') &&
-                _json.result) {
+            if (
+              (_json.message === "OK" ||
+                _json.message === "No transactions found" ||
+                _json.status === "1" ||
+                _json.status === "0") &&
+              _json.result
+            ) {
               const _txs = ethTransactionsToBtc(_json.result, address);
               resolve(_txs);
             } else {
-              resolve(_json);
+              throw new Error("ETH transactions not OK.");
             }
           } catch (e) {
-            api.log('eth transactions parse error', 'eth.transactions');
-            api.log(e, 'eth.transactions');
-            throw e
+            api.log("eth transactions parse error", "eth.transactions");
+            api.log(e, "eth.transactions");
+            throw e;
           }
         } else {
-          api.log(`eth transactions error: unable to request ${network}`, 'eth.transactions');
-          throw new Error(`Unable to request ${network}`)
+          api.log(
+            `eth transactions error: unable to request ${network}`,
+            "eth.transactions"
+          );
+          throw new Error(`Unable to request ${network}`);
         }
       });
     });
