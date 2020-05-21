@@ -7,10 +7,10 @@ stages:
 ########################################################################################################################
 variables:
   DOCKER_DRIVER: overlay2
-  DEFAULT_VERUSCOIN_BRANCH: dev
-  VERUS_VERSION: 0.6.5-dev-6
+  DEFAULT_VERUSCOIN_BRANCH: release
+  VERUS_VERSION: 0.6.5-2
   VERUSCOIN_VERSION: 0.6.5-2
-  KOMODO_VERSION: 0.5.2
+  KOMODO_VERSION: 0.6.0
   BINARY_SOURCE: VerusCoin
   VERUS_APPIMAGE_X64: Verus-Desktop-v${VERUS_VERSION}-x86_64.AppImage
   VERUS_APPIMAGE_ARM64: Verus-Desktop-v${VERUS_VERSION}-arm64.AppImage
@@ -189,7 +189,7 @@ build:mac:
     - gsutil cp $STAGING/VerusCoin/Zcash/zcashd-macos.tar.gz .
     - tar -xzvf zcashd-macos.tar.gz --directory assets/bin/osx/
     - rm zcashd-macos.tar.gz
-    - sed -i "s/process.env.ETHERSCAN_API_KEY/'${ETHERSCAN_KEY}'/g" keys/etherscan.js
+    - sed -i -e "s/process.env.ETHERSCAN_API_KEY/'${ETHERSCAN_KEY}'/g" keys/etherscan.js
     - yarn install
   script:
     - export USE_HARD_LINKS=false
