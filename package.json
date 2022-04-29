@@ -46,7 +46,7 @@
     "adm-zip": "^0.4.7",
     "agama-wallet-lib": "https://github.com/VerusCoin/agama-wallet-lib.git#dev",
     "arch": "^2.1.0",
-    "async": "^2.6.0",
+    "async": "^2.6.4",
     "bigi": "^1.4.2",
     "bip39": "^2.5.0",
     "bitgo-utxo-lib": "git+https://github.com/VerusCoin/bitgo-utxo-lib.git",
