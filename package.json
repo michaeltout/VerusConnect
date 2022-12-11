@@ -57,7 +57,7 @@
     "create-hash": "git://github.com/pbca26/createHash#electron-v4",
     "ethereumjs-util": "^6.0.0",
     "ethers": "git://github.com/pbca26/ethers.js",
-    "express": "^4.14.0",
+    "express": "^4.17.3",
     "fix-path": "^2.1.0",
     "fs-extra": "^7.0.0",
     "graceful-fs": "^4.1.11",
